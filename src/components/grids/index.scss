@@ -1,0 +1,26 @@
+.grids {
+  position: relative;
+  height: 250px;
+  width: 250px;
+  overflow: hidden;
+  .animation-helper {
+    position: absolute;
+    display: flex;
+    transform: translate(-268px, 0);
+    &.move-left {
+      transition: all 0.5s ease;
+      transform: translate(-6px, 0);
+    }
+    &.move-right {
+      transition: all 0.5s ease;
+      transform: translate(-530px, 0);
+    }
+  }
+
+  //   temp style
+  .month {
+    // border: 1px solid gray;
+    border-radius: 4px;
+    margin: 0 6px;
+  }
+}

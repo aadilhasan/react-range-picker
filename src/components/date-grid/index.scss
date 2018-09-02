@@ -1,0 +1,44 @@
+.date-grid-container {
+  width: 250px;
+  height: 250px;
+  .date-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    &.days-names {
+      border-bottom: 1px solid gray;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .day-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      &:hover {
+        background-color: #80808030;
+        cursor: pointer;
+      }
+      &.prev-month-day {
+        color: #b8c2cc;
+        cursor: auto;
+        background-color: white;
+      }
+      &.today {
+        background-color: red;
+        color: white;
+        cursor: auto;
+      }
+      &.selected {
+        background-color: green;
+        color: white;
+      }
+      &.hovered {
+        background-color: #80808030;
+      }
+      .day {
+      }
+    }
+  }
+}

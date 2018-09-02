@@ -1,0 +1,8 @@
+.date-picker {
+  width: 250px;
+  height: calc(250px + 58px);
+  display: inline-flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  border-radius: 4px;
+}
