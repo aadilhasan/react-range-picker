@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  padding-bottom: 20px;
+  padding: 10px 5px 20px 5px;
   min-height: 38px;
   align-items: center;
   .prev,
@@ -43,8 +43,15 @@
     @extend %arrow;
     transform: rotate(45deg);
   }
-  .year {
+  .month {
+    min-width: 91px;
+  }
+  .year,
+  .month {
     @extend %btn-style;
     font-size: 1em;
+  }
+  .values {
+    flex: 1;
   }
 }

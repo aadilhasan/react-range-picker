@@ -1,0 +1,30 @@
+.picker {
+  display: inline-flex;
+  flex-direction: column;
+  width: 30px;
+  align-items: center;
+  .arrow-wrapper {
+    cursor: pointer;
+    .arrow {
+      border: solid black;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+    }
+    .arrow.up {
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+    }
+    .arrow.down {
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    }
+  }
+  input {
+    width: 30px;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
+  }
+}

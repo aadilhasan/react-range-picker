@@ -4,6 +4,8 @@ import { getNewMonthFrom, getCustomDateObject, monthsFull } from 'utils';
 
 import Grids from './grids';
 import Navigator from './navigator';
+import MonthPicker from './month-picker';
+import YearPicker from './year-picker';
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -17,7 +19,9 @@ class DatePicker extends React.Component {
     date: new Date(this.actualDate),
     animationClass: '',
     selectedDate1: null,
-    selectedDate2: null
+    selectedDate2: null,
+    showMonthPopup: false,
+    showYearPopup: false
   };
 
   onMonthChange = increment => {
@@ -46,6 +50,36 @@ class DatePicker extends React.Component {
     }, 500);
   };
 
+  onMonthSelect = () => {
+    this.setState({
+      showMonthPopup: true
+    });
+  };
+
+  monthChanged = (month, monthIndex) => {
+    const { date } = this.state;
+    date.setMonth(monthIndex);
+    this.setState({
+      date,
+      showMonthPopup: false
+    });
+  };
+
+  onYearSelect = () => {
+    this.setState({
+      showYearPopup: true
+    });
+  };
+
+  yearChanged = year => {
+    const { date } = this.state;
+    date.setFullYear(year);
+    this.setState({
+      date,
+      showYearPopup: false
+    });
+  };
+
   onDateSelect = date => {
     const { selectedDate1, selectedDate2 } = this.state;
     const newState = {};
@@ -68,17 +102,37 @@ class DatePicker extends React.Component {
   };
 
   render() {
-    const { date, animationClass, selectedDate1, selectedDate2 } = this.state;
+    const {
+      date,
+      animationClass,
+      selectedDate1,
+      selectedDate2,
+      showMonthPopup,
+      showYearPopup
+    } = this.state;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const { month, year } = getCustomDateObject(date);
     return (
       <div className="date-picker">
+        <MonthPicker
+          months={monthsFull}
+          disabled={month}
+          visible={showMonthPopup}
+          onChange={this.monthChanged}
+        />
+        <YearPicker
+          year={year}
+          visible={showYearPopup}
+          onChange={this.yearChanged}
+        />
         <Navigator
           month={monthsFull[month]}
           year={year}
           onMonthChange={this.onMonthChange}
+          onSelectMonth={this.onMonthSelect}
+          onSelectYear={this.onYearSelect}
         />
         <Grids
           prevMonth={prevMonth}

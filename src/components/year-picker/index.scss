@@ -1,0 +1,34 @@
+.year-picker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  z-index: 2;
+  &.hidden {
+    display: none;
+  }
+  &.visible {
+    display: block;
+  }
+  .year-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    .year-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      cursor: pointer;
+      &:hover {
+        background-color: #8080808f;
+        color: white;
+      }
+    }
+  }
+}

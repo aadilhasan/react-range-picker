@@ -1,0 +1,35 @@
+.month-select {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  z-index: 2;
+  &.hidden {
+    display: none;
+  }
+  &.visible {
+    display: block;
+  }
+  .select-items {
+    // width: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+    .select-item {
+      padding: 10px 0;
+      text-align: center;
+      &:hover {
+        background-color: gray;
+        color: white;
+        cursor: pointer;
+      }
+      &.disabled {
+        color: #808080a3;
+        background-color: transparent;
+        cursor: auto;
+      }
+    }
+  }
+}

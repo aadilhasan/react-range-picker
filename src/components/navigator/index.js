@@ -13,14 +13,16 @@ const Navigator = ({
   return (
     <div className="navigator">
       <button className="arrow prev" onClick={e => onMonthChange(-1)} />
-      <button className="year" onClick={onSelectMonth}>
-        {' '}
-        {month}{' '}
-      </button>
-      <button className="year" onClick={onSelectYear}>
-        {' '}
-        {year}{' '}
-      </button>
+      <div className="values">
+        <button className="month" onClick={onSelectMonth}>
+          {' '}
+          {month}{' '}
+        </button>
+        <button className="year" onClick={onSelectYear}>
+          {' '}
+          {year}{' '}
+        </button>
+      </div>
       <button className="arrow next" onClick={e => onMonthChange(1)} />
     </div>
   );
