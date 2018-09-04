@@ -6,20 +6,20 @@
   .animation-helper {
     position: absolute;
     display: flex;
-    transform: translate(-268px, 0);
+    transform: translateX(-268px);
+    will-change: transform;
     &.move-left {
       transition: all 0.5s ease;
-      transform: translate(-6px, 0);
+      transform: translateX(-6px);
     }
     &.move-right {
       transition: all 0.5s ease;
-      transform: translate(-530px, 0);
+      transform: translateX(-530px);
     }
   }
 
   //   temp style
   .month {
-    // border: 1px solid gray;
     border-radius: 4px;
     margin: 0 6px;
   }

@@ -6,6 +6,7 @@ import './index.scss';
 const MonthPicker = ({
   months = [],
   disabled = -1,
+  selected = -1,
   visible = false,
   onChange = noHandler(' no change handler for month change')
 }) => {
@@ -16,7 +17,9 @@ const MonthPicker = ({
           const onClick = index !== disabled ? onChange : () => {};
           return (
             <div
-              className={`select-item${index === disabled ? ' disabled' : ''}`}
+              className={`select-item${index === disabled ? ' disabled' : ''}${
+                index === selected ? ' selected' : ''
+              }`}
               onClick={e => onClick(month, index)}
             >
               {' '}

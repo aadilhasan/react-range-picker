@@ -6,20 +6,20 @@
   right: 0;
   background-color: white;
   z-index: 2;
-  &.hidden {
-    display: none;
-  }
+  transition: all 0.5s ease;
+  transform: translateY(-100%);
+  will-change: transform;
   &.visible {
-    display: block;
+    transform: translateY(0%);
   }
   .select-items {
-    // width: 100px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     height: 100%;
     .select-item {
-      padding: 10px 0;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &:hover {
         background-color: gray;
         color: white;
@@ -29,6 +29,9 @@
         color: #808080a3;
         background-color: transparent;
         cursor: auto;
+      }
+      &.selected {
+        color: red;
       }
     }
   }

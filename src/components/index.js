@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { getNewMonthFrom, getCustomDateObject, monthsFull } from 'utils';
+import {
+  getNewMonthFrom,
+  getCustomDateObject,
+  monthsFull,
+  monthsShort
+} from 'utils';
 
 import Grids from './grids';
 import Navigator from './navigator';
@@ -117,8 +122,8 @@ class DatePicker extends React.Component {
     return (
       <div className="date-picker">
         <MonthPicker
-          months={monthsFull}
-          disabled={month}
+          months={monthsShort}
+          selected={month}
           visible={showMonthPopup}
           onChange={this.monthChanged}
         />

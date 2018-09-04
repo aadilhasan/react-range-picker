@@ -12,10 +12,7 @@ class YearPicker extends React.Component {
 
   componentDidMount() {
     const { year } = this.props;
-    this.setState({
-      year,
-      years: this.getYearsToRender(year)
-    });
+    this.setYearData(year);
   }
   componentWillReceiveProps({ year }) {
     this.setState({
@@ -24,28 +21,55 @@ class YearPicker extends React.Component {
     });
   }
 
+  setYearData = year => {
+    this.setState({
+      year,
+      years: this.getYearsToRender(year),
+      sartYear: year,
+      endYear: year + this.years_to_display - 1
+    });
+  };
+
   getYearsToRender = year => {
-    let counter = year + 1,
+    let counter = year,
       limit = year + this.years_to_display,
       years = [];
-    while (counter <= limit) {
+    while (counter < limit) {
       years.push(counter++);
     }
     return years;
   };
 
+  onYearChange = incrementBy => {
+    const { year } = this.state;
+    this.setYearData(year + this.years_to_display * incrementBy);
+  };
+
   render() {
-    const { years } = this.state;
-    const { visible } = this.props;
+    const { year, years, sartYear, endYear } = this.state;
+    const { visible, selected } = this.props;
     const { onChange = noHandler('no handler for year picker') } = this.props;
     return (
       <div className={`year-picker${visible ? ' visible' : ' hidden'}`}>
+        <div className="navigator">
+          <button className="arrow prev" onClick={e => this.onYearChange(-1)} />
+          <div className="values">
+            {' '}
+            {sartYear} - {endYear}
+          </div>
+          <button className="arrow next" onClick={e => this.onYearChange(1)} />
+        </div>
         <div className="year-grid">
-          {years.map(year => {
+          {years.map(yearItem => {
             return (
-              <div className="year-container" onClick={() => onChange(year)}>
+              <div
+                className={`year-container${
+                  year === yearItem ? ' selected' : ''
+                }`}
+                onClick={() => onChange(yearItem)}
+              >
                 {' '}
-                <div className="year">{year}</div>{' '}
+                <div className="year">{yearItem}</div>{' '}
               </div>
             );
           })}
