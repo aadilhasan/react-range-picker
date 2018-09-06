@@ -6,7 +6,7 @@ const Day = ({
   selected,
   selected2,
   hovered,
-  hoveredSmaller,
+  hoveredPrev,
   onClick,
   onHover,
   offHover
@@ -17,7 +17,7 @@ const Day = ({
     !!selected &&
     !selected2 &&
     !!hovered &&
-    (hoveredSmaller
+    (hoveredPrev
       ? currentDate < selected && currentDate > hovered
       : currentDate > selected && currentDate < hovered);
   const isInSelectedRanges =
@@ -27,17 +27,43 @@ const Day = ({
     currentDate < selected2;
   const showHoverEffect = isInSelectedRanges || isHovered;
 
+  let dayContainerClass = 'day-container';
+  dayContainerClass += isToday ? ' today' : '';
+  dayContainerClass += isSelected ? ' selected' : '';
+  dayContainerClass +=
+    isSelected && (!!hovered || (!hovered && !!selected && !!selected2))
+      ? ' first'
+      : '';
+  dayContainerClass += isSelected2 ? ' selected' : '';
+  dayContainerClass +=
+    isSelected2 || (isSelected && hoveredPrev) ? ' second' : '';
+
+  dayContainerClass +=
+    !!selected && !selected2 && hovered === currentDate
+      ? ' active-hovered'
+      : '';
+
+  if (isSelected || isSelected2 || hovered === currentDate) {
+    if (!!selected && !!selected2 && hovered) {
+      dayContainerClass += ' next';
+    } else {
+      dayContainerClass += hoveredPrev ? ' prev' : ' next';
+    }
+  }
+
+  dayContainerClass += showHoverEffect ? ' hovered' : '';
+
   return (
     <div
       key={day}
-      className={`day-container${isToday ? ' today' : ''}${
-        isSelected || isSelected2 ? ' selected' : ''
-      }${showHoverEffect ? ' hovered' : ''}`}
+      className={dayContainerClass}
       onClick={e => onClick(currentDate)}
       onMouseEnter={e => onHover(currentDate)}
       onMouseLeave={offHover}
     >
-      <div className="day">{day}</div>
+      <div className="day">
+        <span>{day}</span>
+      </div>
     </div>
   );
 };

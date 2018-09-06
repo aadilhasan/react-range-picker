@@ -1,8 +1,9 @@
 .grids {
   position: relative;
-  height: 250px;
+  min-height: 237px;
   width: 250px;
   overflow: hidden;
+  padding: 10px 0;
   .animation-helper {
     position: absolute;
     display: flex;

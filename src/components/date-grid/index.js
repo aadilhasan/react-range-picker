@@ -85,7 +85,7 @@ class DateGrid extends Component {
     const actualDate = this.dateToInt(getCustomDateObject(this.actualDate));
     const days = getDaysArray(dateObj);
     const prevMonthDays = this.getRemainingPrevMonthDays(dateObj);
-    const hoveredSmaller = !!selected && !!hovered && hovered < selected;
+    const hoveredPrev = !!selected && !!hovered && hovered < selected;
 
     return (
       <div className="date-grid-container">
@@ -94,17 +94,18 @@ class DateGrid extends Component {
         </div>
         <div className="date-grid">
           <PreviousMonthDays days={prevMonthDays} />
-          {days.map(day => {
+          {days.map((day, index) => {
             const currentDate = this.dateToInt({ date: day, month, year });
             return (
               <Day
+                key={index}
                 day={day}
                 currentDate={currentDate}
                 isToday={actualDate === currentDate}
                 selected={selected}
                 selected2={selected2}
                 hovered={hovered}
-                hoveredSmaller={hoveredSmaller}
+                hoveredPrev={hoveredPrev}
                 onClick={this.onDateSelect}
                 onHover={this.onHover}
                 offHover={this.offHover}
@@ -118,8 +119,8 @@ class DateGrid extends Component {
 }
 
 const PreviousMonthDays = ({ days = [] }) => {
-  return days.map(day => (
-    <div className="day-container prev-month-day">
+  return days.map((day, index) => (
+    <div key={index} className="day-container prev-month-day">
       {' '}
       <div className="day">{day}</div>{' '}
     </div>

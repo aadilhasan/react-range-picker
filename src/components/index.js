@@ -4,13 +4,15 @@ import {
   getNewMonthFrom,
   getCustomDateObject,
   monthsFull,
-  monthsShort
+  monthsShort,
+  getActualDate
 } from 'utils';
 
 import Grids from './grids';
 import Navigator from './navigator';
 import MonthPicker from './month-picker';
 import YearPicker from './year-picker';
+import Placeholder from './placeholder';
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -119,35 +121,42 @@ class DatePicker extends React.Component {
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const { month, year } = getCustomDateObject(date);
+    const firstDateObj = getActualDate(selectedDate1);
+    const secondDateObj = getActualDate(selectedDate2);
     return (
-      <div className="date-picker">
-        <MonthPicker
-          months={monthsShort}
-          selected={month}
-          visible={showMonthPopup}
-          onChange={this.monthChanged}
-        />
-        <YearPicker
-          year={year}
-          visible={showYearPopup}
-          onChange={this.yearChanged}
-        />
-        <Navigator
-          month={monthsFull[month]}
-          year={year}
-          onMonthChange={this.onMonthChange}
-          onSelectMonth={this.onMonthSelect}
-          onSelectYear={this.onYearSelect}
-        />
-        <Grids
-          prevMonth={prevMonth}
-          currentMonth={currentMonth}
-          nextMonth={nextMonth}
-          animationClass={animationClass}
-          onDateSelect={this.onDateSelect}
-          selectedDate1={selectedDate1}
-          selectedDate2={selectedDate2}
-        />
+      <div className="full-date-picker-container">
+        <div>
+          <div className="date-picker">
+            <MonthPicker
+              months={monthsShort}
+              selected={month}
+              visible={showMonthPopup}
+              onChange={this.monthChanged}
+            />
+            <YearPicker
+              year={year}
+              visible={showYearPopup}
+              onChange={this.yearChanged}
+            />
+            <Navigator
+              month={monthsFull[month]}
+              year={year}
+              onMonthChange={this.onMonthChange}
+              onSelectMonth={this.onMonthSelect}
+              onSelectYear={this.onYearSelect}
+            />
+            <Grids
+              prevMonth={prevMonth}
+              currentMonth={currentMonth}
+              nextMonth={nextMonth}
+              animationClass={animationClass}
+              onDateSelect={this.onDateSelect}
+              selectedDate1={selectedDate1}
+              selectedDate2={selectedDate2}
+            />
+          </div>
+          <Placeholder firstDate={firstDateObj} secondDate={secondDateObj} />
+        </div>
       </div>
     );
   }

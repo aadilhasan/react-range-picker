@@ -1,10 +1,21 @@
-.date-picker {
-  width: 250px;
-  height: calc(250px + 58px);
-  display: inline-flex;
-  flex-direction: column;
+$primary-color: #6597ff;
+$secondry-color: rgba(42, 123, 255, 0.2);
+%today-style {
+  background-color: rgba(52, 221, 184, 0.1);
+  border: solid 1px #34ddb8;
+}
+
+.full-date-picker-container {
   border: 1px solid gray;
   border-radius: 4px;
-  position: relative;
-  font-size: 90%;
+  padding: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  > div {
+    position: relative;
+  }
+  .date-picker {
+    font-size: 90%;
+  }
 }

@@ -39,6 +39,40 @@ export const getCustomDateObject = (date = new Date()) => {
   };
 };
 
+const getCurrentTime = format => {
+  const date = new Date();
+  const tempHours = date.getHours();
+  const hours = format === 12 && tempHours > 12 ? tempHours - 12 : tempHours;
+  return {
+    hours,
+    minutes: date.getMinutes()
+  };
+};
+
+export const getActualDate = (intDate = '', format = 12) => {
+  const strDate = (intDate || '').toString();
+  if (!strDate || strDate.length !== 8) {
+    console.error(intDate, ' is not a valid date integer');
+    return {};
+  }
+  const year = parseInt(strDate.substring(0, 4));
+  const month = parseInt(strDate.substring(4, 6));
+  const date = parseInt(strDate.substring(6, 8));
+  const { hours, minutes } = getCurrentTime(format);
+  return {
+    dateObject: new Date(year, month, date),
+    customObject: {
+      minutes,
+      hours,
+      date,
+      month,
+      year,
+      monthNameShort: monthsShort[month],
+      monthNameFull: monthsFull[month]
+    }
+  };
+};
+
 export const monthsFull = [
   'January',
   'February',

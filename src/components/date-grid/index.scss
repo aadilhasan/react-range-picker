@@ -1,10 +1,10 @@
+@import '../index';
 .date-grid-container {
   width: 250px;
-  height: 250px;
   .date-grid {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     display: grid;
-    grid-column-gap: 5px;
+    // grid-column-gap: 5px;
     grid-row-gap: 5px;
     &.days-names {
       border-bottom: 1px solid gray;
@@ -15,10 +15,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 30px;
+      height: 35.7px;
       &:hover {
-        background-color: #80808030;
+        background-color: $secondry-color;
         cursor: pointer;
+        border-radius: 50%;
+      }
+      &.active-hovered {
+        &.prev {
+          border-radius: 50% 0 0 50%;
+          background-color: rgba(42, 123, 255, 0.2);
+        }
+        &.next {
+          border-radius: 0 50% 50% 0;
+          background-color: rgba(42, 123, 255, 0.2);
+        }
       }
       &.prev-month-day {
         color: #b8c2cc;
@@ -26,16 +37,36 @@
         background-color: white;
       }
       &.today {
-        background-color: red;
-        color: white;
-        cursor: auto;
+        .day {
+          @extend %today-style;
+          border-radius: 50%;
+        }
       }
       &.selected {
-        background-color: green;
-        color: white;
+        &.first {
+          border-radius: 50% 0 0 50%;
+          background-color: rgba(42, 123, 255, 0.2);
+        }
+        &.second {
+          border-radius: 0 50% 50% 0;
+          background-color: rgba(42, 123, 255, 0.2);
+        }
+        div {
+          background-color: $primary-color;
+          color: white;
+          border-radius: 50%;
+        }
       }
       &.hovered {
-        background-color: #80808030;
+        background-color: $secondry-color;
+        border-radius: 0;
+      }
+      .day {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

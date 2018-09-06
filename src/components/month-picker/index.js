@@ -17,6 +17,7 @@ const MonthPicker = ({
           const onClick = index !== disabled ? onChange : () => {};
           return (
             <div
+              key={index}
               className={`select-item${index === disabled ? ' disabled' : ''}${
                 index === selected ? ' selected' : ''
               }`}

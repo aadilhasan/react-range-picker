@@ -15,10 +15,7 @@ class YearPicker extends React.Component {
     this.setYearData(year);
   }
   componentWillReceiveProps({ year }) {
-    this.setState({
-      year,
-      years: this.getYearsToRender(year)
-    });
+    this.setYearData(year);
   }
 
   setYearData = year => {
@@ -60,9 +57,10 @@ class YearPicker extends React.Component {
           <button className="arrow next" onClick={e => this.onYearChange(1)} />
         </div>
         <div className="year-grid">
-          {years.map(yearItem => {
+          {years.map((yearItem, index) => {
             return (
               <div
+                key={index}
                 className={`year-container${
                   year === yearItem ? ' selected' : ''
                 }`}

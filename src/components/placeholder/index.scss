@@ -1,0 +1,50 @@
+.default-placeholder {
+  .single-date-heading {
+    font-size: 80%;
+    color: gray;
+    margin-bottom: 3px;
+  }
+  .holder-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &.center-items {
+      justify-content: center;
+    }
+    .date-holder {
+      text-align: left;
+      .heading {
+        font-size: 80%;
+        color: gray;
+      }
+      .date {
+        font-size: 90%;
+        font-weight: bold;
+        margin-top: 7px;
+      }
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    .today {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      color: #1bbf9a;
+      outline: none;
+      padding: 0;
+    }
+    .select {
+      border-radius: 3px;
+      box-shadow: 0 1px 3px -1px #e0e0e0;
+      background-color: #ffffff;
+      border: solid 1px #e0e0e0;
+      padding: 7px 25px;
+      font-weight: bold;
+      outline: none;
+    }
+  }
+}
