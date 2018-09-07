@@ -5,7 +5,9 @@ import {
   getCustomDateObject,
   monthsFull,
   monthsShort,
-  getActualDate
+  getActualDate,
+  noHandler,
+  dateToInt
 } from 'utils';
 
 import Grids from './grids';
@@ -20,8 +22,10 @@ const ANIMATE_RIGHT = 'move-right';
 
 class DatePicker extends React.Component {
   actualDate = new Date();
+  actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
   //flag to prevent month change when the month slide animation is still running
   is_animating = false;
+  enable_range = false;
   state = {
     date: new Date(this.actualDate),
     animationClass: '',
@@ -30,6 +34,14 @@ class DatePicker extends React.Component {
     showMonthPopup: false,
     showYearPopup: false
   };
+
+  componentDidMount() {
+    this.enable_range = !!this.props.enableRange;
+  }
+
+  componentWillReceiveProps(props) {
+    this.enable_range = !!props.enableRange;
+  }
 
   onMonthChange = increment => {
     if (this.is_animating) return;
@@ -89,7 +101,17 @@ class DatePicker extends React.Component {
 
   onDateSelect = date => {
     const { selectedDate1, selectedDate2 } = this.state;
+    const { onDateSelected = noHandler() } = this.props;
     const newState = {};
+
+    if (!this.enable_range && !!date) {
+      this.setState({
+        selectedDate1: date
+      });
+      onDateSelected(getActualDate(date));
+      return;
+    }
+
     if (!selectedDate1) {
       newState.selectedDate1 = date;
       newState.selectedDate2 = null;
@@ -106,6 +128,49 @@ class DatePicker extends React.Component {
       newState.selectedDate2 = null;
     }
     this.setState(newState);
+    const d1 = newState.selectedDate1,
+      d2 = newState.selectedDate2;
+    if (!!this.enable_range && !!d1 && !!d2) {
+      onDateSelected(getActualDate(d1), getActualDate(d2));
+    }
+  };
+
+  selectToday = () => {
+    const { date } = this.state;
+    const savedDate = getCustomDateObject(date);
+    const currentDate = getCustomDateObject(new Date(this.actualDate));
+
+    if (date === this.actualIntDate) {
+      this.onDateSelect();
+    }
+
+    const goingBack =
+      currentDate.year < savedDate.year ||
+      (currentDate.year === savedDate.year &&
+        currentDate.month < savedDate.month)
+        ? true
+        : false;
+    if (goingBack) {
+      this.setState({
+        animationClass: ANIMATE_LEFT
+      });
+    } else if (currentDate.month > savedDate.month) {
+      this.setState({
+        animationClass: ANIMATE_RIGHT
+      });
+    }
+    // added timeout of same time as animation, so after the animation is done we can remove the animation class
+    setTimeout(() => {
+      this.setState(
+        {
+          animationClass: '',
+          selectedDate1: this.actualIntDate,
+          selectedDate2: null,
+          date: new Date(this.actualDate)
+        },
+        () => (this.is_animating = false)
+      );
+    }, 500);
   };
 
   render() {
@@ -117,6 +182,8 @@ class DatePicker extends React.Component {
       showMonthPopup,
       showYearPopup
     } = this.state;
+    const { onOk = noHandler() } = this.props;
+
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
@@ -153,9 +220,15 @@ class DatePicker extends React.Component {
               onDateSelect={this.onDateSelect}
               selectedDate1={selectedDate1}
               selectedDate2={selectedDate2}
+              rangeEnabled={this.enable_range}
             />
           </div>
-          <Placeholder firstDate={firstDateObj} secondDate={secondDateObj} />
+          <Placeholder
+            onToday={this.selectToday}
+            firstDate={firstDateObj}
+            secondDate={secondDateObj}
+            onOk={onOk}
+          />
         </div>
       </div>
     );

@@ -1,11 +1,16 @@
 import React from 'react';
-
+import { noHandler } from 'utils';
 import './index.scss';
 
 class Placeholder extends React.Component {
   render() {
     // const { year, years, sartYear, endYear } = this.state;
-    const { firstDate, secondDate } = this.props;
+    const {
+      firstDate,
+      secondDate,
+      onToday = noHandler(),
+      onOk = noHandler()
+    } = this.props;
     let fDate = '',
       lDate = '';
     if (!!firstDate.customObject) {
@@ -29,8 +34,17 @@ class Placeholder extends React.Component {
           {lDate && <DateHolder heading="To" date={lDate} />}
         </div>
         <div className="buttons">
-          <button className="today"> TODAY </button>
-          <button className="select"> Select </button>
+          <button className="today" onClick={onToday}>
+            {' '}
+            TODAY{' '}
+          </button>
+          <button
+            className="select"
+            onClick={e => onOk(firstDate.dateObject, secondDate.dateObject)}
+          >
+            {' '}
+            Select{' '}
+          </button>
         </div>
       </div>
     );

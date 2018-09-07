@@ -1,5 +1,4 @@
 import React from 'react';
-import { noHandler } from 'utils';
 import DateGrid from '../date-grid';
 
 import './index.scss';
@@ -14,7 +13,8 @@ class Grids extends React.Component {
       animationClass = '',
       onDateSelect,
       selectedDate1,
-      selectedDate2
+      selectedDate2,
+      rangeEnabled
     } = this.props;
     return (
       <div className="grids">
@@ -25,6 +25,7 @@ class Grids extends React.Component {
               onDateSelect={onDateSelect}
               selectedDate1={selectedDate1}
               selectedDate2={selectedDate2}
+              rangeEnabled={rangeEnabled}
             />
           </div>
           <div className="month current">
@@ -33,6 +34,7 @@ class Grids extends React.Component {
               onDateSelect={onDateSelect}
               selectedDate1={selectedDate1}
               selectedDate2={selectedDate2}
+              rangeEnabled={rangeEnabled}
             />
           </div>
           <div className="month next">
@@ -41,6 +43,7 @@ class Grids extends React.Component {
               onDateSelect={onDateSelect}
               selectedDate1={selectedDate1}
               selectedDate2={selectedDate2}
+              rangeEnabled={rangeEnabled}
             />
           </div>
         </div>

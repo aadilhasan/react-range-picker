@@ -28,7 +28,7 @@ export const getNewMonthFrom = (from, months = 0) => {
   return newInstance;
 };
 
-export const noHandler = message => e => console.log(message, ' ', e);
+export const noHandler = message => () => console.log(message);
 
 export const getCustomDateObject = (date = new Date()) => {
   return {
@@ -52,7 +52,7 @@ const getCurrentTime = format => {
 export const getActualDate = (intDate = '', format = 12) => {
   const strDate = (intDate || '').toString();
   if (!strDate || strDate.length !== 8) {
-    console.error(intDate, ' is not a valid date integer');
+    // console.error(intDate, ' is not a valid date integer');
     return {};
   }
   const year = parseInt(strDate.substring(0, 4));
@@ -71,6 +71,13 @@ export const getActualDate = (intDate = '', format = 12) => {
       monthNameFull: monthsFull[month]
     }
   };
+};
+
+export const dateToInt = date => {
+  // make sure both month and day starts with 0 if single digit;
+  const month = date.month < 10 ? '0' + date.month : date.month;
+  const day = date.date < 10 ? '0' + date.date : date.date;
+  return parseInt('' + date.year + month + day);
 };
 
 export const monthsFull = [

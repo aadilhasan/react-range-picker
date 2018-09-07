@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getDaysArray, getDays, getCustomDateObject } from 'utils';
+import { getDaysArray, getDays, getCustomDateObject, dateToInt } from 'utils';
 import DaysNames from './days-names';
 import Day from './day';
 
@@ -16,24 +16,18 @@ class DateGrid extends Component {
     this.setState(newState, () => onDateSelect && onDateSelect(date));
   };
   onHover = date => {
-    if (!this.state.selected) return;
+    if (!this.props.rangeEnabled || !this.state.selected) return;
     this.setState({
       hovered: date
     });
   };
 
   offHover = () => {
-    if (!this.state.selected || !this.state.hovered) return;
+    if (!this.props.rangeEnabled || !this.state.selected || !this.state.hovered)
+      return;
     this.setState({
       hovered: null
     });
-  };
-
-  dateToInt = date => {
-    // make sure both month and day starts with 0 if single digit;
-    const month = date.month < 10 ? '0' + date.month : date.month;
-    const day = date.date < 10 ? '0' + date.date : date.date;
-    return parseInt('' + date.year + month + day);
   };
 
   hasSameMonthAndYear = (date1, date2) => {
@@ -84,7 +78,7 @@ class DateGrid extends Component {
   };
 
   render() {
-    const { date, selectedDate1, selectedDate2 } = this.props;
+    const { date, selectedDate1, selectedDate2, rangeEnabled } = this.props;
     const { hovered } = this.state;
     const selected = selectedDate1;
     const selected2 = selectedDate2;
@@ -94,7 +88,7 @@ class DateGrid extends Component {
     }
     const dateObj = getCustomDateObject(tempDate);
     const { month, year } = dateObj;
-    const actualDate = this.dateToInt(getCustomDateObject(this.actualDate));
+    const actualDate = dateToInt(getCustomDateObject(this.actualDate));
     const days = getDaysArray(dateObj);
     const prevMonthDays = this.getRemainingPrevMonthDays(dateObj);
     const hoveredPrev = !!selected && !!hovered && hovered < selected;
@@ -110,7 +104,7 @@ class DateGrid extends Component {
         <div className="date-grid">
           <PreviousMonthDays days={prevMonthDays} />
           {days.map((day, index) => {
-            const currentDate = this.dateToInt({ date: day, month, year });
+            const currentDate = dateToInt({ date: day, month, year });
             return (
               <Day
                 key={index}
@@ -124,6 +118,7 @@ class DateGrid extends Component {
                 onClick={this.onDateSelect}
                 onHover={this.onHover}
                 offHover={this.offHover}
+                rangeEnabled={rangeEnabled}
               />
             );
           })}
