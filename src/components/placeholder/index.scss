@@ -1,8 +1,14 @@
 .default-placeholder {
+  min-height: 87px;
+  &.hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .single-date-heading {
     font-size: 80%;
     color: gray;
-    margin-bottom: 3px;
+    // margin-bottom: 3px;
   }
   .holder-wrapper {
     display: flex;

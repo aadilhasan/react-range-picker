@@ -7,6 +7,7 @@ import './index.scss';
 
 class DateGrid extends Component {
   actualDate = new Date();
+  daysPerPage = 42;
   state = { selected: null, selected2: null, hovered: null };
   onDateSelect = date => {
     const { onDateSelect } = this.props;
@@ -71,6 +72,17 @@ class DateGrid extends Component {
     return daysArray;
   };
 
+  getRemainingNextMonthDays = (days = 0) => {
+    const remainingDays = this.daysPerPage - days,
+      arr = [];
+    let i = 1;
+    for (i; i <= remainingDays; i += 1) {
+      arr.push(i);
+    }
+
+    return arr;
+  };
+
   render() {
     const { date, selectedDate1, selectedDate2 } = this.props;
     const { hovered } = this.state;
@@ -86,6 +98,9 @@ class DateGrid extends Component {
     const days = getDaysArray(dateObj);
     const prevMonthDays = this.getRemainingPrevMonthDays(dateObj);
     const hoveredPrev = !!selected && !!hovered && hovered < selected;
+    const nextMonthDays = this.getRemainingNextMonthDays(
+      prevMonthDays.length + days.length
+    );
 
     return (
       <div className="date-grid-container">
@@ -112,6 +127,7 @@ class DateGrid extends Component {
               />
             );
           })}
+          <PreviousMonthDays days={nextMonthDays} />
         </div>
       </div>
     );

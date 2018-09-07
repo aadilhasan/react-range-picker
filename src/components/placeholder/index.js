@@ -1,5 +1,4 @@
 import React from 'react';
-import { getStringDate } from 'utils';
 
 import './index.scss';
 
@@ -17,9 +16,12 @@ class Placeholder extends React.Component {
       const { date, monthNameShort, year } = secondDate.customObject;
       lDate += date + ' ' + monthNameShort + ' ' + year;
     }
-    if (!fDate && !lDate) return null;
+    if (!fDate && !lDate)
+      return (
+        <div className="default-placeholder hint">Select a date/range</div>
+      );
     return (
-      <div className={`default-placeholder`}>
+      <div className="default-placeholder">
         {!!fDate &&
           !lDate && <div className="single-date-heading"> Selcted Date </div>}
         <div className={`holder-wrapper${!lDate ? ' center-items' : ''}`}>

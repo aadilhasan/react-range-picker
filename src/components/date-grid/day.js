@@ -36,18 +36,22 @@ const Day = ({
       : '';
   dayContainerClass += isSelected2 ? ' selected' : '';
   dayContainerClass +=
-    isSelected2 || (isSelected && hoveredPrev) ? ' second' : '';
+    isSelected2 || (isSelected && !selected2 && hoveredPrev) ? ' second' : '';
 
   dayContainerClass +=
     !!selected && !selected2 && hovered === currentDate
       ? ' active-hovered'
       : '';
 
-  if (isSelected || isSelected2 || hovered === currentDate) {
+  if (isSelected || isSelected2 || (selected && hovered === currentDate)) {
     if (!!selected && !!selected2 && hovered) {
       dayContainerClass += ' next';
     } else {
-      dayContainerClass += hoveredPrev ? ' prev' : ' next';
+      dayContainerClass += hoveredPrev
+        ? ' prev'
+        : hovered !== selected
+          ? ' next'
+          : '';
     }
   }
 
