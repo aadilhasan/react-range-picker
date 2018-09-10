@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import DatePicker from './components';
-import TimePicker from './components/time-picker';
 
 class App extends Component {
   onDateSelect = (dateObject, dateCustomObject) => {
@@ -19,9 +18,8 @@ class App extends Component {
           onDateSelected={this.onDateSelect}
           onOk={this.onOk}
           enableRange={true}
+          selectTime={true}
         />
-        <br />
-        <TimePicker />
       </div>
     );
   }

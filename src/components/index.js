@@ -15,6 +15,7 @@ import Navigator from './navigator';
 import MonthPicker from './month-picker';
 import YearPicker from './year-picker';
 import Placeholder from './placeholder';
+import TimePicker from './time-picker';
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -31,8 +32,10 @@ class DatePicker extends React.Component {
     animationClass: '',
     selectedDate1: null,
     selectedDate2: null,
+    date1Time: '',
     showMonthPopup: false,
-    showYearPopup: false
+    showYearPopup: false,
+    showTimePopup: false
   };
 
   componentDidMount() {
@@ -101,7 +104,7 @@ class DatePicker extends React.Component {
 
   onDateSelect = date => {
     const { selectedDate1, selectedDate2 } = this.state;
-    const { onDateSelected = noHandler() } = this.props;
+    const { onDateSelected = noHandler(), selectTime } = this.props;
     const newState = {};
 
     if (!this.enable_range && !!date) {
@@ -132,6 +135,10 @@ class DatePicker extends React.Component {
       d2 = newState.selectedDate2;
     if (!!this.enable_range && !!d1 && !!d2) {
       onDateSelected(getActualDate(d1), getActualDate(d2));
+    }
+
+    if (!!selectTime) {
+      this.showTime();
     }
   };
 
@@ -173,6 +180,23 @@ class DatePicker extends React.Component {
     }, 500);
   };
 
+  showTime = () => {
+    this.setState({
+      showTimePopup: true
+    });
+  };
+
+  closeTime = () => {
+    this.setState({
+      showTimePopup: false
+    });
+  };
+
+  onTimeSelected = (hours, minutes) => {
+    console.log(' time ', hours, minutes);
+    this.closeTime();
+  };
+
   render() {
     const {
       date,
@@ -180,7 +204,8 @@ class DatePicker extends React.Component {
       selectedDate1,
       selectedDate2,
       showMonthPopup,
-      showYearPopup
+      showYearPopup,
+      showTimePopup
     } = this.state;
     const { onOk = noHandler() } = this.props;
 
@@ -205,6 +230,7 @@ class DatePicker extends React.Component {
               visible={showYearPopup}
               onChange={this.yearChanged}
             />
+            <TimePicker visible={showTimePopup} onDone={this.onTimeSelected} />
             <Navigator
               month={monthsFull[month]}
               year={year}

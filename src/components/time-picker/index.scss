@@ -1,0 +1,45 @@
+.date-picker-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  transition: background-color 0.3s linear;
+  .date-picker {
+    position: absolute;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    transform: translateY(65px);
+    transition: transform 0.3s linear;
+  }
+  &.hidden {
+    transform: translateY(105%);
+    transition: transform 0.3s linear;
+    background-color: #00000000;
+    .date-picker {
+      transform: translateY(65px);
+      transition: transform 0.3s linear;
+    }
+  }
+  &.visible {
+    transform: translateY(0%);
+    background-color: #0000008c;
+    .date-picker {
+      transform: translateY(0px);
+      transition: transform 0.3s linear;
+    }
+  }
+  .done button {
+    margin-top: 20px;
+    border-radius: 4px;
+    padding: 9px 35px;
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 16px 0 rgba(64, 93, 119, 0.15),
+      0 0 2px 0 rgba(96, 111, 123, 0.2);
+  }
+}
