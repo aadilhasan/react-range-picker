@@ -33,23 +33,32 @@ class Placeholder extends React.Component {
           {fDate && <DateHolder heading={!!lDate ? 'From' : ''} date={fDate} />}
           {lDate && <DateHolder heading="To" date={lDate} />}
         </div>
-        <div className="buttons">
-          <button className="today" onClick={onToday}>
-            {' '}
-            TODAY{' '}
-          </button>
-          <button
-            className="select"
-            onClick={e => onOk(firstDate.dateObject, secondDate.dateObject)}
-          >
-            {' '}
-            Select{' '}
-          </button>
-        </div>
+        <Buttons
+          hideSelect={!fDate && !lDate}
+          onToday={onToday}
+          onOk={e => onOk(firstDate.dateObject, secondDate.dateObject)}
+        />
       </div>
     );
   }
 }
+
+const Buttons = ({ hideSelect, onToday, onOk }) => {
+  return (
+    <div className="buttons">
+      <button className="today" onClick={onToday}>
+        {' '}
+        TODAY{' '}
+      </button>
+      {!hideSelect && (
+        <button className="select" onClick={onOk}>
+          {' '}
+          Select{' '}
+        </button>
+      )}
+    </div>
+  );
+};
 
 const DateHolder = ({ heading = '', date = '' }) => {
   return (

@@ -5,17 +5,44 @@ $secondry-color: rgba(42, 123, 255, 0.2);
   border: solid 1px #34ddb8;
 }
 
-.full-date-picker-container {
-  border: 1px solid gray;
-  border-radius: 4px;
-  padding: 10px;
+.date-picker-app-wrapper {
   display: inline-flex;
   flex-direction: column;
-  overflow: hidden;
-  > div {
+  position: relative;
+  .calendar-wrapper {
     position: relative;
   }
-  .date-picker {
-    font-size: 90%;
+  .calendar {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    transform: scaleY(0);
+    transition: transform 0.2s cubic-bezier(0.56, 0.15, 1, 1);
+    transform-origin: top left;
+    &.visible {
+      transform: scaleY(1);
+      transition: transform 0.2s cubic-bezier(0, 0.65, 0.62, 1.03);
+    }
+  }
+  .full-date-picker-container {
+    // border: 1px solid gray;
+    box-shadow: 0 4px 16px 0 rgba(64, 93, 119, 0.15),
+      0 0 2px 0 rgba(96, 111, 123, 0.2);
+    border-radius: 4px;
+    padding: 10px;
+    display: inline-flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    > div {
+      // position: relative;
+    }
+    .date-picker {
+      font-size: 90%;
+      // padding: 10px;
+    }
+    .default-placeholder {
+      // padding: 10px;
+    }
   }
 }
