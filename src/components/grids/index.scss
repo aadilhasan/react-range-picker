@@ -1,13 +1,17 @@
+$calendar-width: 260px;
 .grids {
   position: relative;
   min-height: 270px;
-  width: 250px;
+  width: $calendar-width;
   overflow: hidden;
   padding: 10px 0;
+  .date-grid-container {
+    width: $calendar-width;
+  }
   .animation-helper {
     position: absolute;
     display: flex;
-    transform: translateX(-268px);
+    transform: translateX(-278px);
     will-change: transform;
     &.move-left {
       transition: all 0.5s ease;
@@ -15,7 +19,7 @@
     }
     &.move-right {
       transition: all 0.5s ease;
-      transform: translateX(-530px);
+      transform: translateX(-550px);
     }
   }
 

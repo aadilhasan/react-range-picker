@@ -1,21 +1,20 @@
 @import '../index';
 .date-grid-container {
-  width: 250px;
   .date-grid {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     display: grid;
-    // grid-column-gap: 5px;
     grid-row-gap: 5px;
     &.days-names {
-      border-bottom: 1px solid gray;
-      padding-bottom: 5px;
+      border-bottom: 1px solid #d6d6d6;
+      padding-bottom: 10px;
       margin-bottom: 10px;
+      color: #7e7e7e;
     }
     .day-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 35.7px;
+      height: 37.14px;
       padding: 1px;
       box-sizing: border-box;
       &:hover {

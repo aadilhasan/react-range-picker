@@ -18,11 +18,14 @@ class App extends Component {
           onDateSelected={this.onDateSelect}
           onOk={this.onOk}
           enableRange={true}
-          selectTime={true}
         />
       </div>
     );
   }
 }
+
+const Footer = () => {
+  return <div> New Props </div>;
+};
 
 export default App;

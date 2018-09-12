@@ -51,9 +51,8 @@ const getCurrentTime = format => {
 
 export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
   const strDate = (intDate || '').toString();
-  let hours, minutes;
+  let hours, minutes, period;
   if (!strDate || strDate.length !== 8) {
-    // console.error(intDate, ' is not a valid date integer');
     return {};
   }
   const year = parseInt(strDate.substring(0, 4));
@@ -67,8 +66,15 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
     hours = time.hours;
     minutes = time.minutes;
   } else if (typeof timeObj === 'object') {
-    hours = timeObj.hours;
-    minutes = timeObj.minutes;
+    hours = timeObj.hours > 9 ? '' + timeObj.hours : '0' + timeObj.hours;
+    minutes =
+      timeObj.minutes > 9 ? '' + timeObj.minutes : '0' + timeObj.minutes;
+    period = '' + timeObj.period;
+    // if (period === 'PM') {
+    //   hours = hours < 12 ? 12 : hours;
+    // } else {
+    //   hours = hours === 12 ? 0 : hours;
+    // }
     newDate.setHours(hours);
     newDate.setMinutes(minutes);
   }
@@ -77,6 +83,7 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
     customObject: {
       minutes,
       hours,
+      period,
       date,
       month,
       year,

@@ -3,14 +3,22 @@
   flex-direction: column;
   width: 30px;
   align-items: center;
+  margin: 0 10px;
   .arrow-wrapper {
+    box-shadow: 0 1px 15px 0 rgba(64, 93, 119, 0.09),
+      0 0 2px 0 rgba(96, 111, 123, 0.2);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     .arrow {
-      border: solid black;
-      border-width: 0 4px 4px 0;
+      border: solid #565656;
+      border-width: 0 2px 2px 0;
       display: inline-block;
-      border-radius: 4px;
-      padding: 5px 5px;
+      padding: 2px 2px;
     }
     .arrow.up {
       transform: rotate(-135deg);
@@ -30,6 +38,6 @@
   }
   .value {
     margin: 10px 0;
-    font-weight: bold;
+    font-weight: 500;
   }
 }

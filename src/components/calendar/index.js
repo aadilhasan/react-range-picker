@@ -14,7 +14,7 @@ import Grids from '../grids';
 import Navigator from '../navigator';
 import MonthPicker from '../month-picker';
 import YearPicker from '../year-picker';
-import Placeholder from '../placeholder';
+import Footer from '../footer';
 import TimePicker from '../time-picker';
 import './index.scss';
 
@@ -34,11 +34,13 @@ class Calander extends React.Component {
     selectedDate2: null,
     date1Time: {
       hours: 0,
-      minutes: 0
+      minutes: 0,
+      period: 'AM'
     },
     date2Time: {
       hours: 0,
-      minutes: 0
+      minutes: 0,
+      period: 'AM'
     },
     showMonthPopup: false,
     showYearPopup: false,
@@ -222,22 +224,25 @@ class Calander extends React.Component {
     });
   };
 
-  onTimeSelected = (hours, minutes) => {
+  onTimeSelected = (hours, minutes, period) => {
     console.log(' time ', hours, minutes);
     let { selectedDate2, date1Time, date2Time } = this.state;
     if (selectedDate2) {
       date2Time = {
         hours,
-        minutes
+        minutes,
+        period
       };
     } else {
       date1Time = {
         hours,
-        minutes
+        minutes,
+        period
       };
       date2Time = {
         hours: 0,
-        minutes: 0
+        minutes: 0,
+        period: 'AM'
       };
     }
     this.setState({
@@ -259,8 +264,7 @@ class Calander extends React.Component {
       showYearPopup,
       showTimePopup
     } = this.state;
-    const { onOk = noHandler() } = this.props;
-
+    const { onOk = noHandler(), footer, selectTime } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
@@ -301,12 +305,23 @@ class Calander extends React.Component {
               rangeEnabled={this.enable_range}
             />
           </div>
-          <Placeholder
-            onToday={this.selectToday}
-            firstDate={firstDateObj}
-            secondDate={secondDateObj}
-            onOk={onOk}
-          />
+          {!!footer && footer.type ? (
+            <footer.type
+              {...footer.props}
+              onToday={this.selectToday}
+              firstDate={firstDateObj}
+              secondDate={secondDateObj}
+              onOk={onOk}
+            />
+          ) : (
+            <Footer
+              onToday={this.selectToday}
+              firstDate={firstDateObj}
+              secondDate={secondDateObj}
+              onOk={onOk}
+              showTinme={!!selectTime}
+            />
+          )}
         </div>
       </div>
     );

@@ -1,15 +1,22 @@
-.default-placeholder {
-  min-height: 87px;
+.default-footer {
+  height: 125px;
+  display: flex;
+  flex-direction: column;
   .hint {
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 3;
+    flex: 1;
   }
-  .single-date-heading {
+  .date-heading {
     font-size: 80%;
-    color: gray;
-    // margin-bottom: 3px;
+    color: #8795a1;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+  .selected-dates {
+    flex: 1;
   }
   .holder-wrapper {
     display: flex;
@@ -22,12 +29,19 @@
       text-align: left;
       .heading {
         font-size: 80%;
-        color: gray;
+        color: #3d4852;
+      }
+      &.second .heading {
+        text-align: right;
       }
       .date {
-        font-size: 90%;
-        font-weight: bold;
+        font-size: 80%;
+        font-weight: 500;
         margin-top: 7px;
+        .time {
+          font-size: 79%;
+          font-weight: initial;
+        }
       }
     }
   }

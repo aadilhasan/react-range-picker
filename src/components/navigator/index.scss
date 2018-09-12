@@ -4,8 +4,8 @@
   display: inline-block;
   width: 0.5em;
   height: 0.5em;
-  border-right: 0.1em solid black;
-  border-top: 0.1em solid black;
+  border-right: 0.15em solid #2a7bff;
+  border-top: 0.15em solid #2a7bff;
 }
 %btn-style {
   background: #ffffff;
@@ -27,14 +27,15 @@
   .prev,
   .next {
     @extend %btn-style;
-    box-shadow: 0 4px 16px 0 rgba(64, 93, 119, 0.15),
-      0 0 2px 0 rgba(96, 111, 123, 0.2);
+    // box-shadow: 0 4px 16px 0 rgba(64, 93, 119, 0.15),
+    //   0 0 2px 0 rgba(96, 111, 123, 0.2);
     width: 38px;
     height: 38px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+    background-color: #f8fafc;
   }
   .prev.arrow::before {
     @extend %arrow;

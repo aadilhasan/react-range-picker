@@ -28,8 +28,8 @@
       border-radius: 4px;
       cursor: pointer;
       &:hover {
-        background-color: #8080808f;
-        color: white;
+        background-color: rgba(42, 123, 255, 0.2);
+        // color: white;
       }
       &.selected {
         color: red;

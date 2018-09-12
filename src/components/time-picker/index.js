@@ -29,12 +29,12 @@ class TimePicker extends React.Component {
     this.temp_state[type] = val;
     if (onChange) {
       let { hours, minutes, period } = this.temp_state;
-      if (period === 'PM') {
-        hours = hours < 12 ? hours + 12 : hours;
-      } else {
-        hours = hours === 12 ? 0 : hours;
-      }
-      onChange(hours, minutes);
+      // if (period === 'PM') {
+      //   hours = hours < 12 ? hours + 12 : hours;
+      // } else {
+      //   hours = hours === 12 ? 0 : hours;
+      // }
+      onChange(hours, minutes, period);
     }
   };
 
@@ -42,12 +42,12 @@ class TimePicker extends React.Component {
     const { onDone } = this.props;
     if (onDone) {
       let { hours, minutes, period } = this.temp_state;
-      if (period === 'PM') {
-        hours += hours < 12 ? 12 : hours;
-      } else {
-        hours += hours === 12 ? 0 : hours;
-      }
-      onDone(hours, minutes);
+      // if (period === 'PM') {
+      //   hours = hours < 12 ? 12 : hours;
+      // } else {
+      //   hours = hours === 12 ? 0 : hours;
+      // }
+      onDone(hours, minutes, period);
     }
   };
 
