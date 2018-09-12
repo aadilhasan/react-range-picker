@@ -49,8 +49,22 @@ class Calander extends React.Component {
     this.enable_range = !!this.props.enableRange;
   }
 
-  componentWillReceiveProps(props) {
-    this.enable_range = !!props.enableRange;
+  componentWillReceiveProps({ enableRange, isVisible }) {
+    this.enable_range = !!enableRange;
+    if (!isVisible && this.props.isVisible !== isVisible) {
+      // if calendar is hiding, make sure all the popup hide as well
+      // so user dont see them next time when calendar is visible
+      // using time-out with 300ms so hiding of popup transition is not visible to user when hide animation is running
+      setTimeout(
+        () =>
+          this.setState({
+            showMonthPopup: false,
+            showYearPopup: false,
+            showTimePopup: false
+          }),
+        300
+      );
+    }
   }
 
   onMonthChange = increment => {

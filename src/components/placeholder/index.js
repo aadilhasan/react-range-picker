@@ -21,20 +21,21 @@ class Placeholder extends React.Component {
       const { date, monthNameShort, year } = secondDate.customObject;
       lDate += date + ' ' + monthNameShort + ' ' + year;
     }
-    if (!fDate && !lDate)
-      return (
-        <div className="default-placeholder hint">Select a date/range</div>
-      );
     return (
       <div className="default-placeholder">
-        {!!fDate &&
-          !lDate && <div className="single-date-heading"> Selcted Date </div>}
-        <div className={`holder-wrapper${!lDate ? ' center-items' : ''}`}>
-          {fDate && <DateHolder heading={!!lDate ? 'From' : ''} date={fDate} />}
-          {lDate && <DateHolder heading="To" date={lDate} />}
+        {!fDate && !lDate && <div className="hint">Select a date/range</div>}
+        <div className="selected-dates">
+          {!!fDate &&
+            !lDate && <div className="single-date-heading"> Selcted Date </div>}
+          <div className={`holder-wrapper${!lDate ? ' center-items' : ''}`}>
+            {fDate && (
+              <DateHolder heading={!!lDate ? 'From' : ''} date={fDate} />
+            )}
+            {lDate && <DateHolder heading="To" date={lDate} />}
+          </div>
         </div>
         <Buttons
-          hideSelect={!fDate && !lDate}
+          disableSelect={!fDate && !lDate}
           onToday={onToday}
           onOk={e => onOk(firstDate.dateObject, secondDate.dateObject)}
         />
@@ -43,19 +44,17 @@ class Placeholder extends React.Component {
   }
 }
 
-const Buttons = ({ hideSelect, onToday, onOk }) => {
+const Buttons = ({ disableSelect, onToday, onOk }) => {
   return (
     <div className="buttons">
       <button className="today" onClick={onToday}>
         {' '}
         TODAY{' '}
       </button>
-      {!hideSelect && (
-        <button className="select" onClick={onOk}>
-          {' '}
-          Select{' '}
-        </button>
-      )}
+      <button disabled={disableSelect} className="select" onClick={onOk}>
+        {' '}
+        Select{' '}
+      </button>
     </div>
   );
 };

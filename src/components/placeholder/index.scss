@@ -1,9 +1,10 @@
 .default-placeholder {
   min-height: 87px;
-  &.hint {
+  .hint {
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 3;
   }
   .single-date-heading {
     font-size: 80%;
@@ -51,6 +52,9 @@
       padding: 7px 25px;
       font-weight: bold;
       outline: none;
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
   }
 }

@@ -17,7 +17,7 @@ $secondry-color: rgba(42, 123, 255, 0.2);
     position: absolute;
     top: 0;
     transform: scaleY(0);
-    transition: transform 0.2s cubic-bezier(0.56, 0.15, 1, 1);
+    transition: transform 0.2s cubic-bezier(0.08, -0.03, 0.93, 0.32);
     transform-origin: top left;
     &.visible {
       transform: scaleY(1);

@@ -73,7 +73,7 @@ class DatePicker extends React.Component {
           className={'calendar' + (showCalendar ? ' visible' : '')}
           ref={this.calendar_ref}
         >
-          <Calendar {...this.props} onOk={this.onOk} />
+          <Calendar {...this.props} isVisible={showCalendar} onOk={this.onOk} />
         </div>
       </div>
     );

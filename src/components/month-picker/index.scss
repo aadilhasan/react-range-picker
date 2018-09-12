@@ -9,6 +9,7 @@
   transition: all 0.5s ease;
   transform: translateY(-103%);
   will-change: transform;
+  padding: 10px;
   &.visible {
     transform: translateY(0%);
   }
