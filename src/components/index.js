@@ -3,6 +3,28 @@ import React from 'react';
 import Placeholder from './placeholder';
 import Calendar from './calendar';
 
+/*
+  apis ==>
+
+   onDateSelected (function)  - 'gets called when a date/range is selected and time selected',
+   onOk (function) - 'when your pressed ok/select button in footer'
+   enableRange (boolean) - 'if true user can select single date or two dates'
+   selectTime (boolean) - if true time picker will show up each time a date gets selected
+
+   placeholder (React Component) - if user wants custom placeholder, placeholder will recieve  these props 
+      showTime (boolean) - it user api value
+      startDate (object {dateObjet <new Date>, customDate <object> })
+      endDate (object {dateObjet <new Date>, customDate <object> })
+      
+  footer (React Component) - if user wants custom placeholder, placeholder will recieve these props 
+      showTime (boolean) - it user api value
+      startDate (object {dateObjet <new Date>, customDate <object> })
+      endDate (object {dateObjet <new Date>, customDate <object> })
+      onToday (function) - to select today's date
+      onOk (function) - closes the calendar and calls onOk API callback
+
+ */
+
 class DatePicker extends React.Component {
   calendar_ref = React.createRef();
   user_placeholder_ref = React.createRef();
@@ -55,12 +77,14 @@ class DatePicker extends React.Component {
 
   onDateSelected = (startDate, endDate) => {
     const { onDateSelected } = this.props;
+    const dateObj1 = startDate ? startDate.dateObject : void 0;
+    const dateObj2 = endDate ? endDate.dateObject : void 0;
     this.setState(
       {
         startDate,
         endDate
       },
-      () => onDateSelected && onDateSelected(startDate, endDate)
+      () => onDateSelected && onDateSelected(dateObj1, dateObj2)
     );
   };
 

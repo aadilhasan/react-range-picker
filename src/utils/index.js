@@ -55,9 +55,9 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
   if (!strDate || strDate.length !== 8) {
     return {};
   }
-  const year = parseInt(strDate.substring(0, 4));
-  const month = parseInt(strDate.substring(4, 6));
-  const date = parseInt(strDate.substring(6, 8));
+  const year = parseInt(strDate.substring(0, 4), 10);
+  const month = parseInt(strDate.substring(4, 6), 10);
+  const date = parseInt(strDate.substring(6, 8), 10);
 
   const newDate = new Date(year, month, date);
 
@@ -66,17 +66,22 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
     hours = time.hours;
     minutes = time.minutes;
   } else if (typeof timeObj === 'object') {
+    hours = timeObj.hours;
+    minutes = timeObj.minutes;
+    period = '' + timeObj.period;
+    let dateHours = 0;
+    // format date to 24 hours for date object
+    if (period === 'PM') {
+      dateHours = hours < 12 ? hours + 12 : hours;
+    } else {
+      dateHours = hours === 12 ? 0 : hours;
+    }
+    newDate.setHours(dateHours);
+    newDate.setMinutes(minutes);
+    // in custome date object add 0 prefix in hours and minutes if the number is single digit
     hours = timeObj.hours > 9 ? '' + timeObj.hours : '0' + timeObj.hours;
     minutes =
       timeObj.minutes > 9 ? '' + timeObj.minutes : '0' + timeObj.minutes;
-    period = '' + timeObj.period;
-    // if (period === 'PM') {
-    //   hours = hours < 12 ? 12 : hours;
-    // } else {
-    //   hours = hours === 12 ? 0 : hours;
-    // }
-    newDate.setHours(hours);
-    newDate.setMinutes(minutes);
   }
   return {
     dateObject: newDate,
@@ -97,7 +102,7 @@ export const dateToInt = date => {
   // make sure both month and day starts with 0 if single digit;
   const month = date.month < 10 ? '0' + date.month : date.month;
   const day = date.date < 10 ? '0' + date.date : date.date;
-  return parseInt('' + date.year + month + day);
+  return parseInt('' + date.year + month + day, 10);
 };
 
 export const monthsFull = [

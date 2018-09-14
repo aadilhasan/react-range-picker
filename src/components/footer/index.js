@@ -6,8 +6,8 @@ class Footer extends React.Component {
   render() {
     // const { year, years, sartYear, endYear } = this.state;
     const {
-      firstDate,
-      secondDate,
+      startDate,
+      endDate,
       onToday = noHandler(),
       onOk = noHandler(),
       showTime = false
@@ -16,7 +16,7 @@ class Footer extends React.Component {
       fDateTime = '',
       lDate = '',
       lDateTime = '';
-    if (!!firstDate.customObject) {
+    if (!!startDate.customObject) {
       const {
         date,
         monthNameShort,
@@ -24,11 +24,11 @@ class Footer extends React.Component {
         hours,
         minutes,
         period
-      } = firstDate.customObject;
+      } = startDate.customObject;
       fDate += date + ' ' + monthNameShort + ' ' + year;
       fDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
     }
-    if (!!secondDate.customObject) {
+    if (!!endDate.customObject) {
       const {
         date,
         monthNameShort,
@@ -36,7 +36,7 @@ class Footer extends React.Component {
         hours,
         minutes,
         period
-      } = secondDate.customObject;
+      } = endDate.customObject;
       lDate += date + ' ' + monthNameShort + ' ' + year;
       lDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
     }
@@ -68,7 +68,7 @@ class Footer extends React.Component {
         <Buttons
           disableSelect={!fDate && !lDate}
           onToday={onToday}
-          onOk={e => onOk(firstDate.dateObject, secondDate.dateObject)}
+          onOk={e => onOk(startDate.dateObject, endDate.dateObject)}
         />
       </div>
     );

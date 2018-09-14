@@ -326,15 +326,15 @@ class Calander extends React.Component {
             <footer.type
               {...footer.props}
               onToday={this.selectToday}
-              firstDate={firstDateObj}
-              secondDate={secondDateObj}
+              startDate={firstDateObj}
+              endDate={secondDateObj}
               onOk={onOk}
             />
           ) : (
             <Footer
               onToday={this.selectToday}
-              firstDate={firstDateObj}
-              secondDate={secondDateObj}
+              startDate={firstDateObj}
+              endDate={secondDateObj}
               onOk={onOk}
               showTime={!!selectTime}
             />
