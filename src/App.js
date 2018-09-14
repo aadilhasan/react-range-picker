@@ -17,7 +17,8 @@ class App extends Component {
         <DatePicker
           onDateSelected={this.onDateSelect}
           onOk={this.onOk}
-          enableRange={true}
+          // enableRange
+          selectTime
         />
       </div>
     );

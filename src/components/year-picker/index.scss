@@ -1,3 +1,5 @@
+@import '../index';
+
 .year-picker {
   position: absolute;
   left: 0;
@@ -29,10 +31,10 @@
       cursor: pointer;
       &:hover {
         background-color: rgba(42, 123, 255, 0.2);
-        // color: white;
       }
       &.selected {
-        color: red;
+        color: $primary-color;
+        font-weight: bold;
       }
     }
   }

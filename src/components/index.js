@@ -1,22 +1,15 @@
 import React from 'react';
 
-import {
-  getNewMonthFrom,
-  getCustomDateObject,
-  monthsFull,
-  monthsShort,
-  getActualDate,
-  noHandler,
-  dateToInt
-} from 'utils';
-
+import Placeholder from './placeholder';
 import Calendar from './calendar';
 
 class DatePicker extends React.Component {
   calendar_ref = React.createRef();
   user_placeholder_ref = React.createRef();
   state = {
-    showCalendar: false
+    showCalendar: false,
+    startDate: null,
+    endDate: null
   };
 
   componentDidMount() {
@@ -60,20 +53,43 @@ class DatePicker extends React.Component {
     }
   };
 
+  onDateSelected = (startDate, endDate) => {
+    const { onDateSelected } = this.props;
+    this.setState(
+      {
+        startDate,
+        endDate
+      },
+      () => onDateSelected && onDateSelected(startDate, endDate)
+    );
+  };
+
   render() {
-    const { showCalendar } = this.state;
+    const { showCalendar, startDate, endDate } = this.state;
     return (
       <div className="date-picker-app-wrapper">
-        <div className="user-placeholder" ref={this.user_placeholder_ref}>
-          {' '}
-          <button onClick={this.toggleCalendar}> show calendar </button>{' '}
+        <div
+          className="user-placeholder"
+          ref={this.user_placeholder_ref}
+          onClick={this.toggleCalendar}
+        >
+          <Placeholder
+            startDate={startDate}
+            endDate={endDate}
+            showTime={this.props.selectTime}
+          />
         </div>
         <div
           style={this.calanderPosition}
           className={'calendar' + (showCalendar ? ' visible' : '')}
           ref={this.calendar_ref}
         >
-          <Calendar {...this.props} isVisible={showCalendar} onOk={this.onOk} />
+          <Calendar
+            {...this.props}
+            onDateSelected={this.onDateSelected}
+            isVisible={showCalendar}
+            onOk={this.onOk}
+          />
         </div>
       </div>
     );

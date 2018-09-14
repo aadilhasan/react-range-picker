@@ -33,12 +33,12 @@ class Calander extends React.Component {
     selectedDate1: null,
     selectedDate2: null,
     date1Time: {
-      hours: 0,
+      hours: 12,
       minutes: 0,
       period: 'AM'
     },
     date2Time: {
-      hours: 0,
+      hours: 12,
       minutes: 0,
       period: 'AM'
     },
@@ -126,15 +126,25 @@ class Calander extends React.Component {
   };
 
   onDateSelect = date => {
-    const { selectedDate1, selectedDate2 } = this.state;
+    const {
+      selectedDate1,
+      selectedDate2,
+      date1Time,
+      date2Time,
+      showTimePopup
+    } = this.state;
     const { onDateSelected = noHandler(), selectTime } = this.props;
-    const newState = {};
+    const newState = {
+      selectedDate1,
+      selectedDate2
+    };
 
     if (!this.enable_range && !!date) {
       this.setState({
-        selectedDate1: date
+        selectedDate1: date,
+        showTimePopup: !!selectTime ? true : showTimePopup
       });
-      onDateSelected(getActualDate(date));
+      onDateSelected(getActualDate(date, date1Time));
       return;
     }
 
@@ -157,7 +167,10 @@ class Calander extends React.Component {
     const d1 = newState.selectedDate1,
       d2 = newState.selectedDate2;
     if (!!this.enable_range && !!d1 && !!d2) {
-      onDateSelected(getActualDate(d1), getActualDate(d2));
+      onDateSelected(
+        getActualDate(d1, date1Time),
+        getActualDate(d2, date2Time)
+      );
     }
 
     if (!!selectTime) {
@@ -225,8 +238,8 @@ class Calander extends React.Component {
   };
 
   onTimeSelected = (hours, minutes, period) => {
-    console.log(' time ', hours, minutes);
-    let { selectedDate2, date1Time, date2Time } = this.state;
+    let { selectedDate1, selectedDate2, date1Time, date2Time } = this.state;
+    const { onDateSelected } = this.props;
     if (selectedDate2) {
       date2Time = {
         hours,
@@ -240,7 +253,7 @@ class Calander extends React.Component {
         period
       };
       date2Time = {
-        hours: 0,
+        hours: 12,
         minutes: 0,
         period: 'AM'
       };
@@ -250,6 +263,10 @@ class Calander extends React.Component {
       date1Time,
       date2Time
     });
+    onDateSelected(
+      getActualDate(selectedDate1, date1Time),
+      !!selectedDate2 ? getActualDate(selectedDate2, date2Time) : void 0
+    );
   };
 
   render() {
@@ -319,7 +336,7 @@ class Calander extends React.Component {
               firstDate={firstDateObj}
               secondDate={secondDateObj}
               onOk={onOk}
-              showTinme={!!selectTime}
+              showTime={!!selectTime}
             />
           )}
         </div>

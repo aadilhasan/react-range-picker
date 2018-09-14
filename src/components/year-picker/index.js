@@ -12,18 +12,18 @@ class YearPicker extends React.Component {
 
   componentDidMount() {
     const { year } = this.props;
-    this.setYearData(year);
+    this.setYearData(year, year);
   }
   componentWillReceiveProps({ year }) {
-    this.setYearData(year);
+    this.setYearData(year, year);
   }
 
-  setYearData = year => {
+  setYearData = (selectedYear, startYear) => {
     this.setState({
-      year,
-      years: this.getYearsToRender(year),
-      sartYear: year,
-      endYear: year + this.years_to_display - 1
+      year: selectedYear,
+      years: this.getYearsToRender(startYear),
+      sartYear: startYear,
+      endYear: startYear + this.years_to_display - 1
     });
   };
 
@@ -38,13 +38,13 @@ class YearPicker extends React.Component {
   };
 
   onYearChange = incrementBy => {
-    const { year } = this.state;
-    this.setYearData(year + this.years_to_display * incrementBy);
+    const { year, years } = this.state;
+    this.setYearData(year, years[0] + this.years_to_display * incrementBy);
   };
 
   render() {
     const { year, years, sartYear, endYear } = this.state;
-    const { visible, selected } = this.props;
+    const { visible } = this.props;
     const { onChange = noHandler('no handler for year picker') } = this.props;
     return (
       <div className={`year-picker${visible ? ' visible' : ' hidden'}`}>

@@ -1,3 +1,4 @@
+@import '../index';
 .month-select {
   position: absolute;
   left: 0;
@@ -34,7 +35,8 @@
         cursor: auto;
       }
       &.selected {
-        color: red;
+        color: $primary-color;
+        font-weight: bold;
       }
     }
   }
