@@ -18,7 +18,8 @@ class App extends Component {
           onDateSelected={this.onDateSelect}
           onOk={this.onOk}
           enableRange
-          selectTime
+          // rangeTillEndOfDay
+          // selectTime
         />
       </div>
     );

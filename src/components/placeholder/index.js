@@ -25,7 +25,7 @@ class Placeholder extends React.Component {
           {!!s_date || !!e_date ? (
             <div className="dates-container">
               <DateAndTime date={s_date} showTime={showTime} />
-              {!!e_date && ' ~ '}
+              {!!e_date && <b> ~ </b>}
               <DateAndTime date={e_date} showTime={showTime} />
             </div>
           ) : (

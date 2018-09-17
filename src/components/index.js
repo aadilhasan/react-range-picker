@@ -10,9 +10,10 @@ import Calendar from './calendar';
    onOk (function) - 'when your pressed ok/select button in footer'
    enableRange (boolean) - 'if true user can select single date or two dates'
    selectTime (boolean) - if true time picker will show up each time a date gets selected
+   rangeTillEndOfDay (boolean) - if true end(last) date of range will have time of 11:59 PM(end of day) else it will have 12:00
 
    placeholder (React Component) - if user wants custom placeholder, placeholder will recieve  these props 
-      showTime (boolean) - it user api value
+      showTime (boolean) - user provided value
       startDate (object {dateObjet <new Date>, customDate <object> })
       endDate (object {dateObjet <new Date>, customDate <object> })
       

@@ -20,6 +20,21 @@ import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
 const ANIMATE_RIGHT = 'move-right';
+const START_DATE_TIME = {
+  hours: 12,
+  minutes: 0,
+  period: 'AM'
+};
+const END_DATE_TIME = {
+  hours: 12,
+  minutes: 0,
+  period: 'AM'
+};
+const END_DATE_TIME_END_OF_DAY = {
+  hours: 11,
+  minutes: 59,
+  period: 'PM'
+};
 
 class Calander extends React.Component {
   actualDate = new Date();
@@ -32,16 +47,10 @@ class Calander extends React.Component {
     animationClass: '',
     selectedDate1: null,
     selectedDate2: null,
-    date1Time: {
-      hours: 12,
-      minutes: 0,
-      period: 'AM'
-    },
-    date2Time: {
-      hours: 12,
-      minutes: 0,
-      period: 'AM'
-    },
+    date1Time: { ...START_DATE_TIME },
+    date2Time: !!this.props.rangeTillEndOfDay
+      ? { ...END_DATE_TIME_END_OF_DAY }
+      : { ...END_DATE_TIME },
     showMonthPopup: false,
     showYearPopup: false,
     showTimePopup: false
@@ -239,7 +248,7 @@ class Calander extends React.Component {
 
   onTimeSelected = (hours, minutes, period) => {
     let { selectedDate1, selectedDate2, date1Time, date2Time } = this.state;
-    const { onDateSelected } = this.props;
+    const { onDateSelected, rangeTillEndOfDay } = this.props;
     if (selectedDate2) {
       date2Time = {
         hours,
@@ -252,11 +261,9 @@ class Calander extends React.Component {
         minutes,
         period
       };
-      date2Time = {
-        hours: 12,
-        minutes: 0,
-        period: 'AM'
-      };
+      date2Time = !!rangeTillEndOfDay
+        ? { ...END_DATE_TIME_END_OF_DAY }
+        : { ...END_DATE_TIME };
     }
     this.setState({
       showTimePopup: false,
