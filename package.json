@@ -100,5 +100,28 @@
     "prettier": "1.13.7",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0"
-  }
+  },
+  "author": "aadil hasan",
+  "keywords": [
+    "react-date-picker",
+    "react-range-picker",
+    "date-picker",
+    "range-picker",
+    "single-date-picker",
+    "single-range-picker",
+    "react-calendar",
+    "calendar",
+    "react",
+    "react js",
+    "picker"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aadilhasan/react-range-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aadilhasan/react-range-picker/issues"
+  },
+  "homepage": "https://github.com/aadilhasan/react-range-picker#readme"
 }
