@@ -1,1 +1,26 @@
-React Js based date/range picker. With this picker user can select date or range in the single calander not like other pickers which gives you two calander to pick start date and end date.
+React Js based date/range picker, unlike other range pickers it uses single calendar to select the range.
+
+### install
+```sh
+$ npm i react-range-picker --save
+```
+
+### use
+```sh
+import RangePicker from "react-range-picker"
+
+<RangePicker/>
+
+```
+
+### APIS
+
+| API | Type | Description |
+| ------ | -----  |------ |
+onDateSelected | function | gets called each time dates gets selected (params - startDate<Date object>, startDate<Date object>)
+| onOk | function | gets called on click on select button (params - startDate<Date object>, startDate<Date object>)
+| enableRange  | boolean | if true, range select will be enable (default false)
+| selectTime  | boolean | if true, time select will show up on date select (default false)
+| rangeTillEndOfDay  | boolean | if true, then second selected date for range will have time of end of the day (11.59 PM) else it will have time of start of the day (12:00 AM) | 
+| placeholder | react component | it replaces default placeholder, the component will receive following props (startDate <object>, endDate <object>, showTime <boolean>)|
+| footer | react component | it replaces default placeholder, the component will receive following props (startDate <object>, startDate <object>, showTime <boolean>, onToday <function>, onOk <function>)|
