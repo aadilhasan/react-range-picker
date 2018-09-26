@@ -26,4 +26,5 @@ onDateSelected | function | gets called each time date/time gets selected (param
 | footer | react component | it replaces default placeholder, the component will receive following props (startDate <object>, startDate <object>, showTime <boolean>, onToday <function>, onOk <function>)|
 
 
-#### use onOk insted of onDateSelected, because onDateSelected gets called multiple times and onOk gets called only once when calendar is closing.
+#### Note:
+Use onOk insted of onDateSelected, because onDateSelected gets called multiple times and onOk gets called only once when calendar is closing.
