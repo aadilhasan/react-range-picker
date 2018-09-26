@@ -18,7 +18,7 @@ import RangePicker from "react-range-picker"
 | API | Type | Description |
 | ------ | -----  |------ |
 onDateSelected | function | gets called each time dates gets selected (params - startDate<Date object>, startDate<Date object>)
-| onOk | function | gets called on click on select button (params - startDate<Date object>, startDate<Date object>)
+| onOk | function | gets called on click on select button (params - startDate<Date object>, endDate<Date object>)
 | enableRange  | boolean | if true, range select will be enable (default false)
 | selectTime  | boolean | if true, time select will show up on date select (default false)
 | rangeTillEndOfDay  | boolean | if true, then second selected date for range will have time of end of the day (11.59 PM) else it will have time of start of the day (12:00 AM) | 
