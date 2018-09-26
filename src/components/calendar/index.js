@@ -172,11 +172,19 @@ class Calander extends React.Component {
       newState.selectedDate1 = date;
       newState.selectedDate2 = null;
     }
-    this.setState(newState);
+
     const d1 = newState.selectedDate1,
       d2 = newState.selectedDate2;
 
-    onDateSelected(getActualDate(d1, date1Time), getActualDate(d2, date2Time));
+    newState.date2Time =
+      d1 === d2 ? { ...END_DATE_TIME_END_OF_DAY } : date2Time;
+
+    this.setState(newState);
+
+    onDateSelected(
+      getActualDate(d1, date1Time),
+      getActualDate(d2, newState.date2Time)
+    );
 
     if (!!selectTime) {
       this.showTime();
@@ -188,7 +196,7 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const { selectTime } = this.props;
+    const { selectTime, onDateSelected } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
 
@@ -211,6 +219,15 @@ class Calander extends React.Component {
         animationClass: ANIMATE_RIGHT
       });
     }
+
+    if (onDateSelected) {
+      const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME }),
+        lDate = getActualDate(this.actualIntDate, {
+          ...END_DATE_TIME_END_OF_DAY
+        });
+      onDateSelected(fDate, lDate);
+    }
+
     // added timeout of same time as animation, so after the animation is done we can remove the animation class
     setTimeout(() => {
       this.setState(
@@ -218,6 +235,7 @@ class Calander extends React.Component {
           animationClass: '',
           selectedDate1: this.actualIntDate,
           selectedDate2: this.actualIntDate,
+          date2Time: END_DATE_TIME_END_OF_DAY,
           date: new Date(this.actualDate)
         },
         () => {
