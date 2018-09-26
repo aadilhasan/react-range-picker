@@ -221,7 +221,7 @@ class Calander extends React.Component {
         {
           animationClass: '',
           selectedDate1: this.actualIntDate,
-          selectedDate2: null,
+          selectedDate2: this.actualIntDate,
           date: new Date(this.actualDate)
         },
         () => {
