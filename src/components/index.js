@@ -44,6 +44,8 @@ class DatePicker extends React.Component {
   }
 
   handleClick = ({ target }) => {
+    const { showCalendar, startDate, endDate } = this.state;
+
     // if user clicked inside calendar or user-placeholder don't do anything and return
     if (
       this.calendar_ref &&
@@ -55,10 +57,19 @@ class DatePicker extends React.Component {
       return;
     }
 
+    // if calendar is hidden, return.
+    if (!showCalendar) {
+      return;
+    }
+
     // if user clicked outside of the calendar then hide it
     this.setState({
       showCalendar: false
     });
+
+    const fDate = !!startDate ? startDate.dateObject : void 0;
+    const lDate = !!endDate ? endDate.dateObject : void 0;
+    this.props.onOk && this.props.onOk(fDate, lDate);
   };
 
   toggleCalendar = () => {
@@ -68,11 +79,11 @@ class DatePicker extends React.Component {
     });
   };
 
-  onOk = (dateObject, customDateObj) => {
+  onOk = (firstDate, lastDate) => {
     const { onOk } = this.props;
     this.toggleCalendar();
     if (onOk) {
-      onOk(dateObject, customDateObj);
+      onOk(firstDate, lastDate);
     }
   };
 

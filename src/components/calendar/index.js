@@ -175,12 +175,8 @@ class Calander extends React.Component {
     this.setState(newState);
     const d1 = newState.selectedDate1,
       d2 = newState.selectedDate2;
-    if (!!this.enable_range && !!d1 && !!d2) {
-      onDateSelected(
-        getActualDate(d1, date1Time),
-        getActualDate(d2, date2Time)
-      );
-    }
+
+    onDateSelected(getActualDate(d1, date1Time), getActualDate(d2, date2Time));
 
     if (!!selectTime) {
       this.showTime();
