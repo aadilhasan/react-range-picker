@@ -1,4 +1,5 @@
 React Js based date/range picker, unlike other range pickers it uses single calendar to select the range.
+[Click here to see it in action](https://codesandbox.io/s/async-rain-m5m831xjk9)
 
 ### install
 ```sh
