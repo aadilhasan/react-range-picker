@@ -16,9 +16,21 @@ class Placeholder extends React.Component {
   };
 
   render() {
-    const { startDate, endDate, showTime = false } = this.props;
+    const {
+      startDate,
+      endDate,
+      showTime = false,
+      customPlaceholder
+    } = this.props;
     const s_date = startDate ? startDate.customObject : null,
       e_date = endDate ? endDate.customObject : null;
+
+    if (customPlaceholder) {
+      const { dateObject: _startDate } = startDate || {};
+      const { dateObject: _endDate } = endDate || {};
+      return customPlaceholder(_startDate, _endDate, showTime);
+    }
+
     return (
       <div className="default-placeholder">
         <div className="text">

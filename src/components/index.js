@@ -102,6 +102,7 @@ class DatePicker extends React.Component {
 
   render() {
     const { showCalendar, startDate, endDate } = this.state;
+    const { placeholder } = this.props;
     return (
       <div className="date-picker-app-wrapper">
         <div
@@ -110,6 +111,7 @@ class DatePicker extends React.Component {
           onClick={this.toggleCalendar}
         >
           <Placeholder
+            customPlaceholder={placeholder}
             startDate={startDate}
             endDate={endDate}
             showTime={this.props.selectTime}

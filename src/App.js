@@ -17,7 +17,12 @@ class App extends Component {
         <DatePicker
           onDateSelected={this.onDateSelect}
           onOk={this.onOk}
-          enableRange
+          placeholder={(start, end) => (
+            <div>
+              {start ? start.getDate() : null}, {end ? end.getDate() : null}
+            </div>
+          )}
+          // enableRange
           // rangeTillEndOfDay
           // selectTime
         />

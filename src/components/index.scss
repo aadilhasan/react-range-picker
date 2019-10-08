@@ -1,9 +1,4 @@
-$primary-color: #6597ff;
-$secondry-color: rgba(42, 123, 255, 0.2);
-%today-style {
-  background-color: rgba(52, 221, 184, 0.1);
-  border: solid 1px #34ddb8;
-}
+@import './common';
 
 .date-picker-app-wrapper {
   display: inline-flex;
@@ -19,9 +14,11 @@ $secondry-color: rgba(42, 123, 255, 0.2);
     transform: scaleY(0);
     transition: transform 0.2s cubic-bezier(0.08, -0.03, 0.93, 0.32);
     transform-origin: top left;
+    animation: slide-out 0.2s linear;
     &.visible {
       transform: scaleY(1);
-      transition: transform 0.2s cubic-bezier(0, 0.65, 0.62, 1.03);
+      // transition: transform 0.2s cubic-bezier(0, 0.65, 0.62, 1.03);
+      animation: slide-in 0.2s linear;
     }
   }
   .full-date-picker-container {
@@ -44,5 +41,36 @@ $secondry-color: rgba(42, 123, 255, 0.2);
     .default-placeholder {
       // padding: 10px;
     }
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  20% {
+    transform: scaleY(1);
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  90% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.9);
+    opacity: 0;
   }
 }
