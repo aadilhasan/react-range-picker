@@ -343,23 +343,14 @@ class Calander extends React.Component {
               rangeEnabled={this.enable_range}
             />
           </div>
-          {!!footer && footer.type ? (
-            <footer.type
-              {...footer.props}
-              onToday={this.selectToday}
-              startDate={firstDateObj}
-              endDate={secondDateObj}
-              onOk={onOk}
-            />
-          ) : (
-            <Footer
-              onToday={this.selectToday}
-              startDate={firstDateObj}
-              endDate={secondDateObj}
-              onOk={onOk}
-              showTime={!!selectTime}
-            />
-          )}
+          <Footer
+            customFooter={footer}
+            onToday={this.selectToday}
+            startDate={firstDateObj}
+            endDate={secondDateObj}
+            onOk={onOk}
+            showTime={!!selectTime}
+          />
         </div>
       </div>
     );

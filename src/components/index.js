@@ -12,17 +12,15 @@ import Calendar from './calendar';
    selectTime (boolean) - if true time picker will show up each time a date gets selected
    rangeTillEndOfDay (boolean) - if true end(last) date of range will have time of 11:59 PM(end of day) else it will have 12:00
 
-   placeholder (React Component) - if user wants custom placeholder, placeholder will recieve  these props 
-      showTime (boolean) - user provided value
-      startDate (object {dateObjet <new Date>, customDate <object> })
-      endDate (object {dateObjet <new Date>, customDate <object> })
+   placeholder (function which return a React Component) - if user wants custom placeholder, placeholder function will recieve following object as param
+      {startDate (date object),
+      endDate (date object)}
       
-  footer (React Component) - if user wants custom placeholder, placeholder will recieve these props 
-      showTime (boolean) - it user api value
-      startDate (object {dateObjet <new Date>, customDate <object> })
-      endDate (object {dateObjet <new Date>, customDate <object> })
-      onToday (function) - to select today's date
-      onOk (function) - closes the calendar and calls onOk API callback
+  footer (function which return a React Component) - if user wants custom footer, footer will recieve following object as param
+      {startDate (date object)
+      endDate (date object)
+      today (function) - to select today's date
+      ok (function) - closes the calendar and calls onOk API callback}
 
  */
 
@@ -67,9 +65,9 @@ class DatePicker extends React.Component {
       showCalendar: false
     });
 
-    const fDate = !!startDate ? startDate.dateObject : void 0;
-    const lDate = !!endDate ? endDate.dateObject : void 0;
-    this.props.onOk && this.props.onOk(fDate, lDate);
+    const firstDate = startDate ? startDate._date : null;
+    const lastDate = endDate ? endDate._date : null;
+    this.props.onOk && this.props.onOk(firstDate, lastDate);
   };
 
   toggleCalendar = () => {
@@ -79,24 +77,24 @@ class DatePicker extends React.Component {
     });
   };
 
-  onOk = (firstDate, lastDate) => {
+  onOk = (startDate, endDate) => {
     const { onOk } = this.props;
+    const firstDate = startDate ? startDate._date : null;
+    const lastDate = endDate ? endDate._date : null;
     this.toggleCalendar();
-    if (onOk) {
-      onOk(firstDate, lastDate);
-    }
+    onOk && onOk(firstDate, lastDate);
   };
 
   onDateSelected = (startDate, endDate) => {
     const { onDateSelected } = this.props;
-    const dateObj1 = startDate ? startDate.dateObject : void 0;
-    const dateObj2 = endDate ? endDate.dateObject : void 0;
+    const firstDate = startDate ? startDate._date : null;
+    const lastDate = endDate ? endDate._date : null;
     this.setState(
       {
         startDate,
         endDate
       },
-      () => onDateSelected && onDateSelected(dateObj1, dateObj2)
+      () => onDateSelected && onDateSelected(firstDate, lastDate)
     );
   };
 

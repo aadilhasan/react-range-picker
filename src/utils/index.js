@@ -84,7 +84,7 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
       timeObj.minutes > 9 ? '' + timeObj.minutes : '0' + timeObj.minutes;
   }
   return {
-    dateObject: newDate,
+    _date: newDate,
     customObject: {
       minutes,
       hours,

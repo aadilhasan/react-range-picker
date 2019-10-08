@@ -2,78 +2,84 @@ import React from 'react';
 import { noHandler } from 'utils';
 import './index.scss';
 
-class Footer extends React.Component {
-  render() {
-    // const { year, years, sartYear, endYear } = this.state;
-    const {
-      startDate,
-      endDate,
-      onToday = noHandler(),
-      onOk = noHandler(),
-      showTime = false
-    } = this.props;
-    let fDate = '',
-      fDateTime = '',
-      lDate = '',
-      lDateTime = '';
-    if (!!startDate.customObject) {
-      const {
-        date,
-        monthNameShort,
-        year,
-        hours,
-        minutes,
-        period
-      } = startDate.customObject;
-      fDate += date + ' ' + monthNameShort + ' ' + year;
-      fDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
-    }
-    if (!!endDate.customObject) {
-      const {
-        date,
-        monthNameShort,
-        year,
-        hours,
-        minutes,
-        period
-      } = endDate.customObject;
-      lDate += date + ' ' + monthNameShort + ' ' + year;
-      lDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
-    }
-    return (
-      <div className="default-footer">
-        {!fDate && !lDate && <div className="hint">Select a date/range</div>}
-        {!!fDate && (
-          <div className="selected-dates">
-            <div className="date-heading"> Selected Date </div>
-            <div className={`holder-wrapper${!lDate ? ' center-items' : ''}`}>
-              {fDate && (
-                <DateHolder
-                  heading={!!lDate ? 'From' : ''}
-                  date={fDate}
-                  time={fDateTime}
-                />
-              )}
-              {lDate && (
-                <DateHolder
-                  extraClass="second"
-                  heading="To"
-                  date={lDate}
-                  time={lDateTime}
-                />
-              )}
-            </div>
-          </div>
-        )}
-        <Buttons
-          disableSelect={!fDate && !lDate}
-          onToday={onToday}
-          onOk={e => onOk(startDate.dateObject, endDate.dateObject)}
-        />
-      </div>
-    );
+const Footer = ({
+  startDate,
+  endDate,
+  onToday = noHandler(),
+  onOk = noHandler(),
+  showTime = false,
+  customFooter
+}) => {
+  if (customFooter) {
+    return customFooter({
+      today: onToday,
+      startDate: startDate ? startDate._date : null,
+      endDate: endDate ? endDate._date : null,
+      ok: () => onOk(startDate, endDate)
+    });
   }
-}
+
+  let fDate = '',
+    fDateTime = '',
+    lDate = '',
+    lDateTime = '';
+  if (!!startDate.customObject) {
+    const {
+      date,
+      monthNameShort,
+      year,
+      hours,
+      minutes,
+      period
+    } = startDate.customObject;
+    fDate += date + ' ' + monthNameShort + ' ' + year;
+    fDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
+  }
+  if (!!endDate.customObject) {
+    const {
+      date,
+      monthNameShort,
+      year,
+      hours,
+      minutes,
+      period
+    } = endDate.customObject;
+    lDate += date + ' ' + monthNameShort + ' ' + year;
+    lDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
+  }
+  return (
+    <div className="default-footer">
+      {!fDate && !lDate && <div className="hint">Select a date/range</div>}
+      {!!fDate && (
+        <div className="selected-dates">
+          <div className="date-heading"> Selected Date </div>
+          <div className={`holder-wrapper${!lDate ? ' center-items' : ''}`}>
+            {fDate && (
+              <DateHolder
+                heading={!!lDate ? 'From' : ''}
+                date={fDate}
+                time={fDateTime}
+              />
+            )}
+            {lDate && (
+              <DateHolder
+                extraClass="second"
+                heading="To"
+                date={lDate}
+                time={lDateTime}
+              />
+            )}
+          </div>
+        </div>
+      )}
+      <Buttons
+        disableSelect={!fDate && !lDate}
+        onToday={onToday}
+        onOk={e => onOk(startDate, endDate)}
+      />
+    </div>
+  );
+};
 
 const Buttons = ({ disableSelect, onToday, onOk }) => {
   return (

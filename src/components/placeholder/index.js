@@ -26,9 +26,9 @@ class Placeholder extends React.Component {
       e_date = endDate ? endDate.customObject : null;
 
     if (customPlaceholder) {
-      const { dateObject: _startDate } = startDate || {};
-      const { dateObject: _endDate } = endDate || {};
-      return customPlaceholder(_startDate, _endDate, showTime);
+      const { _date: _startDate } = startDate || {};
+      const { _date: _endDate } = endDate || {};
+      return customPlaceholder({ startDate: _startDate, endDate: _endDate });
     }
 
     return (
