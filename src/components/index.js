@@ -11,12 +11,13 @@ import Calendar from './calendar';
    enableRange (boolean) - 'if true user can select single date or two dates'
    selectTime (boolean) - if true time picker will show up each time a date gets selected
    rangeTillEndOfDay (boolean) - if true end(last) date of range will have time of 11:59 PM(end of day) else it will have 12:00
+   selectTime(boolean) - show time picker if true after very date selection
 
    placeholder (function which return a React Component) - if user wants custom placeholder, placeholder function will recieve following object as param
       {startDate (date object),
       endDate (date object)}
       
-  footer (function which return a React Component) - if user wants custom footer, footer will recieve following object as param
+   footer (function which return a React Component) - if user wants custom footer, footer will recieve following object as param
       {startDate (date object)
       endDate (date object)
       today (function) - to select today's date
@@ -24,7 +25,7 @@ import Calendar from './calendar';
 
  */
 
-class DatePicker extends React.Component {
+class RangePicker extends React.Component {
   calendar_ref = React.createRef();
   user_placeholder_ref = React.createRef();
   state = {
@@ -132,4 +133,4 @@ class DatePicker extends React.Component {
   }
 }
 
-export default DatePicker;
+export default RangePicker;
