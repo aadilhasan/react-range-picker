@@ -57,11 +57,11 @@ class Calander extends React.Component {
   };
 
   componentDidMount() {
-    this.enable_range = !!this.props.enableRange;
+    this.enable_range = this.props.disableRange !== true;
   }
 
-  componentWillReceiveProps({ enableRange, isVisible }) {
-    this.enable_range = !!enableRange;
+  componentWillReceiveProps({ disableRange, isVisible }) {
+    this.enable_range = disableRange !== true;
     if (!isVisible && this.props.isVisible !== isVisible) {
       // if calendar is hiding, make sure all the popup hide as well
       // so user dont see them next time when calendar is visible
@@ -302,7 +302,7 @@ class Calander extends React.Component {
       showYearPopup,
       showTimePopup
     } = this.state;
-    const { onOk = noHandler(), footer, selectTime } = this.props;
+    const { onClose = noHandler(), footer, selectTime } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
@@ -343,23 +343,14 @@ class Calander extends React.Component {
               rangeEnabled={this.enable_range}
             />
           </div>
-          {!!footer && footer.type ? (
-            <footer.type
-              {...footer.props}
-              onToday={this.selectToday}
-              startDate={firstDateObj}
-              endDate={secondDateObj}
-              onOk={onOk}
-            />
-          ) : (
-            <Footer
-              onToday={this.selectToday}
-              startDate={firstDateObj}
-              endDate={secondDateObj}
-              onOk={onOk}
-              showTime={!!selectTime}
-            />
-          )}
+          <Footer
+            customFooter={footer}
+            onToday={this.selectToday}
+            startDate={firstDateObj}
+            endDate={secondDateObj}
+            onClose={onClose}
+            showTime={!!selectTime}
+          />
         </div>
       </div>
     );

@@ -1,3 +1,4 @@
+$time: 0.3s;
 .time-picker-container {
   position: absolute;
   top: 0;
@@ -5,8 +6,10 @@
   right: 0;
   bottom: 0;
   z-index: 2;
-  transition: background-color 0.3s linear;
   text-align: center;
+  background-color: #0000003b;
+  transform: translateY(105%);
+  overflow: hidden;
   .time-picker {
     position: absolute;
     background-color: white;
@@ -14,24 +17,18 @@
     left: 0;
     width: 100%;
     padding: 10px 0;
-    transform: translateY(65px);
-    transition: transform 0.3s linear;
+    transform: translateY(105%);
+    transition: transform $time linear;
   }
   &.hidden {
+    transition-delay: $time;
     transform: translateY(105%);
-    transition: transform 0.3s linear;
-    background-color: #00000000;
-    .time-picker {
-      transform: translateY(65px);
-      transition: transform 0.3s linear;
-    }
   }
   &.visible {
     transform: translateY(0%);
     background-color: #0000003b;
     .time-picker {
       transform: translateY(0px);
-      transition: transform 0.3s linear;
     }
   }
   .done button {
