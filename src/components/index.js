@@ -9,7 +9,7 @@ import Calendar from './calendar';
 
    onDateSelected (function)  - 'gets called when a date/range is selected and time selected',
    onClose (function) - 'when your pressed ok/select button in footer'
-   enableRange (boolean) - 'if true user can select single date or two dates'
+   disableRange (boolean) - 'if true user can select only one single'
    selectTime (boolean) - if true time picker will show up each time a date gets selected
    rangeTillEndOfDay (boolean) - if true end(last) date of range will have time of 11:59 PM(end of day) else it will have 12:00
    selectTime(boolean) - show time picker if true after very date selection

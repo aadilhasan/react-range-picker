@@ -57,11 +57,11 @@ class Calander extends React.Component {
   };
 
   componentDidMount() {
-    this.enable_range = !!this.props.enableRange;
+    this.enable_range = this.props.disableRange !== true;
   }
 
-  componentWillReceiveProps({ enableRange, isVisible }) {
-    this.enable_range = !!enableRange;
+  componentWillReceiveProps({ disableRange, isVisible }) {
+    this.enable_range = disableRange !== true;
     if (!isVisible && this.props.isVisible !== isVisible) {
       // if calendar is hiding, make sure all the popup hide as well
       // so user dont see them next time when calendar is visible

@@ -18,7 +18,7 @@ class App extends Component {
           <DatePicker
             onDateSelected={this.onDateSelect}
             onClose={this.onClose}
-            enableRange
+            // disableRange
             // rangeTillEndOfDay
             // selectTime
           />
@@ -40,7 +40,7 @@ class App extends Component {
                 {endDate ? endDate.getDate() : null}
               </div>
             )}
-            enableRange
+            disableRange
             // rangeTillEndOfDay
             selectTime
             footer={({ startDate, endDate, close, today }) => (

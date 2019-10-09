@@ -10,7 +10,7 @@ export interface Props {
   selectTime?: boolean;
   onDateSelected?: function;
   onClose?: function;
-  enableRange?: boolean;
+  disableRange?: boolean;
   selectTime?: boolean;
   rangeTillEndOfDay?: boolean;
   placeholder?: (Dates) => React.Component;
