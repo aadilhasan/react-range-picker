@@ -1,4 +1,4 @@
-@import '../index';
+@import '../common';
 .date-grid-container {
   .date-grid {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -9,6 +9,7 @@
       padding-bottom: 10px;
       margin-bottom: 10px;
       color: #7e7e7e;
+      text-align: center;
     }
     .day-container {
       display: flex;

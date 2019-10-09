@@ -1,4 +1,4 @@
-@import '../index';
+@import '../common';
 
 .default-placeholder {
   border-radius: 3px;
@@ -36,7 +36,7 @@
     position: relative;
     .calendar-hooks {
       position: absolute;
-      left: 0.5px;
+      left: 0.01em;
       top: -0.2em;
       width: 100%;
       display: flex;
