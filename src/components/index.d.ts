@@ -4,12 +4,12 @@ type Dates = {
   endDate: Date;
 };
 
-type FooterParams = Dates & { ok: function; today: function };
+type FooterParams = Dates & { close: function; today: function };
 
 export interface Props {
   selectTime?: boolean;
   onDateSelected?: function;
-  onOk?: function;
+  onClose?: function;
   enableRange?: boolean;
   selectTime?: boolean;
   rangeTillEndOfDay?: boolean;

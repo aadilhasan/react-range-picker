@@ -7,6 +7,9 @@
   .calendar-wrapper {
     position: relative;
   }
+}
+
+#__range-picker-container {
   .calendar {
     background-color: white;
     position: absolute;
@@ -72,5 +75,6 @@
   100% {
     transform: scaleY(0.9);
     opacity: 0;
+    z-index: -3;
   }
 }

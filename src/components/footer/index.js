@@ -6,7 +6,7 @@ const Footer = ({
   startDate,
   endDate,
   onToday = noHandler(),
-  onOk = noHandler(),
+  onClose = noHandler(),
   showTime = false,
   customFooter
 }) => {
@@ -15,7 +15,7 @@ const Footer = ({
       today: onToday,
       startDate: startDate ? startDate._date : null,
       endDate: endDate ? endDate._date : null,
-      ok: () => onOk(startDate, endDate)
+      close: () => onClose(startDate, endDate)
     });
   }
 
@@ -75,20 +75,20 @@ const Footer = ({
       <Buttons
         disableSelect={!fDate && !lDate}
         onToday={onToday}
-        onOk={e => onOk(startDate, endDate)}
+        onClose={e => onClose(startDate, endDate)}
       />
     </div>
   );
 };
 
-const Buttons = ({ disableSelect, onToday, onOk }) => {
+const Buttons = ({ disableSelect, onToday, onClose }) => {
   return (
     <div className="buttons">
       <button className="today" onClick={onToday}>
         {' '}
         TODAY{' '}
       </button>
-      <button disabled={disableSelect} className="select" onClick={onOk}>
+      <button disabled={disableSelect} className="select" onClick={onClose}>
         {' '}
         Select{' '}
       </button>

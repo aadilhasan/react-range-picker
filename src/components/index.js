@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import Placeholder from './placeholder';
 import Calendar from './calendar';
@@ -7,7 +8,7 @@ import Calendar from './calendar';
   apis ==>
 
    onDateSelected (function)  - 'gets called when a date/range is selected and time selected',
-   onOk (function) - 'when your pressed ok/select button in footer'
+   onClose (function) - 'when your pressed ok/select button in footer'
    enableRange (boolean) - 'if true user can select single date or two dates'
    selectTime (boolean) - if true time picker will show up each time a date gets selected
    rangeTillEndOfDay (boolean) - if true end(last) date of range will have time of 11:59 PM(end of day) else it will have 12:00
@@ -21,40 +22,43 @@ import Calendar from './calendar';
       {startDate (date object)
       endDate (date object)
       today (function) - to select today's date
-      ok (function) - closes the calendar and calls onOk API callback}
+      close (function) - closes the calendar and calls onClose API callback}
 
  */
 
+const hiddenStyle = {
+  top: '-100%'
+};
+
 class RangePicker extends React.Component {
   calendar_ref = React.createRef();
-  user_placeholder_ref = React.createRef();
+  popup_ref = React.createRef();
   state = {
     showCalendar: false,
     startDate: null,
-    endDate: null
+    endDate: null,
+    style: hiddenStyle
   };
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClick, false);
+    const { current: popup } = this.popup_ref;
+    window.addEventListener('mousedown', this.handleOutsideClick, false);
+    popup && popup.addEventListener('mousedown', this.preventBubbling, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClick, false);
+    const { current: popup } = this.popup_ref;
+    window.removeEventListener('mousedown', this.handleOutsideClick, false);
+    popup &&
+      popup.removeEventListener('mousedown', this.preventBubbling, false);
   }
 
-  handleClick = ({ target }) => {
-    const { showCalendar, startDate, endDate } = this.state;
+  preventBubbling = e => {
+    e.stopPropagation();
+  };
 
-    // if user clicked inside calendar or user-placeholder don't do anything and return
-    if (
-      this.calendar_ref &&
-      this.user_placeholder_ref &&
-      (this.calendar_ref.current.contains(target) ||
-        this.user_placeholder_ref.current.contains(target))
-    ) {
-      // console.log(' clicked inside ');
-      return;
-    }
+  handleOutsideClick = ({ target }) => {
+    const { showCalendar, startDate, endDate } = this.state;
 
     // if calendar is hidden, return.
     if (!showCalendar) {
@@ -68,22 +72,32 @@ class RangePicker extends React.Component {
 
     const firstDate = startDate ? startDate._date : null;
     const lastDate = endDate ? endDate._date : null;
-    this.props.onOk && this.props.onOk(firstDate, lastDate);
+    this.props.onClose && this.props.onClose(firstDate, lastDate);
   };
 
   toggleCalendar = () => {
-    const { showCalendar } = this.state;
+    const { showCalendar, style: _style } = this.state;
+    let style = { ..._style };
+    if (!showCalendar) {
+      const { current } = this.calendar_ref;
+      const { left, top } = current.getBoundingClientRect();
+      style = {
+        left,
+        top
+      };
+    }
     this.setState({
-      showCalendar: !showCalendar
+      showCalendar: !showCalendar,
+      style
     });
   };
 
-  onOk = (startDate, endDate) => {
-    const { onOk } = this.props;
+  onClose = (startDate, endDate) => {
+    const { onClose } = this.props;
     const firstDate = startDate ? startDate._date : null;
     const lastDate = endDate ? endDate._date : null;
     this.toggleCalendar();
-    onOk && onOk(firstDate, lastDate);
+    onClose && onClose(firstDate, lastDate);
   };
 
   onDateSelected = (startDate, endDate) => {
@@ -100,15 +114,11 @@ class RangePicker extends React.Component {
   };
 
   render() {
-    const { showCalendar, startDate, endDate } = this.state;
+    const { showCalendar, startDate, endDate, style } = this.state;
     const { placeholder } = this.props;
     return (
-      <div className="date-picker-app-wrapper">
-        <div
-          className="user-placeholder"
-          ref={this.user_placeholder_ref}
-          onClick={this.toggleCalendar}
-        >
+      <div className="date-picker-app-wrapper" ref={this.calendar_ref}>
+        <div className="user-placeholder" onClick={this.toggleCalendar}>
           <Placeholder
             customPlaceholder={placeholder}
             startDate={startDate}
@@ -116,21 +126,33 @@ class RangePicker extends React.Component {
             showTime={this.props.selectTime}
           />
         </div>
-        <div
-          style={this.calanderPosition}
-          className={'calendar' + (showCalendar ? ' visible' : '')}
-          ref={this.calendar_ref}
-        >
-          <Calendar
-            {...this.props}
-            onDateSelected={this.onDateSelected}
-            isVisible={showCalendar}
-            onOk={this.onOk}
-          />
-        </div>
+        {PortalCreator(
+          <div
+            style={style}
+            className={'calendar' + (showCalendar ? ' visible' : '')}
+            ref={this.popup_ref}
+          >
+            <Calendar
+              {...this.props}
+              onDateSelected={this.onDateSelected}
+              isVisible={showCalendar}
+              onClose={this.onClose}
+            />
+          </div>
+        )}
       </div>
     );
   }
 }
+
+const PortalCreator = child => {
+  let container = document.getElementById('__range-picker-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = '__range-picker-container';
+    document.body.appendChild(container);
+  }
+  return ReactDOM.createPortal(child, container);
+};
 
 export default RangePicker;

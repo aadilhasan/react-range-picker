@@ -302,7 +302,7 @@ class Calander extends React.Component {
       showYearPopup,
       showTimePopup
     } = this.state;
-    const { onOk = noHandler(), footer, selectTime } = this.props;
+    const { onClose = noHandler(), footer, selectTime } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
@@ -348,7 +348,7 @@ class Calander extends React.Component {
             onToday={this.selectToday}
             startDate={firstDateObj}
             endDate={secondDateObj}
-            onOk={onOk}
+            onClose={onClose}
             showTime={!!selectTime}
           />
         </div>

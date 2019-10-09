@@ -7,7 +7,7 @@ class App extends Component {
     console.log(' date selected ', dateObject, dateCustomObject);
   };
 
-  onOk = (dateObject, dateCustomObject) => {
+  onClose = (dateObject, dateCustomObject) => {
     console.log(' ok/select pressed ', dateObject, dateCustomObject);
   };
 
@@ -17,7 +17,7 @@ class App extends Component {
         <div>
           <DatePicker
             onDateSelected={this.onDateSelect}
-            onOk={this.onOk}
+            onClose={this.onClose}
             enableRange
             // rangeTillEndOfDay
             // selectTime
@@ -27,7 +27,7 @@ class App extends Component {
           <h2> With custom footer and placeholder</h2>
           <DatePicker
             onDateSelected={this.onDateSelect}
-            onOk={this.onOk}
+            onClose={this.onClose}
             placeholder={({ startDate, endDate }) => (
               <div
                 style={{
@@ -43,7 +43,7 @@ class App extends Component {
             enableRange
             // rangeTillEndOfDay
             selectTime
-            footer={({ startDate, endDate, ok, today }) => (
+            footer={({ startDate, endDate, close, today }) => (
               <div
                 style={{
                   border: '1px solid green',
@@ -55,7 +55,7 @@ class App extends Component {
               >
                 {startDate ? startDate.getDate() : null},{' '}
                 {endDate ? endDate.getDate() : null}
-                <button onClick={ok}>OK</button>
+                <button onClick={close}>OK</button>
                 <button onClick={today}>Today</button>
               </div>
             )}
