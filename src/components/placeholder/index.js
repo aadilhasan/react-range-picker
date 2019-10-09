@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.scss';
+import LanguageContext from '../context';
 
 class Placeholder extends React.Component {
   getDateString = (obj, showTime) => {
@@ -52,15 +53,24 @@ class Placeholder extends React.Component {
 
 const DateAndTime = ({ date, showTime }) => {
   if (!date) return null;
-  const dateStr = date.date + '-' + date.month + '-' + date.year;
-  const timeStr = !showTime
-    ? ''
-    : date.hours + ':' + date.minutes + ' ' + date.period;
+
   return (
-    <React.Fragment>
-      <span className="date"> {dateStr} </span>
-      <span className="time"> {timeStr} </span>
-    </React.Fragment>
+    <LanguageContext.Consumer>
+      {({ dates, months }) => {
+        const dateStr =
+          dates[date.date - 1] + '-' + months[date.month] + '-' + date.year;
+        const timeStr = !showTime
+          ? ''
+          : date.hours + ':' + date.minutes + ' ' + date.period;
+        return (
+          <React.Fragment>
+            {console.log(months)}
+            <span className="date">{dateStr}</span>
+            <span className="time"> {timeStr} </span>
+          </React.Fragment>
+        );
+      }}
+    </LanguageContext.Consumer>
   );
 };
 

@@ -133,3 +133,13 @@ export const monthsShort = [
   'Nov',
   'Dec'
 ];
+
+export const getMinutes = () => {
+  let i = 0,
+    limit = 60,
+    minutes = [];
+  for (i; i < limit; i += 1) {
+    minutes.push(i < 10 ? '0' + i : '' + i);
+  }
+  return minutes;
+};

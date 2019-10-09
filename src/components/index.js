@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Placeholder from './placeholder';
 import Calendar from './calendar';
-
+import LanguageContext from './context';
 /*
   apis ==>
 
@@ -115,29 +115,34 @@ class RangePicker extends React.Component {
 
   render() {
     const { showCalendar, startDate, endDate, style } = this.state;
-    const { placeholder } = this.props;
+    const { placeholder, language = {} } = this.props;
     return (
       <div className="date-picker-app-wrapper" ref={this.calendar_ref}>
         <div className="user-placeholder" onClick={this.toggleCalendar}>
-          <Placeholder
-            customPlaceholder={placeholder}
-            startDate={startDate}
-            endDate={endDate}
-            showTime={this.props.selectTime}
-          />
+          <LanguageContext.Provider>
+            <Placeholder
+              customPlaceholder={placeholder}
+              startDate={startDate}
+              endDate={endDate}
+              showTime={this.props.selectTime}
+            />
+          </LanguageContext.Provider>
         </div>
+
         {PortalCreator(
           <div
             style={style}
             className={'calendar' + (showCalendar ? ' visible' : '')}
             ref={this.popup_ref}
           >
-            <Calendar
-              {...this.props}
-              onDateSelected={this.onDateSelected}
-              isVisible={showCalendar}
-              onClose={this.onClose}
-            />
+            <LanguageContext.Provider>
+              <Calendar
+                {...this.props}
+                onDateSelected={this.onDateSelected}
+                isVisible={showCalendar}
+                onClose={this.onClose}
+              />
+            </LanguageContext.Provider>
           </div>
         )}
       </div>
