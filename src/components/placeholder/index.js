@@ -52,7 +52,7 @@ class Placeholder extends React.Component {
 
 const DateAndTime = ({ date, showTime }) => {
   if (!date) return null;
-  const dateStr = date.date + '-' + date.month + '-' + date.year;
+  const dateStr = date.date + '-' + (date.month + 1) + '-' + date.year;
   const timeStr = !showTime
     ? ''
     : date.hours + ':' + date.minutes + ' ' + date.period;

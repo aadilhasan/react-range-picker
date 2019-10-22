@@ -1,6 +1,6 @@
 import React from 'react';
 import DateGrid from '../date-grid';
-
+import ControlledUpdate from '../controlled-update';
 import './index.scss';
 
 class Grids extends React.Component {
@@ -20,13 +20,15 @@ class Grids extends React.Component {
       <div className="grids">
         <div className={'animation-helper ' + animationClass}>
           <div className="month prev">
-            <DateGrid
-              date={prevMonth}
-              onDateSelect={onDateSelect}
-              selectedDate1={selectedDate1}
-              selectedDate2={selectedDate2}
-              rangeEnabled={rangeEnabled}
-            />
+            <ControlledUpdate shouldUpdate={Boolean(animationClass)}>
+              <DateGrid
+                date={prevMonth}
+                onDateSelect={onDateSelect}
+                selectedDate1={selectedDate1}
+                selectedDate2={selectedDate2}
+                rangeEnabled={rangeEnabled}
+              />
+            </ControlledUpdate>
           </div>
           <div className="month current">
             <DateGrid
@@ -38,13 +40,15 @@ class Grids extends React.Component {
             />
           </div>
           <div className="month next">
-            <DateGrid
-              date={nextMonth}
-              onDateSelect={onDateSelect}
-              selectedDate1={selectedDate1}
-              selectedDate2={selectedDate2}
-              rangeEnabled={rangeEnabled}
-            />
+            <ControlledUpdate shouldUpdate={Boolean(animationClass)}>
+              <DateGrid
+                date={nextMonth}
+                onDateSelect={onDateSelect}
+                selectedDate1={selectedDate1}
+                selectedDate2={selectedDate2}
+                rangeEnabled={rangeEnabled}
+              />
+            </ControlledUpdate>
           </div>
         </div>
       </div>

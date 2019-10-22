@@ -32,12 +32,17 @@ class App extends Component {
               <div
                 style={{
                   border: '1px solid red',
-                  padding: '2px, 10px',
+                  padding: '5px, 10px',
                   minWidth: 200
                 }}
               >
-                {startDate ? startDate.getDate() : null},{' '}
-                {endDate ? endDate.getDate() : null}
+                {startDate ? (
+                  ' Date - ' + startDate.getDate()
+                ) : (
+                  <span style={{ opacity: 0.5 }}>
+                    Picker with custom footer and time select{' '}
+                  </span>
+                )}
               </div>
             )}
             disableRange
@@ -61,13 +66,46 @@ class App extends Component {
             )}
           />
         </div>
+        <br />
+        <PickerWithCustomePlaceholder />
       </div>
     );
   }
 }
 
-const Footer = () => {
-  return <div> New Props </div>;
+const PickerWithCustomePlaceholder = () => {
+  const placeholder = ({ startDate, endDate }) => {
+    let _startDate = '';
+    let _endDate = '';
+    if (startDate) {
+      _startDate = `${startDate.getDate()}_${startDate.getMonth() +
+        1}_${startDate.getFullYear()}`;
+    }
+
+    if (endDate) {
+      _endDate = `${endDate.getDate()}_${endDate.getMonth() +
+        1}_${endDate.getFullYear()}`;
+    }
+    return (
+      <div>
+        <div
+          className="_placeholder"
+          style={{ border: '1px solid gray', padding: '5px 10px' }}
+        >
+          {!_startDate ? 'click here ' : `${_startDate} - ${_endDate}`}
+        </div>
+      </div>
+    );
+  };
+  return (
+    <div>
+      <br />
+      <br />
+      <h3>With custom placeholder</h3>
+      <br />
+      <DatePicker placeholder={placeholder} />
+    </div>
+  );
 };
 
 export default App;

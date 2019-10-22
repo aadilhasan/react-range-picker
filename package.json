@@ -1,7 +1,7 @@
 {
   "name": "react-range-picker",
   "main": "build/index.js",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "React Js based date/range picker. With this picker user can select date or range in the single calander not like other pickers which gives you two calander to pick start date and end date.",
   "peerDependencies": {
     "react": "^16.4.2",
