@@ -1,54 +1,38 @@
 import React from 'react';
 import './index.scss';
 
-class Placeholder extends React.Component {
-  getDateString = (obj, showTime) => {
-    if (!obj) return '';
+const Placeholder = ({
+  startDate,
+  endDate,
+  showTime = false,
+  customPlaceholder
+}) => {
+  const s_date = startDate ? startDate.customObject : null,
+    e_date = endDate ? endDate.customObject : null;
 
-    return (
-      obj.date +
-      '-' +
-      obj.month +
-      '-' +
-      obj.year +
-      (showTime ? ' ' + obj.hours + ':' + obj.minutes + ' ' + obj.period : '')
-    );
-  };
-
-  render() {
-    const {
-      startDate,
-      endDate,
-      showTime = false,
-      customPlaceholder
-    } = this.props;
-    const s_date = startDate ? startDate.customObject : null,
-      e_date = endDate ? endDate.customObject : null;
-
-    if (customPlaceholder) {
-      const { _date: _startDate } = startDate || {};
-      const { _date: _endDate } = endDate || {};
-      return customPlaceholder({ startDate: _startDate, endDate: _endDate });
-    }
-
-    return (
-      <div className="default-placeholder">
-        <div className="text">
-          {!!s_date || !!e_date ? (
-            <div className="dates-container">
-              <DateAndTime date={s_date} showTime={showTime} />
-              {!!e_date && <b> ~ </b>}
-              <DateAndTime date={e_date} showTime={showTime} />
-            </div>
-          ) : (
-            'Select Date / Date Range'
-          )}
-        </div>
-        <CalendarIcon />
-      </div>
-    );
+  if (customPlaceholder) {
+    const { _date: _startDate } = startDate || {};
+    const { _date: _endDate } = endDate || {};
+    return customPlaceholder({ startDate: _startDate, endDate: _endDate });
   }
-}
+
+  return (
+    <div className="default-placeholder">
+      <div className="text">
+        {!!s_date || !!e_date ? (
+          <div className="dates-container">
+            <DateAndTime date={s_date} showTime={showTime} />
+            {!!e_date && <b> ~ </b>}
+            <DateAndTime date={e_date} showTime={showTime} />
+          </div>
+        ) : (
+          'Select Date / Date Range'
+        )}
+      </div>
+      <CalendarIcon />
+    </div>
+  );
+};
 
 const DateAndTime = ({ date, showTime }) => {
   if (!date) return null;
