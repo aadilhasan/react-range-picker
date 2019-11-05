@@ -12,15 +12,28 @@ const getMinutes = () => {
   return minutes;
 };
 
-class TimePicker extends React.Component {
-  hours = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  minutes = getMinutes();
-  period = ['AM', 'PM'];
-  visible = false;
+const hours = [
+  '12',
+  '01',
+  '02',
+  '03',
+  '04',
+  '05',
+  '06',
+  '07',
+  '08',
+  '09',
+  '10',
+  '11'
+];
+const minutes = getMinutes();
+const period = ['AM', 'PM'];
 
+class TimePicker extends React.Component {
+  visible = false;
   temp_state = {
-    hours: 12,
-    minutes: 0,
+    hours: '12',
+    minutes: '00',
     period: 'AM'
   };
 
@@ -29,11 +42,6 @@ class TimePicker extends React.Component {
     this.temp_state[type] = val;
     if (onChange) {
       let { hours, minutes, period } = this.temp_state;
-      // if (period === 'PM') {
-      //   hours = hours < 12 ? hours + 12 : hours;
-      // } else {
-      //   hours = hours === 12 ? 0 : hours;
-      // }
       onChange(hours, minutes, period);
     }
   };
@@ -42,11 +50,6 @@ class TimePicker extends React.Component {
     const { onDone } = this.props;
     if (onDone) {
       let { hours, minutes, period } = this.temp_state;
-      // if (period === 'PM') {
-      //   hours = hours < 12 ? 12 : hours;
-      // } else {
-      //   hours = hours === 12 ? 0 : hours;
-      // }
       onDone(hours, minutes, period);
     }
   };
@@ -55,8 +58,8 @@ class TimePicker extends React.Component {
     const { visible } = this.props;
     if (!!visible && visible !== this.visible) {
       this.temp_state = {
-        hours: 12,
-        minutes: 0,
+        hours: '12',
+        minutes: '00',
         period: 'AM'
       };
     }
@@ -68,21 +71,9 @@ class TimePicker extends React.Component {
       >
         <div className="time-picker" onClick={e => e.stopPropagation()}>
           <div key={visible}>
-            <Picker
-              onChange={this.onChange}
-              values={this.hours}
-              label="hours"
-            />
-            <Picker
-              onChange={this.onChange}
-              values={this.minutes}
-              label="minutes"
-            />
-            <Picker
-              onChange={this.onChange}
-              values={this.period}
-              label="period"
-            />
+            <Picker onChange={this.onChange} values={hours} label="hours" />
+            <Picker onChange={this.onChange} values={minutes} label="minutes" />
+            <Picker onChange={this.onChange} values={period} label="period" />
             <div className="done">
               <button onClick={this.onDone}> Done </button>
             </div>

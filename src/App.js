@@ -18,33 +18,17 @@ class App extends Component {
           <DatePicker
             onDateSelected={this.onDateSelect}
             onClose={this.onClose}
+            // dateFormat="DD-MM-YYYY h:miA"
             // disableRange
             // rangeTillEndOfDay
             // selectTime
           />
         </div>
         <div>
-          <h2> With custom footer and placeholder</h2>
+          <h2> With custom footer</h2>
           <DatePicker
             onDateSelected={this.onDateSelect}
             onClose={this.onClose}
-            placeholder={({ startDate, endDate }) => (
-              <div
-                style={{
-                  border: '1px solid red',
-                  padding: '5px, 10px',
-                  minWidth: 200
-                }}
-              >
-                {startDate ? (
-                  ' Date - ' + startDate.getDate()
-                ) : (
-                  <span style={{ opacity: 0.5 }}>
-                    Picker with custom footer and time select{' '}
-                  </span>
-                )}
-              </div>
-            )}
             disableRange
             // rangeTillEndOfDay
             selectTime
@@ -58,12 +42,24 @@ class App extends Component {
                   justifyContent: 'space-between'
                 }}
               >
-                {startDate ? startDate.getDate() : null},{' '}
-                {endDate ? endDate.getDate() : null}
+                {startDate ? startDate.getDate() : null}
+                {endDate ? ', ' + endDate.getDate() : null}
                 <button onClick={close}>OK</button>
                 <button onClick={today}>Today</button>
               </div>
             )}
+          />
+        </div>
+        <br />
+        <div>
+          <h2> With custom date format and placeholder text</h2>
+          <DatePicker
+            onDateSelected={this.onDateSelect}
+            onClose={this.onClose}
+            disableRange
+            dateFormat="MMMM dd  YYYY @ h:mi A"
+            placeholderText="Date of birth and time"
+            selectTime
           />
         </div>
         <br />
@@ -78,13 +74,13 @@ const PickerWithCustomePlaceholder = () => {
     let _startDate = '';
     let _endDate = '';
     if (startDate) {
-      _startDate = `${startDate.getDate()}_${startDate.getMonth() +
-        1}_${startDate.getFullYear()}`;
+      _startDate = `${startDate.getDate()}/${startDate.getMonth() +
+        1}/${startDate.getFullYear()}`;
     }
 
     if (endDate) {
-      _endDate = `${endDate.getDate()}_${endDate.getMonth() +
-        1}_${endDate.getFullYear()}`;
+      _endDate = `${endDate.getDate()}/${endDate.getMonth() +
+        1}/${endDate.getFullYear()}`;
     }
     return (
       <div>

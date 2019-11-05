@@ -3,12 +3,12 @@ import React from 'react';
 import {
   getNewMonthFrom,
   getCustomDateObject,
-  monthsFull,
-  monthsShort,
   getActualDate,
   noHandler,
   dateToInt
 } from 'utils';
+
+import { monthsFull, monthsShort } from 'const';
 
 import Grids from '../grids';
 import Navigator from '../navigator';
@@ -21,18 +21,18 @@ import './index.scss';
 const ANIMATE_LEFT = 'move-left';
 const ANIMATE_RIGHT = 'move-right';
 const START_DATE_TIME = {
-  hours: 12,
-  minutes: 0,
+  hours: '12',
+  minutes: '00',
   period: 'AM'
 };
 const END_DATE_TIME = {
-  hours: 12,
-  minutes: 0,
+  hours: '12',
+  minutes: '00',
   period: 'AM'
 };
 const END_DATE_TIME_END_OF_DAY = {
-  hours: 11,
-  minutes: 59,
+  hours: '11',
+  minutes: '59',
   period: 'PM'
 };
 

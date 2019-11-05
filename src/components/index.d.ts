@@ -11,9 +11,10 @@ export interface Props {
   onDateSelected?: Function;
   onClose?: Function;
   disableRange?: boolean;
-  selectTime?: boolean;
   rangeTillEndOfDay?: boolean;
   placeholder?: (Dates) => React.Component;
+  placeholderText?: string;
+  dateFormat?: string;
   footer?: (FooterParams) => React.Component;
 }
 

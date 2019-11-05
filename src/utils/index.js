@@ -1,3 +1,6 @@
+import { monthsShort, monthsFull } from 'const';
+import { formators } from './date-formators.js';
+
 export const getDays = (month, year) => {
   // Month here is 1-indexed (January is 1, February is 2, etc). This is
   // because we're using 0 as the day so that it returns the last day
@@ -78,10 +81,6 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
     }
     newDate.setHours(dateHours);
     newDate.setMinutes(minutes);
-    // in custome date object add 0 prefix in hours and minutes if the number is single digit
-    hours = timeObj.hours > 9 ? '' + timeObj.hours : '0' + timeObj.hours;
-    minutes =
-      timeObj.minutes > 9 ? '' + timeObj.minutes : '0' + timeObj.minutes;
   }
   return {
     _date: newDate,
@@ -93,7 +92,8 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
       month,
       year,
       monthNameShort: monthsShort[month],
-      monthNameFull: monthsFull[month]
+      monthNameFull: monthsFull[month],
+      day: newDate.getDay()
     }
   };
 };
@@ -105,31 +105,10 @@ export const dateToInt = date => {
   return parseInt('' + date.year + month + day, 10);
 };
 
-export const monthsFull = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
-export const monthsShort = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
-];
+export const formatDate = (format, date = new Date()) => {
+  formators.forEach(formator => {
+    const _f = formator(format, date);
+    format = _f || format;
+  });
+  return format;
+};

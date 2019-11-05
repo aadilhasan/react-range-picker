@@ -115,7 +115,7 @@ class RangePicker extends React.Component {
 
   render() {
     const { showCalendar, startDate, endDate, style } = this.state;
-    const { placeholder } = this.props;
+    const { placeholder, dateFormat, placeholderText } = this.props;
     return (
       <div className="date-picker-app-wrapper" ref={this.calendar_ref}>
         <div className="user-placeholder" onClick={this.toggleCalendar}>
@@ -124,6 +124,8 @@ class RangePicker extends React.Component {
             startDate={startDate}
             endDate={endDate}
             showTime={this.props.selectTime}
+            placeholder={placeholderText}
+            format={dateFormat}
           />
         </div>
         {PortalCreator(

@@ -1,11 +1,14 @@
 import React from 'react';
 import './index.scss';
+import { formatDate } from 'utils';
 
 const Placeholder = ({
   startDate,
   endDate,
   showTime = false,
-  customPlaceholder
+  customPlaceholder,
+  placeholder,
+  format
 }) => {
   const s_date = startDate ? startDate.customObject : null,
     e_date = endDate ? endDate.customObject : null;
@@ -21,12 +24,12 @@ const Placeholder = ({
       <div className="text">
         {!!s_date || !!e_date ? (
           <div className="dates-container">
-            <DateAndTime date={s_date} showTime={showTime} />
+            <DateAndTime format={format} date={s_date} showTime={showTime} />
             {!!e_date && <b> ~ </b>}
-            <DateAndTime date={e_date} showTime={showTime} />
+            <DateAndTime format={format} date={e_date} showTime={showTime} />
           </div>
         ) : (
-          'Select Date / Date Range'
+          placeholder || 'Select Date / Date Range'
         )}
       </div>
       <CalendarIcon />
@@ -34,16 +37,13 @@ const Placeholder = ({
   );
 };
 
-const DateAndTime = ({ date, showTime }) => {
+const DateAndTime = ({ date, format, showTime }) => {
   if (!date) return null;
-  const dateStr = date.date + '-' + (date.month + 1) + '-' + date.year;
-  const timeStr = !showTime
-    ? ''
-    : date.hours + ':' + date.minutes + ' ' + date.period;
+  const _format = showTime ? 'dd-mm-yyyy h:mi A' : 'dd-mm-yyyy';
+  const dateStr = formatDate(format || _format, date);
   return (
     <React.Fragment>
       <span className="date"> {dateStr} </span>
-      <span className="time"> {timeStr} </span>
     </React.Fragment>
   );
 };
