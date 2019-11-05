@@ -16,7 +16,8 @@ module.exports = {
     modules: [path.resolve('./src'), path.resolve('./node_modules')],
     alias: {
       // my alias
-      utils: path.resolve(__dirname, './src/utils/index.js')
+      utils: path.resolve(__dirname, './src/utils/index.js'),
+      const: path.resolve(__dirname, './src/const/index.js')
     }
   },
   module: {
