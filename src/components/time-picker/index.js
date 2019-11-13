@@ -2,16 +2,8 @@ import React from 'react';
 import Picker from './picker';
 import './index.scss';
 
-const getMinutes = () => {
-  let i = 0,
-    limit = 60,
-    minutes = [];
-  for (i; i < limit; i += 1) {
-    minutes.push(i < 10 ? '0' + i : '' + i);
-  }
-  return minutes;
-};
 
+const minutes = [...Array(60).keys()].map(_ => _.toString().padStart(2, "0"));
 const hours = [
   '12',
   '01',
@@ -26,7 +18,6 @@ const hours = [
   '10',
   '11'
 ];
-const minutes = getMinutes();
 const period = ['AM', 'PM'];
 
 class TimePicker extends React.Component {
