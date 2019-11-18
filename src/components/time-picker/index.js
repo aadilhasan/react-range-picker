@@ -3,7 +3,7 @@ import Picker from './picker';
 import './index.scss';
 
 
-const minute = [...Array(60).keys()].map(_ => _.toString().padStart(2, "0"));
+const minutes = [...Array(60).keys()].map(_ => _.toString().padStart(2, "0"));
 const hours = [
   '12',
   '01',
