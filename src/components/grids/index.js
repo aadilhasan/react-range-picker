@@ -12,8 +12,6 @@ class Grids extends React.Component {
       nextMonth,
       animationClass = '',
       onDateSelect,
-      selectedDate1,
-      selectedDate2,
       rangeEnabled
     } = this.props;
     return (
@@ -24,8 +22,6 @@ class Grids extends React.Component {
               <DateGrid
                 date={prevMonth}
                 onDateSelect={onDateSelect}
-                selectedDate1={selectedDate1}
-                selectedDate2={selectedDate2}
                 rangeEnabled={rangeEnabled}
               />
             </ControlledUpdate>
@@ -34,8 +30,6 @@ class Grids extends React.Component {
             <DateGrid
               date={currentMonth}
               onDateSelect={onDateSelect}
-              selectedDate1={selectedDate1}
-              selectedDate2={selectedDate2}
               rangeEnabled={rangeEnabled}
             />
           </div>
@@ -44,8 +38,6 @@ class Grids extends React.Component {
               <DateGrid
                 date={nextMonth}
                 onDateSelect={onDateSelect}
-                selectedDate1={selectedDate1}
-                selectedDate2={selectedDate2}
                 rangeEnabled={rangeEnabled}
               />
             </ControlledUpdate>

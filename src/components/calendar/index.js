@@ -16,6 +16,7 @@ import MonthPicker from '../month-picker';
 import YearPicker from '../year-picker';
 import Footer from '../footer';
 import TimePicker from '../time-picker';
+import Context from '../context';
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -45,12 +46,6 @@ class Calander extends React.Component {
   state = {
     date: new Date(this.actualDate),
     animationClass: '',
-    selectedDate1: null,
-    selectedDate2: null,
-    date1Time: { ...START_DATE_TIME },
-    date2Time: !!this.props.rangeTillEndOfDay
-      ? { ...END_DATE_TIME_END_OF_DAY }
-      : { ...END_DATE_TIME },
     showMonthPopup: false,
     showYearPopup: false,
     showTimePopup: false
@@ -135,13 +130,13 @@ class Calander extends React.Component {
   };
 
   onDateSelect = date => {
-    const {
-      selectedDate1,
-      selectedDate2,
-      date1Time,
-      date2Time,
-      showTimePopup
-    } = this.state;
+    const { showTimePopup } = this.state;
+    const { date1Time, date2Time } = getTimes(
+      this.props.provider,
+      this.props.rangeTillEndOfDay
+    );
+    const { selectedDate1, selectedDate2 } = getIntDates(this.props.provider);
+
     const { onDateSelected = noHandler(), selectTime } = this.props;
     const newState = {
       selectedDate1,
@@ -152,6 +147,9 @@ class Calander extends React.Component {
       this.setState({
         selectedDate1: date,
         showTimePopup: !!selectTime ? true : showTimePopup
+      });
+      this.props.provider.updateContext({
+        startDate: getActualDate(date, date1Time)
       });
       onDateSelected(getActualDate(date, date1Time));
       return;
@@ -180,11 +178,19 @@ class Calander extends React.Component {
       d1 === d2 ? { ...END_DATE_TIME_END_OF_DAY } : date2Time;
 
     this.setState(newState);
+    this.props.provider.updateContext({
+      startDate: newState.selectedDate1,
+      endDate: newState.selectedDate2
+    });
 
-    onDateSelected(
-      getActualDate(d1, date1Time),
-      getActualDate(d2, newState.date2Time)
-    );
+    const _startDate = getActualDate(d1, date1Time);
+    const _endDate = getActualDate(d2, date2Time);
+    this.props.provider.updateContext({
+      startDate: _startDate,
+      endDate: _endDate
+    });
+
+    onDateSelected(_startDate, _endDate);
 
     if (!!selectTime) {
       this.showTime();
@@ -261,7 +267,11 @@ class Calander extends React.Component {
   };
 
   onTimeSelected = (hours, minutes, period) => {
-    let { selectedDate1, selectedDate2, date1Time, date2Time } = this.state;
+    let { date1Time, date2Time } = getTimes(
+      this.props.provider,
+      this.props.rangeTillEndOfDay
+    );
+    const { selectedDate1, selectedDate2 } = getIntDates(this.props.provider);
     const { onDateSelected, rangeTillEndOfDay } = this.props;
     if (selectedDate2) {
       date2Time = {
@@ -284,20 +294,21 @@ class Calander extends React.Component {
       date1Time,
       date2Time
     });
-    onDateSelected(
-      getActualDate(selectedDate1, date1Time),
-      !!selectedDate2 ? getActualDate(selectedDate2, date2Time) : void 0
-    );
+    const _startDate = getActualDate(selectedDate1, date1Time);
+    const _endDate = !!selectedDate2
+      ? getActualDate(selectedDate2, date2Time)
+      : void 0;
+    this.props.provider.updateContext({
+      startDate: _startDate,
+      endDate: _endDate
+    });
+    onDateSelected(_startDate, _endDate);
   };
 
   render() {
     const {
       date,
       animationClass,
-      selectedDate1,
-      selectedDate2,
-      date1Time,
-      date2Time,
       showMonthPopup,
       showYearPopup,
       showTimePopup
@@ -307,8 +318,6 @@ class Calander extends React.Component {
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const { month, year } = getCustomDateObject(date);
-    const firstDateObj = getActualDate(selectedDate1, date1Time);
-    const secondDateObj = getActualDate(selectedDate2, date2Time);
     return (
       <div className="full-date-picker-container">
         <div>
@@ -338,16 +347,12 @@ class Calander extends React.Component {
               nextMonth={nextMonth}
               animationClass={animationClass}
               onDateSelect={this.onDateSelect}
-              selectedDate1={selectedDate1}
-              selectedDate2={selectedDate2}
               rangeEnabled={this.enable_range}
             />
           </div>
           <Footer
             customFooter={footer}
             onToday={this.selectToday}
-            startDate={firstDateObj}
-            endDate={secondDateObj}
             onClose={onClose}
             showTime={!!selectTime}
           />
@@ -357,4 +362,37 @@ class Calander extends React.Component {
   }
 }
 
-export default Calander;
+function getIntDates(provider) {
+  return {
+    selectedDate1: provider.startDate ? provider.startDate._intDate : '',
+    selectedDate2: provider.endDate ? provider.endDate._intDate : ''
+  };
+}
+
+function getTimes(provider, rangeTillEndOfDay) {
+  const { startDate, endDate } = provider;
+  let date1Time = { ...START_DATE_TIME };
+  let date2Time = rangeTillEndOfDay
+    ? { ...END_DATE_TIME_END_OF_DAY }
+    : { ...END_DATE_TIME };
+  if (startDate && startDate.customObject) {
+    const { hours, minutes, period } = startDate.customObject;
+    date1Time = { hours, minutes, period };
+  }
+  if (endDate && endDate.customObject) {
+    const { hours, minutes, period } = endDate.customObject;
+    date2Time = { hours, minutes, period };
+  }
+  return {
+    date1Time,
+    date2Time
+  };
+}
+
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <Calander {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}

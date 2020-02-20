@@ -69,6 +69,9 @@
     transform: scaleY(1);
     opacity: 1;
   }
+  70% {
+    opacity: 0;
+  }
   90% {
     transform: scaleY(1);
   }

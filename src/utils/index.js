@@ -84,6 +84,7 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
   }
   return {
     _date: newDate,
+    _intDate: intDate,
     customObject: {
       minutes,
       hours,

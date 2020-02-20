@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { getDaysArray, getDays, getCustomDateObject, dateToInt } from 'utils';
 import DaysNames from './days-names';
 import Day from './day';
+import Context from '../context';
 
 import './index.scss';
 
@@ -78,10 +79,15 @@ class DateGrid extends Component {
   };
 
   render() {
-    const { date, selectedDate1, selectedDate2, rangeEnabled } = this.props;
+    const { date, rangeEnabled, provider } = this.props;
     const { hovered } = this.state;
-    const selected = selectedDate1;
-    const selected2 = selectedDate2;
+    const { startDate, endDate } = provider;
+    const selected =
+      startDate && startDate.customObject
+        ? dateToInt(startDate.customObject)
+        : null;
+    const selected2 =
+      endDate && endDate.customObject ? dateToInt(endDate.customObject) : null;
     let tempDate = date;
     if (!tempDate) {
       tempDate = new Date();
@@ -138,4 +144,10 @@ const PreviousMonthDays = ({ days = [] }) => {
   ));
 };
 
-export default DateGrid;
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <DateGrid {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}
