@@ -9,15 +9,17 @@ import './index.scss';
 class DateGrid extends Component {
   actualDate = new Date();
   daysPerPage = 42;
-  state = { selected: null, selected2: null, hovered: null };
+  state = { hovered: null };
+
   onDateSelect = date => {
     const { onDateSelect } = this.props;
-    const { selected } = this.state;
-    const newState = !selected ? { selected: date } : { selected2: date };
-    this.setState(newState, () => onDateSelect && onDateSelect(date));
+    onDateSelect && onDateSelect(date);
   };
+
   onHover = date => {
-    if (!this.props.rangeEnabled || !this.state.selected) return;
+    const { startDate } = this.props.provider;
+    const selected = startDate ? startDate._intDate : null;
+    if (!this.props.rangeEnabled || !selected) return;
     this.setState({
       hovered: date
     });
@@ -38,19 +40,6 @@ class DateGrid extends Component {
       date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth()
     );
-  };
-  isDateInRange = (date, month, year, selected, selected2) => {
-    if (!selected && !selected2) false;
-
-    const y = year >= selected.year && year <= selected2.year;
-    const m = month >= selected.month && month <= selected2.month;
-    const d = date > selected.date && date < selected2.date;
-    if (!y && !m && !d) return false;
-    return {
-      y,
-      m,
-      d
-    };
   };
 
   getRemainingPrevMonthDays = ({ month, year, day }) => {
@@ -82,12 +71,8 @@ class DateGrid extends Component {
     const { date, rangeEnabled, provider } = this.props;
     const { hovered } = this.state;
     const { startDate, endDate } = provider;
-    const selected =
-      startDate && startDate.customObject
-        ? dateToInt(startDate.customObject)
-        : null;
-    const selected2 =
-      endDate && endDate.customObject ? dateToInt(endDate.customObject) : null;
+    const selected = startDate ? startDate._intDate : null;
+    const selected2 = endDate ? endDate._intDate : null;
     let tempDate = date;
     if (!tempDate) {
       tempDate = new Date();

@@ -26,7 +26,7 @@ class App extends Component {
           <DatePicker
             onDateSelected={this.onDateSelect}
             defaultValue={{
-              start: '',
+              start: new Date('2020-01-05'),
               end: ''
             }}
             onClose={this.onClose}

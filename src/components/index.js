@@ -36,8 +36,6 @@ class RangePicker extends React.Component {
   popup_ref = React.createRef();
   state = {
     showCalendar: false,
-    startDate: null,
-    endDate: null,
     style: hiddenStyle
   };
 
@@ -59,7 +57,7 @@ class RangePicker extends React.Component {
   };
 
   handleOutsideClick = ({ target }) => {
-    const { showCalendar, startDate, endDate } = this.state;
+    const { showCalendar } = this.state;
 
     // if calendar is hidden, return.
     if (!showCalendar) {
@@ -71,9 +69,7 @@ class RangePicker extends React.Component {
       showCalendar: false
     });
 
-    const firstDate = startDate ? startDate._date : null;
-    const lastDate = endDate ? endDate._date : null;
-    this.props.onClose && this.props.onClose(firstDate, lastDate);
+    this.props.onClose && this.props.onClose();
   };
 
   toggleCalendar = () => {
@@ -96,27 +92,19 @@ class RangePicker extends React.Component {
 
   onClose = (startDate, endDate) => {
     const { onClose } = this.props;
-    const firstDate = startDate ? startDate._date : null;
-    const lastDate = endDate ? endDate._date : null;
     this.toggleCalendar();
-    onClose && onClose(firstDate, lastDate);
+    onClose && onClose();
   };
 
   onDateSelected = (startDate, endDate) => {
     const { onDateSelected } = this.props;
     const firstDate = startDate ? startDate._date : null;
     const lastDate = endDate ? endDate._date : null;
-    this.setState(
-      {
-        startDate,
-        endDate
-      },
-      () => onDateSelected && onDateSelected(firstDate, lastDate)
-    );
+    onDateSelected && onDateSelected(firstDate, lastDate);
   };
 
   render() {
-    const { showCalendar, startDate, endDate, style } = this.state;
+    const { showCalendar, style } = this.state;
     const { placeholder, dateFormat, placeholderText } = this.props;
     return (
       <Provider>
@@ -124,8 +112,6 @@ class RangePicker extends React.Component {
           <div className="user-placeholder" onClick={this.toggleCalendar}>
             <Placeholder
               customPlaceholder={placeholder}
-              startDate={startDate}
-              endDate={endDate}
               showTime={this.props.selectTime}
               placeholder={placeholderText}
               format={dateFormat}

@@ -5,7 +5,8 @@ import {
   getCustomDateObject,
   getActualDate,
   noHandler,
-  dateToInt
+  dateToInt,
+  getTime
 } from 'utils';
 
 import { monthsFull, monthsShort } from 'const';
@@ -37,6 +38,21 @@ const END_DATE_TIME_END_OF_DAY = {
   period: 'PM'
 };
 
+function getDefaultValues(date) {
+  if (!date) return null;
+
+  if (!date instanceof Date) {
+    console.warn(
+      ' start and end must be a valid date object in defaultValue prop '
+    );
+    return null;
+  }
+
+  let customDate = getCustomDateObject(date);
+  let time = getTime(12, date);
+  return getActualDate(dateToInt(customDate), time);
+}
+
 class Calander extends React.Component {
   actualDate = new Date();
   actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
@@ -53,6 +69,24 @@ class Calander extends React.Component {
 
   componentDidMount() {
     this.enable_range = this.props.disableRange !== true;
+    const { defaultValue } = this.props;
+    let startDate = getDefaultValues(defaultValue ? defaultValue.start : null);
+    let endDate = getDefaultValues(defaultValue ? defaultValue.end : null);
+
+    if (endDate && !startDate) {
+      console.warn(
+        ' defaultValue prop must have a startDate if there is an endDate '
+      );
+      return;
+    }
+
+    if (startDate) {
+      this.props.provider.updateContext({
+        startDate,
+        endDate
+      });
+      this.setState({ ...this.state, date: startDate._date });
+    }
   }
 
   componentWillReceiveProps({ disableRange, isVisible }) {
