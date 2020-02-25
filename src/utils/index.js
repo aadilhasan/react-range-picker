@@ -71,7 +71,7 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
     minutes = time.minutes;
     period = time.period;
   } else if (typeof timeObj === 'object') {
-    hours = timeObj.hours;
+    hours = parseInt(timeObj.hours, 10);
     minutes = timeObj.minutes;
     period = '' + timeObj.period;
     let dateHours = 0;

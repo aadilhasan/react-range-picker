@@ -179,7 +179,6 @@ class Calander extends React.Component {
 
     if (!this.enable_range && !!date) {
       this.setState({
-        selectedDate1: date,
         showTimePopup: !!selectTime ? true : showTimePopup
       });
       this.props.provider.updateContext({
@@ -236,7 +235,7 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const { selectTime, onDateSelected } = this.props;
+    const { selectTime, onDateSelected, provider } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
 
@@ -260,11 +259,16 @@ class Calander extends React.Component {
       });
     }
 
+    const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME });
+    const lDate = getActualDate(this.actualIntDate, {
+      ...END_DATE_TIME_END_OF_DAY
+    });
+    provider.updateContext({
+      startDate: fDate,
+      endDate: lDate
+    });
+
     if (onDateSelected) {
-      const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME }),
-        lDate = getActualDate(this.actualIntDate, {
-          ...END_DATE_TIME_END_OF_DAY
-        });
       onDateSelected(fDate, lDate);
     }
 
@@ -273,9 +277,6 @@ class Calander extends React.Component {
       this.setState(
         {
           animationClass: '',
-          selectedDate1: this.actualIntDate,
-          selectedDate2: this.actualIntDate,
-          date2Time: END_DATE_TIME_END_OF_DAY,
           date: new Date(this.actualDate)
         },
         () => {

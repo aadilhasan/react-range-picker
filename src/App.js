@@ -75,13 +75,13 @@ class App extends Component {
           />
         </div>
         <br />
-        <PickerWithCustomePlaceholder />
+        <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
       </div>
     );
   }
 }
 
-const PickerWithCustomePlaceholder = () => {
+const PickerWithCustomePlaceholder = ({ onDateSelect }) => {
   const placeholder = ({ startDate, endDate }) => {
     let _startDate = '';
     let _endDate = '';
@@ -111,7 +111,7 @@ const PickerWithCustomePlaceholder = () => {
       <br />
       <h3>With custom placeholder</h3>
       <br />
-      <DatePicker placeholder={placeholder} />
+      <DatePicker placeholder={placeholder} onDateSelect={onDateSelect} />
     </div>
   );
 };
