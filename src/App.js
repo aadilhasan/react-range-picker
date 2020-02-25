@@ -75,6 +75,19 @@ class App extends Component {
           />
         </div>
         <br />
+        <div>
+          <h2> Close onSelect </h2>
+          <DatePicker
+            onDateSelected={this.onDateSelect}
+            onClose={this.onClose}
+            disableRange
+            dateFormat="MMMM dd  YYYY @ h:mi A"
+            placeholderText="Date of birth and time"
+            // selectTime
+            closeOnSelect
+          />
+        </div>
+        <br />
         <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
       </div>
     );
