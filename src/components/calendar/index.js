@@ -70,8 +70,10 @@ class Calander extends React.Component {
   componentDidMount() {
     this.enable_range = this.props.disableRange !== true;
     const { defaultValue } = this.props;
-    let startDate = getDefaultValues(defaultValue ? defaultValue.start : null);
-    let endDate = getDefaultValues(defaultValue ? defaultValue.end : null);
+    let startDate = getDefaultValues(
+      defaultValue ? defaultValue.startDate : null
+    );
+    let endDate = getDefaultValues(defaultValue ? defaultValue.endDate : null);
 
     if (endDate && !startDate) {
       console.warn(
