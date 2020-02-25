@@ -43,6 +43,3 @@ Followings are the variables for the date format.
 - `mi` - minutes
 - `a` - lowercase period (am),
 - `A` - capital period (AM)
-
-####Note:
-Use onClose instead of onDateSelected, because onDateSelected gets called multiple times and onClose gets called only once when calendar is closing.
