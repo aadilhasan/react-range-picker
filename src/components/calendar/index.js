@@ -238,7 +238,13 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const { selectTime, onDateSelected, provider, onClose } = this.props;
+    const {
+      selectTime,
+      onDateSelected,
+      provider,
+      onClose,
+      closeOnSelect
+    } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
 
@@ -275,7 +281,7 @@ class Calander extends React.Component {
 
     if (onDateSelected) {
       onDateSelected(fDate, lDate);
-      onClose();
+      closeOnSelect && onClose();
     }
 
     // added timeout of same time as animation, so after the animation is done we can remove the animation class
