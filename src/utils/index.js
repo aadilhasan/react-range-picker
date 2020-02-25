@@ -42,13 +42,14 @@ export const getCustomDateObject = (date = new Date()) => {
   };
 };
 
-const getCurrentTime = format => {
-  const date = new Date();
+export const getTime = (format, date = new Date()) => {
   const tempHours = date.getHours();
   const hours = format === 12 && tempHours > 12 ? tempHours - 12 : tempHours;
+  const period = format === 12 ? (tempHours > 12 ? 'PM' : 'AM') : '';
   return {
     hours,
-    minutes: date.getMinutes()
+    minutes: date.getMinutes(),
+    period
   };
 };
 
@@ -65,11 +66,12 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
   const newDate = new Date(year, month, date);
 
   if (!timeObj) {
-    const time = getCurrentTime(format);
+    const time = getTime(format);
     hours = time.hours;
     minutes = time.minutes;
+    period = time.period;
   } else if (typeof timeObj === 'object') {
-    hours = timeObj.hours;
+    hours = parseInt(timeObj.hours, 10);
     minutes = timeObj.minutes;
     period = '' + timeObj.period;
     let dateHours = 0;
@@ -84,6 +86,7 @@ export const getActualDate = (intDate = '', timeObj = {}, format = 12) => {
   }
   return {
     _date: newDate,
+    _intDate: intDate,
     customObject: {
       minutes,
       hours,

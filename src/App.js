@@ -3,12 +3,20 @@ import './App.css';
 import DatePicker from './components';
 
 class App extends Component {
-  onDateSelect = (dateObject, dateCustomObject) => {
-    console.log(' date selected ', dateObject, dateCustomObject);
+  onDateSelect = (startDate, endDate) => {
+    console.log(
+      ' date selected: startDate => %s , endDate => %s',
+      startDate,
+      endDate
+    );
   };
 
-  onClose = (dateObject, dateCustomObject) => {
-    console.log(' ok/select pressed ', dateObject, dateCustomObject);
+  onClose = (startDate, endDate) => {
+    console.log(
+      ' ok/select:  startDate => %s , endDate => %s ',
+      startDate,
+      endDate
+    );
   };
 
   render() {
@@ -17,6 +25,10 @@ class App extends Component {
         <div>
           <DatePicker
             onDateSelected={this.onDateSelect}
+            defaultValue={{
+              startDate: new Date('2020-01-05'),
+              endDate: ''
+            }}
             onClose={this.onClose}
             // dateFormat="DD-MM-YYYY h:miA"
             // disableRange
@@ -63,13 +75,13 @@ class App extends Component {
           />
         </div>
         <br />
-        <PickerWithCustomePlaceholder />
+        <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
       </div>
     );
   }
 }
 
-const PickerWithCustomePlaceholder = () => {
+const PickerWithCustomePlaceholder = ({ onDateSelect }) => {
   const placeholder = ({ startDate, endDate }) => {
     let _startDate = '';
     let _endDate = '';
@@ -99,7 +111,7 @@ const PickerWithCustomePlaceholder = () => {
       <br />
       <h3>With custom placeholder</h3>
       <br />
-      <DatePicker placeholder={placeholder} />
+      <DatePicker placeholder={placeholder} onDateSelect={onDateSelect} />
     </div>
   );
 };

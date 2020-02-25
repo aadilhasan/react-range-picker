@@ -19,8 +19,9 @@ import RangePicker from "react-range-picker"
 
 | API               | Type                       | Description                                                                                                                                                                                                                                             |
 | ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultValue      | object                     | set default values for the calendar - `{startDate: Date, endDate: Date}`                                                                                                                                                                                |
 | onDateSelected    | function                   | gets called each time date/time gets selected (params - startDate<Date object>, startDate<Date object>)                                                                                                                                                 |
-| onClose           | function                   | gets called when calendar closes or ok/select button is pressed (params - startDate<Date object>, endDate<Date object>)                                                                                                                                 |
+| onClose           | function                   | gets called when calendar closes or ok/select button is pressed                                                                                                                                                                                         |
 | disableRange      | boolean                    | if true user can select only one date (default false)                                                                                                                                                                                                   |
 | selectTime        | boolean                    | if true, time select will show up on date select (default false)                                                                                                                                                                                        |
 | rangeTillEndOfDay | boolean                    | if true, then second selected date for range will have time of end of the day (11.59 PM) else it will have time of start of the day (12:00 AM)                                                                                                          |
@@ -42,6 +43,3 @@ Followings are the variables for the date format.
 - `mi` - minutes
 - `a` - lowercase period (am),
 - `A` - capital period (AM)
-
-####Note:
-Use onClose instead of onDateSelected, because onDateSelected gets called multiple times and onClose gets called only once when calendar is closing.

@@ -2,21 +2,24 @@ import React, { Component } from 'react';
 import { getDaysArray, getDays, getCustomDateObject, dateToInt } from 'utils';
 import DaysNames from './days-names';
 import Day from './day';
+import Context from '../context';
 
 import './index.scss';
 
 class DateGrid extends Component {
   actualDate = new Date();
   daysPerPage = 42;
-  state = { selected: null, selected2: null, hovered: null };
+  state = { hovered: null };
+
   onDateSelect = date => {
     const { onDateSelect } = this.props;
-    const { selected } = this.state;
-    const newState = !selected ? { selected: date } : { selected2: date };
-    this.setState(newState, () => onDateSelect && onDateSelect(date));
+    onDateSelect && onDateSelect(date);
   };
+
   onHover = date => {
-    if (!this.props.rangeEnabled || !this.state.selected) return;
+    const { startDate } = this.props.provider;
+    const selected = startDate ? startDate._intDate : null;
+    if (!this.props.rangeEnabled || !selected) return;
     this.setState({
       hovered: date
     });
@@ -37,19 +40,6 @@ class DateGrid extends Component {
       date1.getFullYear() === date2.getFullYear() &&
       date1.getMonth() === date2.getMonth()
     );
-  };
-  isDateInRange = (date, month, year, selected, selected2) => {
-    if (!selected && !selected2) false;
-
-    const y = year >= selected.year && year <= selected2.year;
-    const m = month >= selected.month && month <= selected2.month;
-    const d = date > selected.date && date < selected2.date;
-    if (!y && !m && !d) return false;
-    return {
-      y,
-      m,
-      d
-    };
   };
 
   getRemainingPrevMonthDays = ({ month, year, day }) => {
@@ -78,10 +68,11 @@ class DateGrid extends Component {
   };
 
   render() {
-    const { date, selectedDate1, selectedDate2, rangeEnabled } = this.props;
+    const { date, rangeEnabled, provider } = this.props;
     const { hovered } = this.state;
-    const selected = selectedDate1;
-    const selected2 = selectedDate2;
+    const { startDate, endDate } = provider;
+    const selected = startDate ? startDate._intDate : null;
+    const selected2 = endDate ? endDate._intDate : null;
     let tempDate = date;
     if (!tempDate) {
       tempDate = new Date();
@@ -138,4 +129,10 @@ const PreviousMonthDays = ({ days = [] }) => {
   ));
 };
 
-export default DateGrid;
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <DateGrid {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}

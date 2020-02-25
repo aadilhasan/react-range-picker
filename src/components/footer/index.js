@@ -1,15 +1,17 @@
 import React from 'react';
 import { noHandler } from 'utils';
+import Context from '../context';
+
 import './index.scss';
 
 const Footer = ({
-  startDate,
-  endDate,
   onToday = noHandler(),
   onClose = noHandler(),
   showTime = false,
-  customFooter
+  customFooter,
+  provider
 }) => {
+  const { startDate, endDate } = provider;
   if (customFooter) {
     return customFooter({
       today: onToday,
@@ -23,7 +25,7 @@ const Footer = ({
     fDateTime = '',
     lDate = '',
     lDateTime = '';
-  if (!!startDate.customObject) {
+  if (startDate && startDate.customObject) {
     const {
       date,
       monthNameShort,
@@ -35,7 +37,7 @@ const Footer = ({
     fDate += date + ' ' + monthNameShort + ' ' + year;
     fDateTime = showTime ? hours + ':' + minutes + ' ' + period : '';
   }
-  if (!!endDate.customObject) {
+  if (endDate && endDate.customObject) {
     const {
       date,
       monthNameShort,
@@ -108,4 +110,10 @@ const DateHolder = ({ heading = '', date = '', time, extraClass = '' }) => {
   );
 };
 
-export default Footer;
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <Footer {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}

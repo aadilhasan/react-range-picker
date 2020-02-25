@@ -1,15 +1,16 @@
 import React from 'react';
 import './index.scss';
 import { formatDate } from 'utils';
+import Context from '../context';
 
 const Placeholder = ({
-  startDate,
-  endDate,
   showTime = false,
   customPlaceholder,
   placeholder,
-  format
+  format,
+  provider
 }) => {
+  const { startDate, endDate } = provider;
   const s_date = startDate ? startDate.customObject : null,
     e_date = endDate ? endDate.customObject : null;
 
@@ -63,4 +64,10 @@ const CalendarIcon = () => {
   );
 };
 
-export default Placeholder;
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <Placeholder {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}

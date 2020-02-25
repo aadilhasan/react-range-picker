@@ -5,7 +5,8 @@ import {
   getCustomDateObject,
   getActualDate,
   noHandler,
-  dateToInt
+  dateToInt,
+  getTime
 } from 'utils';
 
 import { monthsFull, monthsShort } from 'const';
@@ -16,6 +17,7 @@ import MonthPicker from '../month-picker';
 import YearPicker from '../year-picker';
 import Footer from '../footer';
 import TimePicker from '../time-picker';
+import Context from '../context';
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -36,6 +38,21 @@ const END_DATE_TIME_END_OF_DAY = {
   period: 'PM'
 };
 
+function getDefaultValues(date) {
+  if (!date) return null;
+
+  if (!date instanceof Date) {
+    console.warn(
+      ' start and end must be a valid date object in defaultValue prop '
+    );
+    return null;
+  }
+
+  let customDate = getCustomDateObject(date);
+  let time = getTime(12, date);
+  return getActualDate(dateToInt(customDate), time);
+}
+
 class Calander extends React.Component {
   actualDate = new Date();
   actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
@@ -45,19 +62,33 @@ class Calander extends React.Component {
   state = {
     date: new Date(this.actualDate),
     animationClass: '',
-    selectedDate1: null,
-    selectedDate2: null,
-    date1Time: { ...START_DATE_TIME },
-    date2Time: !!this.props.rangeTillEndOfDay
-      ? { ...END_DATE_TIME_END_OF_DAY }
-      : { ...END_DATE_TIME },
     showMonthPopup: false,
     showYearPopup: false,
     showTimePopup: false
   };
 
   componentDidMount() {
-    this.enable_range = this.props.disableRange !== true;
+    const { defaultValue, disableRange, provider } = this.props;
+    this.enable_range = disableRange !== true;
+    let startDate = getDefaultValues(
+      defaultValue ? defaultValue.startDate : null
+    );
+    let endDate = getDefaultValues(defaultValue ? defaultValue.endDate : null);
+
+    if (endDate && !startDate) {
+      console.warn(
+        ' defaultValue prop must have a startDate if there is an endDate '
+      );
+      return;
+    }
+
+    if (startDate) {
+      provider.updateContext({
+        startDate,
+        endDate
+      });
+      this.setState({ ...this.state, date: startDate._date });
+    }
   }
 
   componentWillReceiveProps({ disableRange, isVisible }) {
@@ -136,13 +167,14 @@ class Calander extends React.Component {
 
   onDateSelect = date => {
     const {
-      selectedDate1,
-      selectedDate2,
-      date1Time,
-      date2Time,
-      showTimePopup
-    } = this.state;
-    const { onDateSelected = noHandler(), selectTime } = this.props;
+      onDateSelected = noHandler(),
+      selectTime,
+      provider,
+      rangeTillEndOfDay
+    } = this.props;
+    const { showTimePopup } = this.state;
+    const { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
+    const { selectedDate1, selectedDate2 } = getIntDates(provider);
     const newState = {
       selectedDate1,
       selectedDate2
@@ -150,8 +182,10 @@ class Calander extends React.Component {
 
     if (!this.enable_range && !!date) {
       this.setState({
-        selectedDate1: date,
         showTimePopup: !!selectTime ? true : showTimePopup
+      });
+      provider.updateContext({
+        startDate: getActualDate(date, date1Time)
       });
       onDateSelected(getActualDate(date, date1Time));
       return;
@@ -180,11 +214,19 @@ class Calander extends React.Component {
       d1 === d2 ? { ...END_DATE_TIME_END_OF_DAY } : date2Time;
 
     this.setState(newState);
+    provider.updateContext({
+      startDate: newState.selectedDate1,
+      endDate: newState.selectedDate2
+    });
 
-    onDateSelected(
-      getActualDate(d1, date1Time),
-      getActualDate(d2, newState.date2Time)
-    );
+    const _startDate = getActualDate(d1, date1Time);
+    const _endDate = getActualDate(d2, date2Time);
+    provider.updateContext({
+      startDate: _startDate,
+      endDate: _endDate
+    });
+
+    onDateSelected(_startDate, _endDate);
 
     if (!!selectTime) {
       this.showTime();
@@ -196,7 +238,7 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const { selectTime, onDateSelected } = this.props;
+    const { selectTime, onDateSelected, provider } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
 
@@ -220,11 +262,16 @@ class Calander extends React.Component {
       });
     }
 
+    const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME });
+    const lDate = getActualDate(this.actualIntDate, {
+      ...END_DATE_TIME_END_OF_DAY
+    });
+    provider.updateContext({
+      startDate: fDate,
+      endDate: lDate
+    });
+
     if (onDateSelected) {
-      const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME }),
-        lDate = getActualDate(this.actualIntDate, {
-          ...END_DATE_TIME_END_OF_DAY
-        });
       onDateSelected(fDate, lDate);
     }
 
@@ -233,9 +280,6 @@ class Calander extends React.Component {
       this.setState(
         {
           animationClass: '',
-          selectedDate1: this.actualIntDate,
-          selectedDate2: this.actualIntDate,
-          date2Time: END_DATE_TIME_END_OF_DAY,
           date: new Date(this.actualDate)
         },
         () => {
@@ -261,8 +305,10 @@ class Calander extends React.Component {
   };
 
   onTimeSelected = (hours, minutes, period) => {
-    let { selectedDate1, selectedDate2, date1Time, date2Time } = this.state;
-    const { onDateSelected, rangeTillEndOfDay } = this.props;
+    const { onDateSelected, rangeTillEndOfDay, provider } = this.props;
+    let { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
+    const { selectedDate1, selectedDate2 } = getIntDates(provider);
+
     if (selectedDate2) {
       date2Time = {
         hours,
@@ -284,20 +330,21 @@ class Calander extends React.Component {
       date1Time,
       date2Time
     });
-    onDateSelected(
-      getActualDate(selectedDate1, date1Time),
-      !!selectedDate2 ? getActualDate(selectedDate2, date2Time) : void 0
-    );
+    const _startDate = getActualDate(selectedDate1, date1Time);
+    const _endDate = !!selectedDate2
+      ? getActualDate(selectedDate2, date2Time)
+      : void 0;
+    provider.updateContext({
+      startDate: _startDate,
+      endDate: _endDate
+    });
+    onDateSelected(_startDate, _endDate);
   };
 
   render() {
     const {
       date,
       animationClass,
-      selectedDate1,
-      selectedDate2,
-      date1Time,
-      date2Time,
       showMonthPopup,
       showYearPopup,
       showTimePopup
@@ -307,8 +354,6 @@ class Calander extends React.Component {
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const { month, year } = getCustomDateObject(date);
-    const firstDateObj = getActualDate(selectedDate1, date1Time);
-    const secondDateObj = getActualDate(selectedDate2, date2Time);
     return (
       <div className="full-date-picker-container">
         <div>
@@ -338,16 +383,12 @@ class Calander extends React.Component {
               nextMonth={nextMonth}
               animationClass={animationClass}
               onDateSelect={this.onDateSelect}
-              selectedDate1={selectedDate1}
-              selectedDate2={selectedDate2}
               rangeEnabled={this.enable_range}
             />
           </div>
           <Footer
             customFooter={footer}
             onToday={this.selectToday}
-            startDate={firstDateObj}
-            endDate={secondDateObj}
             onClose={onClose}
             showTime={!!selectTime}
           />
@@ -357,4 +398,37 @@ class Calander extends React.Component {
   }
 }
 
-export default Calander;
+function getIntDates(provider) {
+  return {
+    selectedDate1: provider.startDate ? provider.startDate._intDate : '',
+    selectedDate2: provider.endDate ? provider.endDate._intDate : ''
+  };
+}
+
+function getTimes(provider, rangeTillEndOfDay) {
+  const { startDate, endDate } = provider;
+  let date1Time = { ...START_DATE_TIME };
+  let date2Time = rangeTillEndOfDay
+    ? { ...END_DATE_TIME_END_OF_DAY }
+    : { ...END_DATE_TIME };
+  if (startDate && startDate.customObject) {
+    const { hours, minutes, period } = startDate.customObject;
+    date1Time = { hours, minutes, period };
+  }
+  if (endDate && endDate.customObject) {
+    const { hours, minutes, period } = endDate.customObject;
+    date2Time = { hours, minutes, period };
+  }
+  return {
+    date1Time,
+    date2Time
+  };
+}
+
+export default function(props) {
+  return (
+    <Context.Consumer>
+      {provider => <Calander {...props} provider={provider} />}
+    </Context.Consumer>
+  );
+}
