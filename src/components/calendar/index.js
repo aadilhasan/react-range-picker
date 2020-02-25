@@ -170,7 +170,9 @@ class Calander extends React.Component {
       onDateSelected = noHandler(),
       selectTime,
       provider,
-      rangeTillEndOfDay
+      rangeTillEndOfDay,
+      onClose,
+      closeOnSelect
     } = this.props;
     const { showTimePopup } = this.state;
     const { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
@@ -188,6 +190,7 @@ class Calander extends React.Component {
         startDate: getActualDate(date, date1Time)
       });
       onDateSelected(getActualDate(date, date1Time));
+      !selectTime && closeOnSelect && onClose();
       return;
     }
 
@@ -214,22 +217,19 @@ class Calander extends React.Component {
       d1 === d2 ? { ...END_DATE_TIME_END_OF_DAY } : date2Time;
 
     this.setState(newState);
-    provider.updateContext({
-      startDate: newState.selectedDate1,
-      endDate: newState.selectedDate2
-    });
-
     const _startDate = getActualDate(d1, date1Time);
     const _endDate = getActualDate(d2, date2Time);
+
     provider.updateContext({
       startDate: _startDate,
       endDate: _endDate
     });
 
     onDateSelected(_startDate, _endDate);
-
     if (!!selectTime) {
       this.showTime();
+    } else if (!selectTime && d2) {
+      closeOnSelect && onClose();
     }
   };
 
@@ -238,7 +238,7 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const { selectTime, onDateSelected, provider } = this.props;
+    const { selectTime, onDateSelected, provider, onClose } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
 
@@ -263,9 +263,11 @@ class Calander extends React.Component {
     }
 
     const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME });
-    const lDate = getActualDate(this.actualIntDate, {
-      ...END_DATE_TIME_END_OF_DAY
-    });
+    const lDate = this.enable_range
+      ? getActualDate(this.actualIntDate, {
+          ...END_DATE_TIME_END_OF_DAY
+        })
+      : null;
     provider.updateContext({
       startDate: fDate,
       endDate: lDate
@@ -273,6 +275,7 @@ class Calander extends React.Component {
 
     if (onDateSelected) {
       onDateSelected(fDate, lDate);
+      onClose();
     }
 
     // added timeout of same time as animation, so after the animation is done we can remove the animation class
@@ -284,8 +287,8 @@ class Calander extends React.Component {
         },
         () => {
           this.is_animating = false;
-          if (!!selectTime) {
-            this.showTime();
+          if (!this.enable_range && !!selectTime) {
+            // this.showTime();
           }
         }
       );
@@ -305,7 +308,13 @@ class Calander extends React.Component {
   };
 
   onTimeSelected = (hours, minutes, period) => {
-    const { onDateSelected, rangeTillEndOfDay, provider } = this.props;
+    const {
+      onDateSelected,
+      rangeTillEndOfDay,
+      provider,
+      closeOnSelect,
+      onClose
+    } = this.props;
     let { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
     const { selectedDate1, selectedDate2 } = getIntDates(provider);
 
@@ -326,9 +335,7 @@ class Calander extends React.Component {
         : { ...END_DATE_TIME };
     }
     this.setState({
-      showTimePopup: false,
-      date1Time,
-      date2Time
+      showTimePopup: false
     });
     const _startDate = getActualDate(selectedDate1, date1Time);
     const _endDate = !!selectedDate2
@@ -339,6 +346,11 @@ class Calander extends React.Component {
       endDate: _endDate
     });
     onDateSelected(_startDate, _endDate);
+    if (closeOnSelect && this.enable_range && _endDate) {
+      onClose();
+    } else if (closeOnSelect && !this.enable_range) {
+      onClose();
+    }
   };
 
   render() {
