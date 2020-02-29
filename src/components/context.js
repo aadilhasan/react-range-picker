@@ -1,10 +1,5 @@
 import React from 'react';
 const Context = React.createContext({});
-const date = {
-  month: null,
-  year: null,
-  date: null
-};
 
 export class Provider extends React.Component {
   state = {

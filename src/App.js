@@ -30,6 +30,7 @@ class App extends Component {
               endDate: ''
             }}
             onClose={this.onClose}
+            onOpen={() => console.log(' openend')}
             // dateFormat="DD-MM-YYYY h:miA"
             // disableRange
             // rangeTillEndOfDay
@@ -88,6 +89,11 @@ class App extends Component {
           />
         </div>
         <br />
+        <div>
+          <h1> Controlled visibility </h1>
+          <ControlledVisibility />
+        </div>
+        <br />
         <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
       </div>
     );
@@ -128,5 +134,29 @@ const PickerWithCustomePlaceholder = ({ onDateSelect }) => {
     </div>
   );
 };
+
+class ControlledVisibility extends Component {
+  state = { visible: true };
+  onDateSelect = (f, l) => console.log(' date selecred ', f, l);
+  render() {
+    return (
+      <DatePicker
+        onDateSelected={this.onDateSelect}
+        defaultValue={{
+          startDate: new Date('2020-01-05'),
+          endDate: ''
+        }}
+        onClose={() => this.setState({ visible: false })}
+        onOpen={() => this.setState({ visible: true })}
+        visible={this.state.visible}
+        closeOnOutsideClick={false}
+        // dateFormat="DD-MM-YYYY h:miA"
+        // disableRange
+        // rangeTillEndOfDay
+        // selectTime
+      />
+    );
+  }
+}
 
 export default App;

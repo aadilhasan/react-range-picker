@@ -28,21 +28,33 @@ import { Provider } from './context';
  */
 
 const hiddenStyle = {
-  top: '-100%'
+  top: '-150%'
 };
 
 class RangePicker extends React.Component {
   calendar_ref = React.createRef();
   popup_ref = React.createRef();
-  state = {
-    showCalendar: false,
-    style: hiddenStyle
-  };
+  isVisibilityControlled = false;
+  constructor(props) {
+    super(props);
+    this.isVisibilityControlled = typeof props.visible === 'boolean';
+    this.state = {
+      showCalendar: false,
+      style: hiddenStyle
+    };
+  }
 
   componentDidMount() {
     const { current: popup } = this.popup_ref;
     window.addEventListener('mousedown', this.handleOutsideClick, false);
     popup && popup.addEventListener('mousedown', this.preventBubbling, false);
+
+    // force upate as style in render function won't get calculated because "calendar_ref.current" was null
+    // on componentDidMount "calendar_ref.current" will be available, so force rerender the component
+    // to calulate the popup position
+    if (this.isVisibilityControlled) {
+      this.setState({});
+    }
   }
 
   componentWillUnmount() {
@@ -56,7 +68,11 @@ class RangePicker extends React.Component {
     e.stopPropagation();
   };
 
-  handleOutsideClick = ({ target }) => {
+  handleOutsideClick = () => {
+    const { closeOnOutsideClick, onClose } = this.props;
+    if (closeOnOutsideClick === false) {
+      return;
+    }
     const { showCalendar } = this.state;
 
     // if calendar is hidden, return.
@@ -69,28 +85,40 @@ class RangePicker extends React.Component {
       showCalendar: false
     });
 
-    this.props.onClose && this.props.onClose();
+    onClose && onClose();
+  };
+
+  calculateCalendarPosition = isVisible => {
+    const { current } = this.calendar_ref;
+    if (!current || !isVisible) return hiddenStyle;
+    const top = current.offsetTop;
+    const left = current.offsetLeft;
+    return {
+      left,
+      top
+    };
   };
 
   toggleCalendar = () => {
-    const { showCalendar, style: _style } = this.state;
-    let style = { ..._style };
-    if (!showCalendar) {
-      const { current } = this.calendar_ref;
-      const top = current.offsetTop;
-      const left = current.offsetLeft;
-      style = {
-        left,
-        top
-      };
+    const { showCalendar } = this.state;
+    const { onOpen, visible } = this.props;
+    if (
+      (this.isVisibilityControlled && !visible) ||
+      (!this.isVisibilityControlled && !showCalendar)
+    ) {
+      onOpen && onOpen();
     }
+
+    if (this.isVisibilityControlled) return;
+
+    let style = this.calculateCalendarPosition(!showCalendar);
     this.setState({
       showCalendar: !showCalendar,
       style
     });
   };
 
-  onClose = (startDate, endDate) => {
+  onClose = () => {
     const { onClose } = this.props;
     this.toggleCalendar();
     onClose && onClose();
@@ -104,8 +132,12 @@ class RangePicker extends React.Component {
   };
 
   render() {
-    const { showCalendar, style } = this.state;
+    const { showCalendar } = this.state;
     const { placeholder, dateFormat, placeholderText } = this.props;
+    const visible = this.isVisibilityControlled
+      ? this.props.visible === true
+      : showCalendar;
+    const style = this.calculateCalendarPosition(visible);
     return (
       <Provider>
         <div className="date-picker-app-wrapper" ref={this.calendar_ref}>
@@ -120,13 +152,13 @@ class RangePicker extends React.Component {
           {PortalCreator(
             <div
               style={style}
-              className={'calendar' + (showCalendar ? ' visible' : '')}
+              className={'calendar' + (visible ? ' visible' : '')}
               ref={this.popup_ref}
             >
               <Calendar
                 {...this.props}
                 onDateSelected={this.onDateSelected}
-                isVisible={showCalendar}
+                isVisible={visible}
                 onClose={this.onClose}
               />
             </div>
