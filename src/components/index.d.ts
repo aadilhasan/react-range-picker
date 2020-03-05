@@ -23,6 +23,9 @@ export interface Props {
   placeholderText?: string;
   dateFormat?: string;
   footer?: (FooterParams) => React.Component;
+  visible?: boolean;
+  onOpen?: Function;
+  closeOnOutsideClick?: boolean;
 }
 
 export default class RangePicker extends React.Component<Props> {}
