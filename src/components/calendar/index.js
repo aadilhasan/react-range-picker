@@ -53,6 +53,27 @@ function getDefaultValues(date) {
   return getActualDate(dateToInt(customDate), time);
 }
 
+function getMinDate(minDate, current) {
+  const isValid = minDate instanceof Date;
+  let _date = {
+    year: -1,
+    month: -1,
+    date: -1
+  };
+  if (!isValid) return _date;
+  let { date, month, year } = getCustomDateObject(new Date(minDate));
+  _date.year = year;
+
+  if (year >= current.year) {
+    _date = { ..._date, month };
+    if (month >= current.month) {
+      _date = { ..._date, date };
+    }
+  }
+
+  return _date;
+}
+
 class Calander extends React.Component {
   actualDate = new Date();
   actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
@@ -367,11 +388,19 @@ class Calander extends React.Component {
       showYearPopup,
       showTimePopup
     } = this.state;
-    const { onClose = noHandler(), footer, selectTime } = this.props;
+    const {
+      onClose = noHandler(),
+      footer,
+      selectTime,
+      minDate: minFullData
+    } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
-    const { month, year } = getCustomDateObject(date);
+    const selectedMonth = getCustomDateObject(date);
+    const { month, year } = selectedMonth;
+    const _minDate = getMinDate(minFullData, selectedMonth);
+    const { month: minMonth, year: minYear, date: minDate } = _minDate;
     return (
       <div className="full-date-picker-container">
         <div>
@@ -381,19 +410,23 @@ class Calander extends React.Component {
               selected={month}
               visible={showMonthPopup}
               onChange={this.monthChanged}
+              min={minMonth}
             />
             <YearPicker
               year={year}
               visible={showYearPopup}
               onChange={this.yearChanged}
+              min={minYear}
             />
             <TimePicker visible={showTimePopup} onDone={this.onTimeSelected} />
             <Navigator
-              month={monthsFull[month]}
+              monthName={monthsFull[month]}
+              month={month}
               year={year}
               onMonthChange={this.onMonthChange}
               onSelectMonth={this.onMonthSelect}
               onSelectYear={this.onYearSelect}
+              min={_minDate}
             />
             <Grids
               prevMonth={prevMonth}
@@ -402,6 +435,7 @@ class Calander extends React.Component {
               animationClass={animationClass}
               onDateSelect={this.onDateSelect}
               rangeEnabled={this.enable_range}
+              min={minDate}
             />
           </div>
           <Footer

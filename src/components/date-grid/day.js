@@ -10,7 +10,8 @@ const Day = ({
   onClick,
   onHover,
   offHover,
-  rangeEnabled
+  rangeEnabled,
+  disabled
 }) => {
   const isSelected = !!selected && currentDate === selected;
   const isSelected2 = !!selected2 && currentDate === selected2;
@@ -64,6 +65,10 @@ const Day = ({
       }
     }
     dayContainerClass += showHoverEffect ? ' hovered' : '';
+  }
+
+  if (disabled) {
+    dayContainerClass += ' disabled';
   }
 
   return (

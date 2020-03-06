@@ -32,7 +32,8 @@
       &.disabled {
         color: #808080a3;
         background-color: transparent;
-        cursor: auto;
+        cursor: not-allowed;
+        pointer-events: none;
       }
       &.selected {
         color: $primary-color;

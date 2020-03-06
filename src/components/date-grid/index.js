@@ -68,7 +68,7 @@ class DateGrid extends Component {
   };
 
   render() {
-    const { date, rangeEnabled, provider } = this.props;
+    const { date, rangeEnabled, provider, min } = this.props;
     const { hovered } = this.state;
     const { startDate, endDate } = provider;
     const selected = startDate ? startDate._intDate : null;
@@ -110,6 +110,7 @@ class DateGrid extends Component {
                 onHover={this.onHover}
                 offHover={this.offHover}
                 rangeEnabled={rangeEnabled}
+                disabled={min > day}
               />
             );
           })}

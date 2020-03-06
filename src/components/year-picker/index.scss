@@ -36,6 +36,17 @@
         color: $primary-color;
         font-weight: bold;
       }
+      &.disabled {
+        color: #808080a3;
+        background-color: transparent;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
     }
+  }
+
+  .button-placeholder {
+    width: 38px;
+    height: 38px;
   }
 }

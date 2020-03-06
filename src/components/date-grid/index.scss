@@ -76,6 +76,12 @@
         justify-content: center;
         box-sizing: border-box;
       }
+      &.disabled {
+        color: #808080a3;
+        background-color: transparent;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
     }
   }
 }

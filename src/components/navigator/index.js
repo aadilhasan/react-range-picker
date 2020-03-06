@@ -5,18 +5,24 @@ import './index.scss';
 
 const Navigator = ({
   month = '',
+  monthName = '',
   year = 2018,
+  min,
   onMonthChange = noHandler('no month change handler'),
   onSelectMonth = noHandler(' no month select handler'),
   onSelectYear = noHandler(' no year select handler')
 }) => {
   return (
     <div className="navigator">
-      <button className="arrow prev" onClick={e => onMonthChange(-1)} />
+      {min.month < month ? (
+        <button className="arrow prev" onClick={e => onMonthChange(-1)} />
+      ) : (
+        <div className="button-placeholder" />
+      )}
       <div className="values">
         <button className="month" onClick={onSelectMonth}>
           {' '}
-          {month}{' '}
+          {monthName}{' '}
         </button>
         <button className="year" onClick={onSelectYear}>
           {' '}
