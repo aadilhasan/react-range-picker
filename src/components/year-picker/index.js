@@ -44,9 +44,10 @@ class YearPicker extends React.Component {
 
   render() {
     const { year, years, sartYear, endYear } = this.state;
-    const { visible, min } = this.props;
+    const { visible, min, max } = this.props;
     const { onChange = noHandler('no handler for year picker') } = this.props;
     const allowBackNavigation = min < years[0];
+    const allowForwardNavigation = max < years[years.length];
     return (
       <div className={`year-picker${visible ? ' visible' : ' hidden'}`}>
         <div className="navigator">
@@ -62,13 +63,20 @@ class YearPicker extends React.Component {
             {' '}
             {sartYear} - {endYear}
           </div>
-          <button className="arrow next" onClick={e => this.onYearChange(1)} />
+          {allowForwardNavigation ? (
+            <button
+              className="arrow next"
+              onClick={e => this.onYearChange(1)}
+            />
+          ) : (
+            <div className="button-placeholder" />
+          )}
         </div>
         <div className="year-grid">
           {years.map((yearItem, index) => {
             let className = `year-container`;
             className += year === yearItem ? ' selected' : '';
-            className += yearItem < min ? ' disabled' : '';
+            className += yearItem < min || yearItem > max ? ' disabled' : '';
             return (
               <div
                 key={index}

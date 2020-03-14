@@ -21,7 +21,7 @@ const MonthPicker = ({
               className={`select-item${index < min ? ' disabled' : ''}${
                 index === selected ? ' selected' : ''
               }`}
-              onClick={e => onClick(month, index)}
+              onClick={() => onClick(index)}
             >
               {' '}
               {month}{' '}

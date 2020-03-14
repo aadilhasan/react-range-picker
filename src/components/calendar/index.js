@@ -5,8 +5,7 @@ import {
   getCustomDateObject,
   getActualDate,
   noHandler,
-  dateToInt,
-  getTime
+  dateToInt
 } from 'utils';
 
 import { monthsFull, monthsShort } from 'const';
@@ -18,6 +17,14 @@ import YearPicker from '../year-picker';
 import Footer from '../footer';
 import TimePicker from '../time-picker';
 import Context from '../context';
+
+import {
+  getDefaultValues,
+  getMaxDate,
+  getMinDate,
+  handleDisableDates
+} from './utils';
+
 import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
@@ -38,48 +45,14 @@ const END_DATE_TIME_END_OF_DAY = {
   period: 'PM'
 };
 
-function getDefaultValues(date) {
-  if (!date) return null;
-
-  if (!date instanceof Date) {
-    console.warn(
-      ' start and end must be a valid date object in defaultValue prop '
-    );
-    return null;
-  }
-
-  let customDate = getCustomDateObject(date);
-  let time = getTime(12, date);
-  return getActualDate(dateToInt(customDate), time);
-}
-
-function getMinDate(minDate, current) {
-  const isValid = minDate instanceof Date;
-  let _date = {
-    year: -1,
-    month: -1,
-    date: -1
-  };
-  if (!isValid) return _date;
-  let { date, month, year } = getCustomDateObject(new Date(minDate));
-  _date.year = year;
-
-  if (year >= current.year) {
-    _date = { ..._date, month };
-    if (month >= current.month) {
-      _date = { ..._date, date };
-    }
-  }
-
-  return _date;
-}
-
 class Calander extends React.Component {
   actualDate = new Date();
   actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
   //flag to prevent month change when the month slide animation is still running
   is_animating = false;
   enable_range = false;
+  minDate = null;
+  maxDate = null;
   state = {
     date: new Date(this.actualDate),
     animationClass: '',
@@ -89,8 +62,21 @@ class Calander extends React.Component {
   };
 
   componentDidMount() {
-    const { defaultValue, disableRange, provider } = this.props;
+    const {
+      defaultValue,
+      disableRange,
+      provider,
+      minDate,
+      maxDate
+    } = this.props;
+    let state = {};
     this.enable_range = disableRange !== true;
+
+    /**
+     * if start date or end date are not Date instance
+     * getDefaultValues will log a warning so no need to handle that
+     **/
+
     let startDate = getDefaultValues(
       defaultValue ? defaultValue.startDate : null
     );
@@ -100,16 +86,34 @@ class Calander extends React.Component {
       console.warn(
         ' defaultValue prop must have a startDate if there is an endDate '
       );
-      return;
-    }
-
-    if (startDate) {
+    } else if (startDate) {
       provider.updateContext({
         startDate,
         endDate
       });
-      this.setState({ ...this.state, date: startDate._date });
+      state = { date: startDate._date };
     }
+
+    if (minDate instanceof Date) {
+      this.minDate = new Date(minDate);
+
+      /**
+       * if current date is less then min, then show min date as first month
+       * if start date is more then the min then show that as first month
+       */
+
+      let date = handleDisableDates(this.actualDate, this.minDate, null);
+
+      state.date = startDate
+        ? handleDisableDates(startDate._date, date, null)
+        : date;
+    }
+
+    if (maxDate instanceof Date) {
+      this.maxDate = new Date(maxDate);
+    }
+
+    this.setState({ ...this.state, ...state });
   }
 
   componentWillReceiveProps({ disableRange, isVisible }) {
@@ -162,11 +166,12 @@ class Calander extends React.Component {
     });
   };
 
-  monthChanged = (month, monthIndex) => {
+  monthChanged = month => {
     const { date } = this.state;
-    date.setMonth(monthIndex);
+    date.setMonth(month);
+    let updatedDate = handleDisableDates(date, this.minDate, this.maxDate);
     this.setState({
-      date,
+      date: updatedDate,
       showMonthPopup: false
     });
   };
@@ -180,8 +185,9 @@ class Calander extends React.Component {
   yearChanged = year => {
     const { date } = this.state;
     date.setFullYear(year);
+    let updatedDate = handleDisableDates(date, this.minDate, this.maxDate);
     this.setState({
-      date,
+      date: updatedDate,
       showYearPopup: false
     });
   };
@@ -392,15 +398,18 @@ class Calander extends React.Component {
       onClose = noHandler(),
       footer,
       selectTime,
-      minDate: minFullData
+      minDate: minFullDate,
+      maxDate: maxFullDate
     } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const selectedMonth = getCustomDateObject(date);
     const { month, year } = selectedMonth;
-    const _minDate = getMinDate(minFullData, selectedMonth);
-    const { month: minMonth, year: minYear, date: minDate } = _minDate;
+    const _minDate = getMinDate(minFullDate, selectedMonth);
+    const _maxDate = getMaxDate(maxFullDate, selectedMonth);
+    const { month: minMonth, year: minYear } = _minDate;
+    const { month: maxMonth, year: maxYear } = _maxDate;
     return (
       <div className="full-date-picker-container">
         <div>
@@ -411,12 +420,14 @@ class Calander extends React.Component {
               visible={showMonthPopup}
               onChange={this.monthChanged}
               min={minMonth}
+              max={maxMonth}
             />
             <YearPicker
               year={year}
               visible={showYearPopup}
               onChange={this.yearChanged}
               min={minYear}
+              max={maxYear}
             />
             <TimePicker visible={showTimePopup} onDone={this.onTimeSelected} />
             <Navigator
@@ -427,6 +438,7 @@ class Calander extends React.Component {
               onSelectMonth={this.onMonthSelect}
               onSelectYear={this.onYearSelect}
               min={_minDate}
+              max={_maxDate}
             />
             <Grids
               prevMonth={prevMonth}
@@ -435,7 +447,8 @@ class Calander extends React.Component {
               animationClass={animationClass}
               onDateSelect={this.onDateSelect}
               rangeEnabled={this.enable_range}
-              min={minDate}
+              min={_minDate}
+              max={_maxDate}
             />
           </div>
           <Footer

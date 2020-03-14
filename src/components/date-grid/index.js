@@ -12,14 +12,15 @@ class DateGrid extends Component {
   state = { hovered: null };
 
   onDateSelect = date => {
-    const { onDateSelect } = this.props;
-    onDateSelect && onDateSelect(date);
+    const { onDateSelect, enableDateSelection } = this.props;
+    enableDateSelection && onDateSelect && onDateSelect(date);
   };
 
   onHover = date => {
-    const { startDate } = this.props.provider;
+    const { provider, enableDateSelection } = this.props;
+    const { startDate } = provider;
     const selected = startDate ? startDate._intDate : null;
-    if (!this.props.rangeEnabled || !selected) return;
+    if (!enableDateSelection || !this.props.rangeEnabled || !selected) return;
     this.setState({
       hovered: date
     });
@@ -68,7 +69,7 @@ class DateGrid extends Component {
   };
 
   render() {
-    const { date, rangeEnabled, provider, min } = this.props;
+    const { date, rangeEnabled, provider, min, max } = this.props;
     const { hovered } = this.state;
     const { startDate, endDate } = provider;
     const selected = startDate ? startDate._intDate : null;
@@ -77,11 +78,10 @@ class DateGrid extends Component {
     if (!tempDate) {
       tempDate = new Date();
     }
-    const dateObj = getCustomDateObject(tempDate);
-    const { month, year } = dateObj;
+    const { month, year } = date;
     const actualDate = dateToInt(getCustomDateObject(this.actualDate));
-    const days = getDaysArray(dateObj);
-    const prevMonthDays = this.getRemainingPrevMonthDays(dateObj);
+    const days = getDaysArray(date);
+    const prevMonthDays = this.getRemainingPrevMonthDays(date);
     const hoveredPrev = !!selected && !!hovered && hovered < selected;
     const nextMonthDays = this.getRemainingNextMonthDays(
       prevMonthDays.length + days.length
@@ -110,7 +110,7 @@ class DateGrid extends Component {
                 onHover={this.onHover}
                 offHover={this.offHover}
                 rangeEnabled={rangeEnabled}
-                disabled={min > day}
+                disabled={min > day || max < day}
               />
             );
           })}

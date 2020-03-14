@@ -8,6 +8,7 @@ const Navigator = ({
   monthName = '',
   year = 2018,
   min,
+  max,
   onMonthChange = noHandler('no month change handler'),
   onSelectMonth = noHandler(' no month select handler'),
   onSelectYear = noHandler(' no year select handler')
@@ -29,7 +30,11 @@ const Navigator = ({
           {year}{' '}
         </button>
       </div>
-      <button className="arrow next" onClick={e => onMonthChange(1)} />
+      {max.month > month ? (
+        <button className="arrow next" onClick={e => onMonthChange(1)} />
+      ) : (
+        <div className="button-placeholder" />
+      )}
     </div>
   );
 };

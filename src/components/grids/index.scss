@@ -14,7 +14,7 @@ $calendar-width: 260px;
     transform: translateX(-278px);
     will-change: transform;
     &.move-left {
-      transition: all 0.5s ease;
+      transition: all 0.3s ease;
       transform: translateX(-6px);
     }
     &.move-right {

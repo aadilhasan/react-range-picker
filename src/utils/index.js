@@ -28,7 +28,7 @@ export const getNewMonthFrom = (from, months = 0) => {
   const newInstance = new Date(from);
   newInstance.setMonth(newInstance.getMonth() + months);
   newInstance.setDate(1);
-  return newInstance;
+  return getCustomDateObject(newInstance);
 };
 
 export const noHandler = message => () => console.log(message);

@@ -26,13 +26,13 @@ class App extends Component {
           <DatePicker
             onDateSelected={this.onDateSelect}
             defaultValue={{
-              startDate: new Date('2020-03-05'),
+              startDate: new Date('2020-04-05'),
               endDate: ''
             }}
             onClose={this.onClose}
-            onOpen={() => console.log(' openend')}
+            onOpen={() => console.log(' openend ')}
             minDate={new Date()}
-            maxDate={new Date('2020-04-05')}
+            maxDate={new Date('2020-04-15')}
             // dateFormat="DD-MM-YYYY h:miA"
             // disableRange
             // rangeTillEndOfDay
