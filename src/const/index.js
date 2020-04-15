@@ -64,3 +64,19 @@ export const days = [
     full: 'Saturday'
   }
 ];
+
+export const START_DATE_TIME = {
+  hours: '12',
+  minutes: '00',
+  period: 'AM'
+};
+export const END_DATE_TIME = {
+  hours: '12',
+  minutes: '00',
+  period: 'AM'
+};
+export const END_DATE_TIME_END_OF_DAY = {
+  hours: '11',
+  minutes: '59',
+  period: 'PM'
+};

@@ -1,4 +1,10 @@
-import { monthsShort, monthsFull } from 'const';
+import {
+  monthsShort,
+  monthsFull,
+  START_DATE_TIME,
+  END_DATE_TIME,
+  END_DATE_TIME_END_OF_DAY
+} from 'const';
 import { formators } from './date-formators.js';
 
 export const getDays = (month, year) => {
@@ -114,4 +120,31 @@ export const formatDate = (format, date = new Date()) => {
     format = _f || format;
   });
   return format;
+};
+
+export const getTimesFromProvider = (provider, rangeTillEndOfDay) => {
+  const { startDate, endDate } = provider;
+  let date1Time = { ...START_DATE_TIME };
+  let date2Time = rangeTillEndOfDay
+    ? { ...END_DATE_TIME_END_OF_DAY }
+    : { ...END_DATE_TIME };
+  if (startDate && startDate.customObject) {
+    const { hours, minutes, period } = startDate.customObject;
+    date1Time = { hours, minutes, period };
+  }
+  if (endDate && endDate.customObject) {
+    const { hours, minutes, period } = endDate.customObject;
+    date2Time = { hours, minutes, period };
+  }
+  return {
+    date1Time,
+    date2Time
+  };
+};
+
+export const getIntDatesFromProvider = provider => {
+  return {
+    selectedDate1: provider.startDate ? provider.startDate._intDate : '',
+    selectedDate2: provider.endDate ? provider.endDate._intDate : ''
+  };
 };

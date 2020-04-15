@@ -6,10 +6,17 @@ import {
   getActualDate,
   noHandler,
   dateToInt,
-  getTime
+  getTime,
+  getTimesFromProvider,
+  getIntDatesFromProvider
 } from 'utils';
 
-import { monthsFull, monthsShort } from 'const';
+import {
+  monthsFull,
+  monthsShort,
+  START_DATE_TIME,
+  END_DATE_TIME_END_OF_DAY
+} from 'const';
 
 import Grids from '../grids';
 import Navigator from '../navigator';
@@ -18,25 +25,9 @@ import YearPicker from '../year-picker';
 import Footer from '../footer';
 import TimePicker from '../time-picker';
 import Context from '../context';
-import './index.scss';
 
 const ANIMATE_LEFT = 'move-left';
 const ANIMATE_RIGHT = 'move-right';
-const START_DATE_TIME = {
-  hours: '12',
-  minutes: '00',
-  period: 'AM'
-};
-const END_DATE_TIME = {
-  hours: '12',
-  minutes: '00',
-  period: 'AM'
-};
-const END_DATE_TIME_END_OF_DAY = {
-  hours: '11',
-  minutes: '59',
-  period: 'PM'
-};
 
 function getDefaultValues(date) {
   if (!date) return null;
@@ -175,19 +166,24 @@ class Calander extends React.Component {
       closeOnSelect
     } = this.props;
     const { showTimePopup } = this.state;
-    const { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
-    const { selectedDate1, selectedDate2 } = getIntDates(provider);
+    const { date1Time, date2Time } = getTimesFromProvider(
+      provider,
+      rangeTillEndOfDay
+    );
+    const { selectedDate1, selectedDate2 } = getIntDatesFromProvider(provider);
     const newState = {
       selectedDate1,
       selectedDate2
     };
+    let lastSelectedDateIsFirst = false;
 
     if (!this.enable_range && !!date) {
       this.setState({
         showTimePopup: !!selectTime ? true : showTimePopup
       });
       provider.updateContext({
-        startDate: getActualDate(date, date1Time)
+        startDate: getActualDate(date, date1Time),
+        lastSelectedDateIsFirst
       });
       onDateSelected(getActualDate(date, date1Time));
       !selectTime && closeOnSelect && onClose();
@@ -201,9 +197,13 @@ class Calander extends React.Component {
       // make sure selectedDate1 is always smaller then selectedDate2
       if (date < selectedDate1) {
         newState.selectedDate1 = date;
+        newState.date1Time = date2Time;
         newState.selectedDate2 = selectedDate1;
+        newState.date2Time = date1Time;
+        lastSelectedDateIsFirst = true;
       } else {
         newState.selectedDate2 = date;
+        newState.date2Time = date2Time;
       }
     } else if (!!selectedDate1 && !!selectedDate2) {
       newState.selectedDate1 = date;
@@ -213,16 +213,14 @@ class Calander extends React.Component {
     const d1 = newState.selectedDate1,
       d2 = newState.selectedDate2;
 
-    newState.date2Time =
-      d1 === d2 ? { ...END_DATE_TIME_END_OF_DAY } : date2Time;
-
     this.setState(newState);
     const _startDate = getActualDate(d1, date1Time);
     const _endDate = getActualDate(d2, date2Time);
 
     provider.updateContext({
       startDate: _startDate,
-      endDate: _endDate
+      endDate: _endDate,
+      lastSelectedDateIsFirst
     });
 
     onDateSelected(_startDate, _endDate);
@@ -313,81 +311,62 @@ class Calander extends React.Component {
     });
   };
 
-  onTimeSelected = (hours, minutes, period) => {
-    const {
-      onDateSelected,
-      rangeTillEndOfDay,
-      provider,
-      closeOnSelect,
-      onClose
-    } = this.props;
-    let { date1Time, date2Time } = getTimes(provider, rangeTillEndOfDay);
-    const { selectedDate1, selectedDate2 } = getIntDates(provider);
-
-    if (selectedDate2) {
-      date2Time = {
-        hours,
-        minutes,
-        period
-      };
-    } else {
-      date1Time = {
-        hours,
-        minutes,
-        period
-      };
-      date2Time = !!rangeTillEndOfDay
-        ? { ...END_DATE_TIME_END_OF_DAY }
-        : { ...END_DATE_TIME };
-    }
+  onTimeSelected = (startDate, endDate) => {
+    const { onDateSelected, closeOnSelect, onClose } = this.props;
     this.setState({
       showTimePopup: false
     });
-    const _startDate = getActualDate(selectedDate1, date1Time);
-    const _endDate = !!selectedDate2
-      ? getActualDate(selectedDate2, date2Time)
-      : void 0;
-    provider.updateContext({
-      startDate: _startDate,
-      endDate: _endDate
-    });
-    onDateSelected(_startDate, _endDate);
-    if (closeOnSelect && this.enable_range && _endDate) {
+    onDateSelected(startDate, endDate);
+    if (closeOnSelect && this.enable_range && endDate) {
       onClose();
     } else if (closeOnSelect && !this.enable_range) {
       onClose();
     }
   };
 
+  renderPickers = ({ month, year }) => {
+    const { showMonthPopup, showYearPopup, showTimePopup } = this.state;
+    const { provider } = this.props;
+
+    return (
+      <div>
+        <MonthPicker
+          months={monthsShort}
+          selected={month}
+          visible={showMonthPopup}
+          onChange={this.monthChanged}
+        />
+        <YearPicker
+          year={year}
+          visible={showYearPopup}
+          onChange={this.yearChanged}
+        />
+        <TimePicker
+          visible={showTimePopup}
+          provider={provider}
+          onDone={this.onTimeSelected}
+        />
+      </div>
+    );
+  };
+
   render() {
-    const {
-      date,
-      animationClass,
-      showMonthPopup,
-      showYearPopup,
-      showTimePopup
-    } = this.state;
-    const { onClose = noHandler(), footer, selectTime } = this.props;
+    const { date, animationClass } = this.state;
+    const { onClose = noHandler(), footer, selectTime, isVisible } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const { month, year } = getCustomDateObject(date);
+
+    if (!isVisible) {
+      return null;
+    }
+
     return (
       <div className="full-date-picker-container">
         <div>
           <div className="date-picker">
-            <MonthPicker
-              months={monthsShort}
-              selected={month}
-              visible={showMonthPopup}
-              onChange={this.monthChanged}
-            />
-            <YearPicker
-              year={year}
-              visible={showYearPopup}
-              onChange={this.yearChanged}
-            />
-            <TimePicker visible={showTimePopup} onDone={this.onTimeSelected} />
+            {isVisible ? this.renderPickers({ month, year }) : null}
             <Navigator
               month={monthsFull[month]}
               year={year}
@@ -414,33 +393,6 @@ class Calander extends React.Component {
       </div>
     );
   }
-}
-
-function getIntDates(provider) {
-  return {
-    selectedDate1: provider.startDate ? provider.startDate._intDate : '',
-    selectedDate2: provider.endDate ? provider.endDate._intDate : ''
-  };
-}
-
-function getTimes(provider, rangeTillEndOfDay) {
-  const { startDate, endDate } = provider;
-  let date1Time = { ...START_DATE_TIME };
-  let date2Time = rangeTillEndOfDay
-    ? { ...END_DATE_TIME_END_OF_DAY }
-    : { ...END_DATE_TIME };
-  if (startDate && startDate.customObject) {
-    const { hours, minutes, period } = startDate.customObject;
-    date1Time = { hours, minutes, period };
-  }
-  if (endDate && endDate.customObject) {
-    const { hours, minutes, period } = endDate.customObject;
-    date2Time = { hours, minutes, period };
-  }
-  return {
-    date1Time,
-    date2Time
-  };
 }
 
 export default function(props) {

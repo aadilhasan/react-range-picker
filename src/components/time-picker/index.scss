@@ -1,4 +1,6 @@
+@import '../common.scss';
 $time: 0.3s;
+
 .time-picker-container {
   position: absolute;
   top: 0;
@@ -8,7 +10,7 @@ $time: 0.3s;
   z-index: 2;
   text-align: center;
   background-color: #0000003b;
-  transform: translateY(105%);
+  transition: all 0.2s;
   overflow: hidden;
   .time-picker {
     position: absolute;
@@ -17,16 +19,60 @@ $time: 0.3s;
     left: 0;
     width: 100%;
     padding: 10px 0;
+    transition: transform $time ease;
+    transition-delay: 0.2s;
     transform: translateY(105%);
-    transition: transform $time linear;
+    background-color: white;
+    .selected,
+    .open {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .open {
+      border-bottom: 1px solid #e2e2e2;
+    }
+    .options {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      display: grid;
+      grid-row-gap: 10px;
+      padding: 10px 0;
+      overflow: auto;
+      max-height: 190px;
+      &.animate {
+        animation: drawer-animation 0.3s linear;
+      }
+      .option-wrap {
+        display: flex;
+        align-self: center;
+        justify-content: center;
+      }
+      .option {
+        height: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border-radius: 50%;
+        border: none;
+        &:hover {
+          background-color: rgba(42, 123, 255, 0.2);
+        }
+      }
+    }
   }
+
   &.hidden {
-    transition-delay: $time;
+    transition-delay: 0.3s;
     transform: translateY(105%);
+    opacity: 0;
   }
   &.visible {
     transform: translateY(0%);
     background-color: #0000003b;
+    opacity: 1;
     .time-picker {
       transform: translateY(0px);
     }
@@ -39,5 +85,105 @@ $time: 0.3s;
     border: none;
     box-shadow: 0 4px 16px 0 rgba(64, 93, 119, 0.15),
       0 0 2px 0 rgba(96, 111, 123, 0.2);
+  }
+}
+
+.switch-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > span {
+    margin: 0 10px;
+  }
+  label {
+    display: flex;
+    align-items: center;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 21px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .period {
+    margin: 0 5px;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #34ddb8;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: '';
+    height: 17px;
+    width: 17px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: $primary-color;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px $primary-color;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(14px);
+  }
+
+  .slider.round {
+    border-radius: 17px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+}
+
+@keyframes drawer-animation {
+  from {
+    transform: translatex(105%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: -40px;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  right: 10px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: #f3f3f3;
   }
 }
