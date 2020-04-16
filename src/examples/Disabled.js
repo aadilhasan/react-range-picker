@@ -49,11 +49,11 @@ export default class App extends Component {
           <h2> Min and Max date disabled </h2>
           <DatePicker
             onDateSelected={this.onDateSelect}
-            disableRange
             onClose={this.onClose}
             onOpen={() => console.log(' openend ')}
             minDate={today}
-            maxDate={maxDate}
+            maxDate={new Date(new Date().setHours(today.getHours() + 12))}
+            selectTime
           />
         </div>
       </div>

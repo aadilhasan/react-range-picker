@@ -40,19 +40,22 @@ export const getNewMonthFrom = (from, months = 0) => {
 
 export const noHandler = message => () => console.log(message);
 
-export const getCustomDateObject = (date = new Date()) => {
+export const getCustomDateObject = (date = new Date(), dateFormat = 12) => {
   return {
     day: date.getDay(),
     date: date.getDate(),
     month: date.getMonth(),
-    year: date.getFullYear()
+    year: date.getFullYear(),
+    time: getTime(dateFormat, date)
   };
 };
 
 export const getTime = (format, date = new Date()) => {
   const tempHours = date.getHours();
-  const hours = format === 12 && tempHours > 12 ? tempHours - 12 : tempHours;
-  const period = format === 12 ? (tempHours > 12 ? 'PM' : 'AM') : '';
+  // if hours is 0, use it as 12 AM
+  const hours =
+    format === 12 && tempHours > 12 ? tempHours - 12 : tempHours || 12;
+  const period = format === 12 ? (tempHours > 11 ? 'PM' : 'AM') : '';
   return {
     hours,
     minutes: date.getMinutes(),

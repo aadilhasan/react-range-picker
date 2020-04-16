@@ -57,7 +57,7 @@ $time: 0.3s;
         background-color: transparent;
         border-radius: 50%;
         border: none;
-        &:hover {
+        &:not(:disabled):hover {
           background-color: rgba(42, 123, 255, 0.2);
         }
       }

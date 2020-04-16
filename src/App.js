@@ -25,7 +25,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1 style={{ color: 'red' }}> BUG => Handle disabled time </h1>
+        <h1 style={{ color: 'red' }}>
+          {' '}
+          BUG => Handle disabled time && Able to go to disabled month <hr />
+          Handle toggle change when in minute select page
+        </h1>
         <div>
           <DatePicker
             onDateSelected={this.onDateSelect}

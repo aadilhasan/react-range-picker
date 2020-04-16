@@ -6,7 +6,6 @@ import {
   getActualDate,
   noHandler,
   dateToInt,
-  getTime,
   getTimesFromProvider,
   getIntDatesFromProvider
 } from 'utils';
@@ -44,6 +43,8 @@ class Calander extends React.Component {
   enable_range = false;
   minDate = null;
   maxDate = null;
+  disableMinTime = false;
+  disableMaxTime = false;
   state = {
     date: new Date(this.actualDate),
     animationClass: '',
@@ -86,7 +87,7 @@ class Calander extends React.Component {
     }
 
     if (minDate instanceof Date) {
-      this.minDate = new Date(minDate);
+      this.minDate = getCustomDateObject(new Date(minDate));
 
       /**
        * if current date is less then min, then show min date as first month
@@ -101,7 +102,7 @@ class Calander extends React.Component {
     }
 
     if (maxDate instanceof Date) {
-      this.maxDate = new Date(maxDate);
+      this.maxDate = getCustomDateObject(new Date(maxDate));
     }
 
     this.setState({ ...this.state, ...state });
@@ -192,12 +193,35 @@ class Calander extends React.Component {
       onClose,
       closeOnSelect
     } = this.props;
+
     const { showTimePopup } = this.state;
-    const { date1Time, date2Time } = getTimesFromProvider(
+
+    let minTime = null,
+      maxTime = null;
+
+    let { date1Time, date2Time } = getTimesFromProvider(
       provider,
       rangeTillEndOfDay
     );
+
     const { selectedDate1, selectedDate2 } = getIntDatesFromProvider(provider);
+
+    this.disableMinTime = this.minDate && date === dateToInt(this.minDate);
+    this.disableMaxTime = this.maxDate && date === dateToInt(this.maxDate);
+
+    if (this.disableMinTime) {
+      minTime = this.minDate.time;
+      this.disableMinTime = true;
+    }
+
+    if (this.disableMaxTime) {
+      maxTime = this.maxDate.time;
+    }
+    // make selected sure first date has new start time or min time (if min date is selected)
+    if (!selectedDate1) {
+      date1Time = minTime ? minTime : START_DATE_TIME;
+    }
+
     const newState = {
       selectedDate1,
       selectedDate2
@@ -224,11 +248,12 @@ class Calander extends React.Component {
       // make sure selectedDate1 is always smaller then selectedDate2
       if (date < selectedDate1) {
         newState.selectedDate1 = date;
-        newState.date1Time = date2Time;
         newState.selectedDate2 = selectedDate1;
+        newState.date1Time = date2Time;
         newState.date2Time = date1Time;
         lastSelectedDateIsFirst = true;
       } else {
+        date2Time = maxTime ? maxTime : date2Time;
         newState.selectedDate2 = date;
         newState.date2Time = date2Time;
       }
@@ -380,6 +405,12 @@ class Calander extends React.Component {
           visible={showTimePopup}
           provider={provider}
           onDone={this.onTimeSelected}
+          disableProps={{
+            minDate: this.minDate,
+            maxDate: this.maxDate,
+            disableMin: this.disableMinTime,
+            disableMax: this.disableMaxTime
+          }}
         />
       </div>
     );

@@ -16,14 +16,13 @@ export function getDefaultValues(date) {
 }
 
 export function getMinDate(minDate, current) {
-  const isValid = minDate instanceof Date;
   let _date = {
     year: -1,
     month: -1,
     date: -1
   };
-  if (!isValid) return _date;
-  let { date, month, year } = getCustomDateObject(new Date(minDate));
+  if (!minDate) return _date;
+  let { date, month, year } = minDate;
   _date.year = year;
 
   if (year === current.year) {
@@ -37,14 +36,13 @@ export function getMinDate(minDate, current) {
 }
 
 export function getMaxDate(maxDate, current) {
-  const isValid = maxDate instanceof Date;
   let _date = {
     year: Infinity,
     month: Infinity,
     date: Infinity
   };
-  if (!isValid) return _date;
-  let { date, month, year } = getCustomDateObject(new Date(maxDate));
+  if (!maxDate) return _date;
+  let { date, month, year } = maxDate;
   _date.year = year;
 
   if (year === current.year) {
@@ -60,14 +58,14 @@ export function getMaxDate(maxDate, current) {
 export function handleDisableDates(newDate, minDate, maxDate) {
   const date = dateToInt(getCustomDateObject(newDate));
   if (minDate) {
-    const min = dateToInt(getCustomDateObject(minDate));
+    const min = dateToInt(minDate);
     if (min > date) {
       return minDate;
     }
   }
 
   if (maxDate) {
-    const max = dateToInt(getCustomDateObject(maxDate));
+    const max = dateToInt(maxDate);
     if (max < date) {
       return maxDate;
     }

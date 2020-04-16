@@ -53,25 +53,56 @@ function PeriodPicker({ checked, onChange }) {
   );
 }
 
-function Options({ options, optionsFor, onClick }) {
+function Option({ text, disabled, onClick }) {
+  return (
+    <div className="option-wrap">
+      <button onClick={onClick} className="option" disabled={disabled}>
+        {text}
+      </button>
+    </div>
+  );
+}
+
+function Minutes({ options, optionsFor, onClick, min, max }) {
   return (
     <React.Fragment>
-      {options.map((option, index) => (
-        <div className="option-wrap" key={index}>
-          <button
+      {options.map((option, index) => {
+        let disabled = index < min || index > max;
+        return (
+          <Option
+            key={index}
+            text={option}
             onClick={() => onClick(optionsFor, option)}
-            className="option"
-          >
-            {option}
-          </button>
-        </div>
-      ))}
+            disabled={disabled}
+          />
+        );
+      })}
+    </React.Fragment>
+  );
+}
+
+function Hours({ options, optionsFor, onClick, period, min, max }) {
+  let plusHour = period === 'AM' ? 0 : 12;
+  return (
+    <React.Fragment>
+      {options.map((option, index) => {
+        let disabled = index + plusHour < min || index + plusHour > max;
+        return (
+          <Option
+            key={index}
+            text={option}
+            onClick={() => onClick(optionsFor, option)}
+            disabled={disabled}
+          />
+        );
+      })}
     </React.Fragment>
   );
 }
 
 class TimePicker extends React.Component {
   visible = false;
+  selectedTime = {};
   state = {
     hours: '12',
     minutes: '00',
@@ -79,10 +110,28 @@ class TimePicker extends React.Component {
     showHours: true
   };
 
-  componentWillReceiveProps({ visible, ...newState }) {
+  componentWillReceiveProps({
+    visible,
+    disableProps,
+    rangeTillEndOfDay,
+    provider,
+    ...newState
+  }) {
     if (visible) {
-      this.setState({ ...newState });
+      console.log(' timepicker disableProps ', disableProps);
+      let { date1Time, date2Time } = getTimesFromProvider(
+        provider,
+        rangeTillEndOfDay
+      );
+      const { selectedDate2 } = getIntDatesFromProvider(provider);
+      const { lastSelectedDateIsFirst } = provider;
+      debugger;
+      let time =
+        lastSelectedDateIsFirst || !selectedDate2 ? date1Time : date2Time;
+      this.selectedTime = time;
+      this.setState({ ...newState, ...time });
     } else {
+      this.selectedTime = {};
       setTimeout(() => {
         this.setState({
           hours: '12',
@@ -111,6 +160,17 @@ class TimePicker extends React.Component {
   };
 
   onPeriodChange = ({ target: { checked } }) => {
+    // if hours has been picked and then on change of period, reset to default
+    // as it might lead to selection of a disabled date
+
+    if (!this.state.showHours) {
+      this.setState({
+        ...this.selectedTime,
+        showHours: true,
+        period: checked ? 'PM' : 'AM'
+      });
+      return;
+    }
     this.setState({
       period: checked ? 'PM' : 'AM'
     });
@@ -163,13 +223,43 @@ class TimePicker extends React.Component {
   };
 
   render() {
-    const { visible } = this.props;
+    const { visible, disableProps } = this.props;
     const {
       showHours,
       hours: selectedHours,
       minutes: selectedMinutes,
       period
     } = this.state;
+
+    const { minDate, maxDate, disableMin, disableMax } = disableProps;
+    let minHours = -1,
+      minMinutes = -1,
+      maxHours = Infinity,
+      maxMinutes = Infinity;
+
+    if (disableMin) {
+      let _minHours =
+        minDate.time.period === 'AM' && minDate.time.hours == 12
+          ? 0
+          : minDate.time.hours;
+      minHours = minDate.time.period === 'AM' ? _minHours : _minHours + 12;
+      minMinutes =
+        period === minDate.time.period && selectedHours == _minHours
+          ? minDate.time.minutes
+          : -1;
+    }
+
+    if (disableMax) {
+      let _maxHours =
+        maxDate.time.period === 'AM' && maxDate.time.hours == 12
+          ? 0
+          : maxDate.time.hours;
+      maxHours = maxDate.time.period === 'AM' ? _maxHours : _maxHours + 12;
+      maxMinutes =
+        period === maxDate.time.period && selectedHours == _maxHours
+          ? maxDate.time.minutes
+          : Infinity;
+    }
 
     return (
       <div
@@ -196,18 +286,24 @@ class TimePicker extends React.Component {
           }
           {showHours ? (
             <div className="options">
-              <Options
+              <Hours
                 options={hours}
                 optionsFor="hours"
                 onClick={this.onChange}
+                disable={disableProps}
+                min={minHours}
+                max={maxHours}
+                period={period}
               />
             </div>
           ) : (
             <div className="options animate">
-              <Options
+              <Minutes
                 options={minutes}
                 optionsFor="minutes"
                 onClick={this.onChange}
+                min={minMinutes}
+                max={maxMinutes}
               />
             </div>
           )}
