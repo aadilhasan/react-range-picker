@@ -140,6 +140,8 @@ class TimePicker extends React.Component {
       };
     }
 
+    // if second selected date is the startDate (if it is smaller than first selected date)
+    // then second selected time should go with the startDate (second selected date), so swap the dates
     if (lastSelectedDateIsFirst) {
       let temp = date1Time;
       date1Time = date2Time;
