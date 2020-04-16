@@ -7,7 +7,8 @@ export class Provider extends React.Component {
     startDate: null,
     endDate: null,
     startTime: null,
-    endTime: null
+    endTime: null,
+    lastSelectedDateIsFirst: false // flag to track when last selected date was smaller then first selected one
   };
   updateContext = partialState => {
     this.setState({ ...this.state, ...partialState });

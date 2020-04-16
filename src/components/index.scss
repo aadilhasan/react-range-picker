@@ -10,6 +10,9 @@
 }
 
 #__range-picker-container {
+  * {
+    box-sizing: border-box;
+  }
   .calendar {
     background-color: white;
     position: absolute;
