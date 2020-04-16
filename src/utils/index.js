@@ -8,10 +8,11 @@ import {
 import { formators } from './date-formators.js';
 
 export const getDays = (month, year) => {
-  // Month here is 1-indexed (January is 1, February is 2, etc). This is
-  // because we're using 0 as the day so that it returns the last day
-  // of the last month,  so we add +1 to the month number
-  // so it returns the correct amount of days
+  /** Month starts from index 0 so we add +1 to get next month.
+      Day starts from index 1, if we give day = 0, it returns date of previous day.
+      So here we are using next month of the given month with date = 0, so it returns last day of the given month
+  **/
+
   if (typeof month !== 'number' || typeof year !== 'number') {
     const date = new Date();
     month = date.getMonth();

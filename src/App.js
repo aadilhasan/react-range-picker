@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import DatePicker from './components';
 import Disabled from './examples/Disabled';
+import CustomPlaceHolder from './examples/CustomPlaceHolder';
+import DateEnabled from './examples/DateEnabled';
 
 class App extends Component {
   onDateSelect = (startDate, endDate) => {
@@ -69,18 +71,6 @@ class App extends Component {
         </div>
         <br />
         <div>
-          <h2> With custom date format and placeholder text</h2>
-          <DatePicker
-            onDateSelected={this.onDateSelect}
-            onClose={this.onClose}
-            disableRange
-            dateFormat="MMMM dd  YYYY @ h:mi A"
-            placeholderText="Date of birth and time"
-            selectTime
-          />
-        </div>
-        <br />
-        <div>
           <h2> Close onSelect </h2>
           <DatePicker
             onDateSelected={this.onDateSelect}
@@ -97,48 +87,15 @@ class App extends Component {
           <h1> Controlled visibility </h1>
           {/* <ControlledVisibility /> */}
         </div>
+        <DateEnabled />
         <br />
-        <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
+        <CustomPlaceHolder />
+        <br />
         <Disabled />
       </div>
     );
   }
 }
-
-const PickerWithCustomePlaceholder = ({ onDateSelect }) => {
-  const placeholder = ({ startDate, endDate }) => {
-    let _startDate = '';
-    let _endDate = '';
-    if (startDate) {
-      _startDate = `${startDate.getDate()}/${startDate.getMonth() +
-        1}/${startDate.getFullYear()}`;
-    }
-
-    if (endDate) {
-      _endDate = `${endDate.getDate()}/${endDate.getMonth() +
-        1}/${endDate.getFullYear()}`;
-    }
-    return (
-      <div>
-        <div
-          className="_placeholder"
-          style={{ border: '1px solid gray', padding: '5px 10px' }}
-        >
-          {!_startDate ? 'click here ' : `${_startDate} - ${_endDate}`}
-        </div>
-      </div>
-    );
-  };
-  return (
-    <div>
-      <br />
-      <br />
-      <h3>With custom placeholder</h3>
-      <br />
-      <DatePicker placeholder={placeholder} onDateSelect={onDateSelect} />
-    </div>
-  );
-};
 
 class ControlledVisibility extends Component {
   state = { visible: true };
