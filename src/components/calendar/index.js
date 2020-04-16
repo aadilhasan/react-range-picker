@@ -387,21 +387,14 @@ class Calander extends React.Component {
 
   render() {
     const { date, animationClass } = this.state;
-    const {
-      onClose = noHandler(),
-      footer,
-      selectTime,
-      minDate: minFullDate,
-      maxDate: maxFullDate,
-      isVisible
-    } = this.props;
+    const { onClose = noHandler(), footer, selectTime, isVisible } = this.props;
     const prevMonth = getNewMonthFrom(date, -1);
     const nextMonth = getNewMonthFrom(date, 1);
     const currentMonth = getNewMonthFrom(date, 0);
     const selectedMonth = getCustomDateObject(date);
     const { month, year } = selectedMonth;
-    const minDate = getMinDate(minFullDate, selectedMonth);
-    const maxDate = getMaxDate(maxFullDate, selectedMonth);
+    const minDate = getMinDate(this.minDate, selectedMonth);
+    const maxDate = getMaxDate(this.maxDate, selectedMonth);
 
     if (!isVisible) {
       return null;
