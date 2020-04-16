@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import DatePicker from './components';
+import Disabled from './examples/Disabled';
 
 class App extends Component {
   onDateSelect = (startDate, endDate) => {
@@ -22,6 +23,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <h1 style={{ color: 'red' }}> BUG => Handle disabled time </h1>
         <div>
           <DatePicker
             onDateSelected={this.onDateSelect}
@@ -93,10 +95,11 @@ class App extends Component {
         <br />
         <div>
           <h1> Controlled visibility </h1>
-          <ControlledVisibility />
+          {/* <ControlledVisibility /> */}
         </div>
         <br />
         <PickerWithCustomePlaceholder onDateSelect={this.onDateSelect} />
+        <Disabled />
       </div>
     );
   }
