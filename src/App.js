@@ -25,7 +25,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1 style={{ color: 'red' }}> BUG => Handle disabled time </h1>
+        <h1 style={{ color: 'red' }}>
+          {' '}
+          FEAT: Add close button in month and year selector{' '}
+        </h1>
         <div>
           <DatePicker
             onDateSelected={this.onDateSelect}

@@ -165,6 +165,12 @@ class Calander extends React.Component {
 
   monthChanged = month => {
     const { date } = this.state;
+    if (!month) {
+      this.setState({
+        showMonthPopup: false
+      });
+      return;
+    }
     date.setMonth(month);
     let updatedDate = handleDisableDates(date, this.minDate, this.maxDate);
     this.setState({
