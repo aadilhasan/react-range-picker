@@ -51,8 +51,10 @@ export const getCustomDateObject = (date = new Date()) => {
 
 export const getTime = (format, date = new Date()) => {
   const tempHours = date.getHours();
-  const hours = format === 12 && tempHours > 12 ? tempHours - 12 : tempHours;
-  const period = format === 12 ? (tempHours > 12 ? 'PM' : 'AM') : '';
+  // if tempHours is 0, then time should be 12 AM
+  const hours =
+    format === 12 && tempHours > 12 ? tempHours - 12 : tempHours || 12;
+  const period = format === 12 ? (tempHours > 11 ? 'PM' : 'AM') : '';
   return {
     hours,
     minutes: date.getMinutes(),
