@@ -107,7 +107,7 @@ class Calander extends React.Component {
     this.setState({ ...this.state, ...state });
   }
 
-  componentWillReceiveProps({ disableRange, isVisible }) {
+  componentWillReceiveProps({ disableRange, isVisible, provider }) {
     this.enable_range = disableRange !== true;
     if (!isVisible && this.props.isVisible !== isVisible) {
       // if calendar is hiding, make sure all the popup hide as well
@@ -122,6 +122,12 @@ class Calander extends React.Component {
           }),
         300
       );
+    } else if (isVisible && !this.props.isVisible) {
+      const { startDate } = provider;
+      this.actualDate = new Date();
+      this.actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
+      let selectedStartDate = startDate ? startDate._date : null;
+      this.setState({ date: new Date(selectedStartDate || this.actualDate) });
     }
   }
 
