@@ -1,4 +1,14 @@
 $time: 0.3s;
+%default-visible {
+  background-color: #0000003b;
+  opacity: 1;
+}
+
+%default-hidden {
+  transition-delay: 0.3s;
+  opacity: 0;
+}
+
 .slider {
   position: absolute;
   top: 0;
@@ -18,5 +28,45 @@ $time: 0.3s;
     transition: transform $time ease;
     transition-delay: 0.1s;
     background-color: white;
+  }
+  &.top {
+    &.visible {
+      transform: translateY(0%);
+      top: 0;
+      left: 0;
+      @extend %default-visible;
+      .content {
+        transform: translateY(0%);
+      }
+    }
+    &.hidden {
+      transform: translateY(-105%);
+      top: 0;
+      left: 0;
+      @extend %default-hidden;
+      .content {
+        transform: translateY(-100%);
+      }
+    }
+  }
+  &.bottom {
+    &.visible {
+      transform: translateY(0%);
+      @extend %default-visible;
+      .content {
+        bottom: 0;
+        left: 0;
+        transform: translateY(0%);
+      }
+    }
+    &.hidden {
+      transform: translateY(105%);
+      @extend %default-hidden;
+      .content {
+        transform: translateY(100%);
+        bottom: 0;
+        left: 0;
+      }
+    }
   }
 }
