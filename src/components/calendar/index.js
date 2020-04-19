@@ -38,7 +38,6 @@ const ANIMATE_RIGHT = 'move-right';
 
 class Calander extends React.Component {
   actualDate = new Date();
-  actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
   //flag to prevent month change when the month slide animation is still running
   is_animating = false;
   enable_range = false;
@@ -125,7 +124,6 @@ class Calander extends React.Component {
     } else if (isVisible && !this.props.isVisible) {
       const { startDate } = provider;
       this.actualDate = new Date();
-      this.actualIntDate = dateToInt(getCustomDateObject(this.actualDate));
       let selectedStartDate = startDate ? startDate._date : null;
       this.setState({ date: new Date(selectedStartDate || this.actualDate) });
     }
@@ -281,18 +279,15 @@ class Calander extends React.Component {
     if (this.is_animating === true) return;
 
     const { date } = this.state;
-    const {
-      selectTime,
-      onDateSelected,
-      provider,
-      onClose,
-      closeOnSelect
-    } = this.props;
     const savedDate = getCustomDateObject(date);
     const currentDate = getCustomDateObject(new Date(this.actualDate));
+    const actualIntDate = dateToInt(currentDate);
+    const saveIntDate = dateToInt(savedDate);
+    debugger;
+    let animationClass = '';
 
-    if (date === this.actualIntDate) {
-      this.onDateSelect();
+    if (saveIntDate === actualIntDate) {
+      return;
     }
 
     const goingBack =
@@ -302,31 +297,13 @@ class Calander extends React.Component {
         ? true
         : false;
     if (goingBack) {
-      this.setState({
-        animationClass: ANIMATE_LEFT
-      });
+      animationClass = ANIMATE_LEFT;
     } else if (currentDate.month > savedDate.month) {
-      this.setState({
-        animationClass: ANIMATE_RIGHT
-      });
+      animationClass = ANIMATE_RIGHT;
     }
 
-    const fDate = getActualDate(this.actualIntDate, { ...START_DATE_TIME });
-    const lDate = this.enable_range
-      ? getActualDate(this.actualIntDate, {
-          ...END_DATE_TIME_END_OF_DAY
-        })
-      : null;
-    provider.updateContext({
-      startDate: fDate,
-      endDate: lDate
-    });
-
-    if (onDateSelected) {
-      onDateSelected(fDate, lDate);
-      closeOnSelect && onClose();
-    }
-
+    this.setState({ animationClass });
+    this.is_animating = true;
     // added timeout of same time as animation, so after the animation is done we can remove the animation class
     setTimeout(() => {
       this.setState(
@@ -336,12 +313,9 @@ class Calander extends React.Component {
         },
         () => {
           this.is_animating = false;
-          if (!this.enable_range && !!selectTime) {
-            // this.showTime();
-          }
         }
       );
-    }, 500);
+    }, 200);
   };
 
   showTime = () => {
