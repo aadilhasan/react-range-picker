@@ -1,5 +1,7 @@
 import React from 'react';
 import { noHandler } from 'utils';
+import Slider from '../common/slider';
+import CloseButton from '../common/close-button';
 
 import './index.scss';
 
@@ -49,7 +51,7 @@ class YearPicker extends React.Component {
     const allowBackNavigation = min < years[0];
     const allowForwardNavigation = max < years[years.length];
     return (
-      <div className={`year-picker${visible ? ' visible' : ' hidden'}`}>
+      <Slider visible={visible} className="year-picker">
         <div className="navigator">
           {allowBackNavigation ? (
             <button
@@ -89,7 +91,8 @@ class YearPicker extends React.Component {
             );
           })}
         </div>
-      </div>
+        <CloseButton className="close" onClick={() => onChange(null)} />
+      </Slider>
     );
   }
 }

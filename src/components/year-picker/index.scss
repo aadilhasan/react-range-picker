@@ -1,21 +1,10 @@
 @import '../common';
 
 .year-picker {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background-color: white;
-  z-index: 2;
-  flex-direction: column;
-  display: flex;
-  transition: all 0.5s ease;
-  transform: translateY(-103%);
   padding: 10px;
-  &.visible {
-    transform: translateY(0%);
-  }
+  height: 75%;
+  display: flex;
+  flex-direction: column;
   .year-grid {
     width: 100%;
     flex: 1;
@@ -44,9 +33,12 @@
       }
     }
   }
-
   .button-placeholder {
     width: 38px;
     height: 38px;
+  }
+  .close {
+    position: absolute;
+    bottom: -40px;
   }
 }

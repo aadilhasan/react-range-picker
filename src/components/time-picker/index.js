@@ -174,7 +174,7 @@ class TimePicker extends React.Component {
     } = this.state;
 
     return (
-      <Slider visible={visible} className="time-picker">
+      <Slider visible={visible} className="time-picker" slideFrom="bottom">
         <React.Fragment>
           <CloseButton onClick={this.onDone} />
           <div className="selected">

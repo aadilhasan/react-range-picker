@@ -64,7 +64,7 @@ const slidDirections = {
 export default function({
   visible: visibility,
   className,
-  slideFrom = 'bottom',
+  slideFrom = 'top',
   children
 }) {
   const { visible, hidden } = slidDirections[slideFrom];

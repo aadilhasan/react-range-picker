@@ -186,6 +186,12 @@ class Calander extends React.Component {
   };
 
   yearChanged = year => {
+    if (!year) {
+      this.setState({
+        showYearPopup: false
+      });
+      return;
+    }
     const { date } = this.state;
     date.setFullYear(year);
     let updatedDate = handleDisableDates(date, this.minDate, this.maxDate);
