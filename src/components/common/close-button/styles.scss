@@ -1,0 +1,15 @@
+.picker-close-button {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  right: 10px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}

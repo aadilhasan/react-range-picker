@@ -4,6 +4,8 @@ import {
   getTimesFromProvider,
   getIntDatesFromProvider
 } from 'utils';
+import CloseButton from '../common/close-button';
+import Slider from '../common/slider';
 
 import './index.scss';
 
@@ -172,13 +174,9 @@ class TimePicker extends React.Component {
     } = this.state;
 
     return (
-      <div
-        className={`time-picker-container${visible ? ' visible' : ' hidden'}`}
-      >
-        <div className="time-picker">
-          <button className="close-btn" onClick={this.onDone}>
-            ×
-          </button>
+      <Slider visible={visible} className="time-picker" slideFrom="bottom">
+        <React.Fragment>
+          <CloseButton onClick={this.onDone} />
           <div className="selected">
             {' '}
             <span
@@ -211,8 +209,8 @@ class TimePicker extends React.Component {
               />
             </div>
           )}
-        </div>
-      </div>
+        </React.Fragment>
+      </Slider>
     );
   }
 }
