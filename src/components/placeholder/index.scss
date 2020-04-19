@@ -52,6 +52,7 @@
       display: grid;
       padding: 3px 2px;
       grid-template-columns: 1fr 1fr 1fr;
+      grid-column-gap: 1px;
       .dot {
         background-color: $primary-color;
         height: 2px;

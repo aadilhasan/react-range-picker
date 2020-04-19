@@ -16,8 +16,8 @@ class YearPicker extends React.Component {
     const { year } = this.props;
     this.setYearData(year, year);
   }
-  componentWillReceiveProps({ year }) {
-    this.setYearData(year, year);
+  componentWillReceiveProps({ year, visible }) {
+    visible && this.setYearData(year, year);
   }
 
   setYearData = (selectedYear, startYear) => {
@@ -49,7 +49,7 @@ class YearPicker extends React.Component {
     const { visible, min, max } = this.props;
     const { onChange = noHandler('no handler for year picker') } = this.props;
     const allowBackNavigation = min < years[0];
-    const allowForwardNavigation = max < years[years.length];
+    const allowForwardNavigation = max > years[years.length - 1];
     return (
       <Slider visible={visible} className="year-picker">
         <div className="navigator">
